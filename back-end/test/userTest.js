@@ -1,5 +1,5 @@
-const us = require('../model/User');
+const userClass = require('../model/User');
 
-var user = new User("Giovanni", "Bonaccio", "test", "test@gmail.com", "test");
+var user = new userClass.User("Giovanni", "Bonaccio", "test", "test@gmail.com", "test");
 console.log(user);
 console.log("Nome: " + user.getFirtName + "\nCognome:" + user.getLastName);

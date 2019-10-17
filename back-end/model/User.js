@@ -8,39 +8,54 @@ class User {
     }
 
     get getFirtName(){
-        return firstName;
+        return this.firstName;
     }
 
     get getLastName(){
-        return firstName;
+        return this.lastName;
     }
 
     get getUsername(){
-        return firstName;
+        return this.username;
     }
     get getEmail(){
-        return firstName;
+        return this.email;
     }
     get getPassword(){
-        return firstName;
+        return this.password;
     }
     
+    /**
+     * @param {any} firstName
+     */
     set setFirstName(firstName){
         this.firstName = firstName;
     }
 
+    /**
+     * @param {any} firstName
+     */
     set setLastName(firstName){
         this.lastName = lastName;
     }
 
+    /**
+     * @param {any} firstName
+     */
     set setUsername(firstName){
         this.username = username;
     }
 
+    /**
+     * @param {any} firstName
+     */
     set setEmail(firstName){
         this.email = email;
     }
 
+    /**
+     * @param {any} firstName
+     */
     set setPassword(firstName){
         this.password = password;
     }

@@ -1,3 +1,9 @@
+/**
+ * 
+ *  @author Giovanni Bonaccio
+ */
+
+
 class User {
     constructor(firstName, lastName, username, email, password){
         this.firstName = firstName;
@@ -5,6 +11,7 @@ class User {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.XP = 0;
     }
 
     get getFirtName(){
@@ -23,6 +30,17 @@ class User {
     }
     get getPassword(){
         return this.password;
+    }
+
+    get getXP(){
+        return this.XP;
+    }
+
+    /**
+     * @param {number} XP
+     */
+    set setXP(XP){
+        this.XP=XP;
     }
     
     /**

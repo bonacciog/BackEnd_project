@@ -45,3 +45,5 @@ class User {
         this.password = password;
     }
 }
+
+exports.User=User;

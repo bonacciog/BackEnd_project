@@ -5,13 +5,16 @@
 
 
 class User {
-    constructor(firstName, lastName, username, email, password){
+    constructor(firstName, lastName, username, email, password, university, fieldStudy, degreeType){
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.email = email;
         this.password = password;
         this.XP = 0;
+        this.university = university;
+        this.fieldStudy = fieldStudy;
+        this.degreeType = degreeType;
     }
 
     get getFirtName(){
@@ -35,6 +38,33 @@ class User {
     get getXP(){
         return this.XP;
     }
+    get getUniversity(){
+        return this.university;
+    }
+    get getFieldStudy(){
+        return this.fieldStudy;
+    }
+    get getDegreeType(){
+        return this.degreeType;
+    }
+    /**
+     * @param {any} university
+     */
+    set setUniversity(university){
+        this.university=university;
+    }
+    /**
+     * @param {any} fieldStudy
+     */
+    set setFieldStudy(fieldStudy){
+        this.fieldStudy=fieldStudy;
+    }
+    /**
+     * @param {any} degreeType
+     */
+    set setDegreeType(degreeType){
+        this.degreeType=degreeType;
+    }
 
     /**
      * @param {number} XP
@@ -51,32 +81,33 @@ class User {
     }
 
     /**
-     * @param {any} firstName
+     * @param {any} lastName
      */
-    set setLastName(firstName){
+    set setLastName(lastName){
         this.lastName = lastName;
     }
 
     /**
-     * @param {any} firstName
+     * @param {any} username
      */
-    set setUsername(firstName){
+    set setUsername(username){
         this.username = username;
     }
 
     /**
-     * @param {any} firstName
+     * @param {any} email
      */
-    set setEmail(firstName){
+    set setEmail(email){
         this.email = email;
     }
 
     /**
-     * @param {any} firstName
+     * @param {any} password
      */
-    set setPassword(firstName){
+    set setPassword(password){
         this.password = password;
     }
 }
+
 
 exports.User=User;

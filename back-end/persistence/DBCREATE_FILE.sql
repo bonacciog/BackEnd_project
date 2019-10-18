@@ -7,5 +7,8 @@ CREATE TABLE IF NOT EXISTS `1001DB`.`Users` (
   `Username` VARCHAR(50) NOT NULL,
   `Password` VARCHAR(50) NOT NULL,
   `XP` INT NULL,
+  `FieldOfStudy` VARCHAR(45) NULL,
+  `TypeOfDegree` VARCHAR(45) NULL,
+  `University` VARCHAR(45) NULL,
   PRIMARY KEY (`Username`))
 ENGINE = InnoDB

@@ -4,6 +4,8 @@ const pm = require('../persistence/PersistenceManager');
 var user = new userClass.User("Giovanni", "Bonaccio", "test1", "test@gmail.com", "test","test","test","test");
 
 
+//pm.saveUser(user)
+//pm.deleteUser(user);
 
 
 pm.getUser(user.username, user.password, function (err, user) {
@@ -24,3 +26,4 @@ function send(user) {
         console.log(user);
 
 }
+

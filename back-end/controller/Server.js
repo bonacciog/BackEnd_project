@@ -1,11 +1,25 @@
-var socket = require('socket.io-client')('http://localhost:1337');
-socket.on('connect', function(){
-  console.log("1 client connected");
+var http = require('http');
+var data = JSON.stringify({
+  data: "OK"
 });
-socket.on('saveUser', function(data){
-  var obj = JSON.parse(data);
-  console.log(obj);
+
+var server = http.createServer().listen(3000, '127.0.0.1');
+
+server.on('request', function (req, res) {
+    if (req.method == 'POST') {
+        var body = '';
+    }
+
+    req.on('data', function (data) {
+        body += data;
+    });
+
+    req.on('end', function () {
+        var post = JSON.parse(body);
+        console.log(post);
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.end(data);
+    });
 });
-socket.on('disconnect', function(){
-  console.log("1 client connected");
-});
+
+console.log('Listening on http://127.0.0.1:3000');

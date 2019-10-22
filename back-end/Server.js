@@ -1,7 +1,5 @@
+var mc = require('./Controller');
 var http = require('http');
-var data = JSON.stringify({
-  response: "OK"
-});
 
 var server = http.createServer().listen(3000, '127.0.0.1');
 
@@ -15,11 +13,8 @@ server.on('request', function (req, res) {
     });
 
     req.on('end', function () {
-        var post = JSON.parse(body);
-        console.log(post);
-        res.writeHead(200, {'Content-Type': 'application/json'});
-        res.end(data);
+        mc.switchRequestAndServe(body, res);
     });
 });
 
-console.log('Listening on http://127.0.0.1:3000');
+console.log('Listening on http://localhost:3000');

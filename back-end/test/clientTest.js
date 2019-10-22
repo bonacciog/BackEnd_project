@@ -1,11 +1,12 @@
 var http = require('http');
 
+/*
 var postData = JSON.stringify({ 
   request : "login",
-  user: [
+  user: 
     { Username : "simo", Password : "bartoli" }
-  ]
-});
+
+});*/
 
 var options = {
     hostname: 'localhost',

@@ -1,0 +1,57 @@
+import {StyleSheet} from 'react-native'
+
+export default StyleSheet.create({
+    heading:{
+        fontSize:25,
+        textAlign:'center'
+    },
+    input:{
+        marginBottom:5,
+        backgroundColor:'#f5f5f5'
+    },
+    customContent:{
+        flex:1,
+        marginLeft:20,
+        marginRight:20
+    },
+    customLogo:{
+        flex:2
+    },
+    customLogin:{
+        flex:1
+    },
+    customSignup:{
+        flex:1,
+        justifyContent:'center',
+    },
+    customBottom:{
+        flex:2
+    },
+    parent:{
+        flex:1
+    },
+    loginButton:{
+        backgroundColor:'green',
+        borderColor:'#f5f5f5',
+    },
+    signupButton:{
+        backgroundColor:'#f5f5f5',
+        borderColor:'green',
+    },
+    button:{
+        borderWidth:1,
+        borderRadius:20,
+        padding:10,
+        justifyContent:'center'
+    },
+    heading:{
+        fontSize:20,
+        textAlign:'center'
+    },
+    signupText:{
+        color:'green'
+    },
+    loginText:{
+        color:'#f5f5f5'
+    }
+})

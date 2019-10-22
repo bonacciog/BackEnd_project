@@ -1,0 +1,6 @@
+{ 
+  "request" : "SaveUser",
+  "user": [
+    { "FirstName : "user.getFirtName", "LastName" = "user.getLastName" }
+  ]
+}

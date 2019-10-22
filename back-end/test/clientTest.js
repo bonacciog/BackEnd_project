@@ -1,9 +1,9 @@
 var http = require('http');
 
 var postData = JSON.stringify({ 
-  request : "SaveUser",
+  request : "login",
   user: [
-    { FirstName : "user.getFirtName", LastName : "user.getLastName" }
+    { Username : "simo", Password : "bartoli" }
   ]
 });
 

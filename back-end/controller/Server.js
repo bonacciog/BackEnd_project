@@ -1,6 +1,6 @@
 var http = require('http');
 var data = JSON.stringify({
-  data: "OK"
+  response: "OK"
 });
 
 var server = http.createServer().listen(3000, '127.0.0.1');

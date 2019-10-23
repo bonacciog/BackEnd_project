@@ -2,7 +2,7 @@ const userClass = require('../model/User');
 const pm = require('../persistence/PersistenceManager');
 
 
-function switchRequestAndServe(req, res) {
+function switchRequestsAndServe(req, res) {
     var errorJSON = {
         error: ""
     };
@@ -27,12 +27,31 @@ function switchRequestAndServe(req, res) {
                 res.end(response);
             });
             break;
+        case "saveMessage":
+            try{
+                pm.saveMessage(request.message);
+            }catch(err){
+                errorJSON.error = err.message;
+                response = JSON.stringify(errorJSON);
+                res.end(response);
+            }
+            break;
+        case "deleteMessage":
+            try{
+                pm.deleteMessage(request.message);
+            } catch(err){
+                errorJSON.error = err.message;
+                response = JSON.stringify(errorJSON);
+                res.end(response);
+            }
+            break;
         default:
             errorJSON.error = "Request error";
             response = JSON.stringify(errorJSON);
+            res.end(response);
     }
 }
 
 function checkToNotify(){}
 
-exports.switchRequestAndServe = switchRequestAndServe;
+exports.switchRequestsAndServe = switchRequestsAndServe;

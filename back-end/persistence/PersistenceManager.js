@@ -110,7 +110,45 @@ function updateUser(user) {
   connection.end();
 }
 
+function saveMessage(message){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+
+  var sql = "insert into 1001db.messages(SenderUsername, ReceiverUsername, Text, DateTime, IsRead)" +
+            " values ('" + message.SenderUsername + "','" + message.ReceiverUsername + "','" + message.Text + "','" + message.DateTime + "','" + message.IsRead + "')";
+
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record inserted");
+  });
+
+  connection.end();
+}
+
+function deleteMessage(message) {
+
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+
+  var sql = "delete from 1001db.messages where SenderUsername = '" + message.SenderUsername + "' and ReceiverUsername = '" + message.ReceiverUsername + "' and DateTime = '" + message.DateTime + "'";
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record deleted");
+  });
+
+
+  connection.end();
+}
+
 exports.getUser = getUser;
 exports.updateUser = updateUser;
 exports.saveUser = saveUser;
 exports.deleteUser = deleteUser;
+exports.saveMessage = saveMessage;
+exports.deleteMessage = deleteMessage;

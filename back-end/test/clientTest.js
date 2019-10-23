@@ -1,13 +1,10 @@
 var http = require('http');
 
-/*
+
 var postData = JSON.stringify({ 
-  request : "login",
-  user: 
-    { Username : "simo", Password : "bartoli" }
-
-});*/
-
+    request : "saveMessage", 
+    message : { SenderUsername : "simo", ReceiverUsername : "test1", Text : "ehi terry", DateTime : "2019-10-23 18:54:00", IsRead : "N"  }
+})
 var options = {
     hostname: 'localhost',
     port: 3000,
@@ -17,7 +14,6 @@ var options = {
         'Content-Length': postData.length
     }
 };
-
 var req = http.request(options, function (res) {
     console.log('STATUS:', res.statusCode);
     console.log('HEADERS:', JSON.stringify(res.headers));
@@ -39,3 +35,22 @@ req.on('error', function (e) {
 
 req.write(postData);
 req.end();
+
+/*
+var readline = require('readline');
+
+
+
+var rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  terminal: false
+});
+
+// Qui dentro per problema callback (in questo caso prendo la richiesta da stdin)
+rl.on('line', function (line) {
+    
+});
+
+
+*/

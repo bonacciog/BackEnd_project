@@ -165,13 +165,12 @@ function getMessages(SenderUsername, ReceiverUsername, limit, callback){
     if (err) callback(err, null);
     else {
       var messageArrayDim = 0;
-      var message;
+      var message = new Array();
       Object.keys(result).forEach(function (key) {
         var row = result[key];
         message[messageArrayDim] = new messageClass.Message(row.SenderUsername, row.ReceiverUsername, row.Text, row.IsRead, row.DateTime);
-        messageArrayDim = messageArrayDim + 1;
+        messageArrayDim++;
       });
-      console.log(message)
       callback(null, message);
     }
   });

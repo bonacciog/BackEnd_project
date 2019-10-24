@@ -1,7 +1,7 @@
 var c = require('./controller/Controller');
 var http = require('http');
 
-var server = http.createServer().listen(3000, '127.0.0.1');
+var server = http.createServer().listen(3000, 'localhost');
 
 server.on('request', function (req, res) {
     if (req.method == 'POST') {

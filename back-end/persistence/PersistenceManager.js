@@ -5,7 +5,7 @@
 
 const mysql = require('mysql');
 const userClass = require('../model/User');
-
+const messageClass = require('../model/Message');
 
 var dbParam = {
   host: "localhost",
@@ -111,6 +111,9 @@ function updateUser(user) {
 }
 
 function saveMessage(message){
+  if (!message instanceof messageClass.Message) {
+    throw new ParamError("Incorrect parameter!");
+  }
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
@@ -118,7 +121,7 @@ function saveMessage(message){
   });
 
   var sql = "insert into 1001db.messages(SenderUsername, ReceiverUsername, Text, DateTime, IsRead)" +
-            " values ('" + message.SenderUsername + "','" + message.ReceiverUsername + "','" + message.Text + "','" + message.DateTime + "','" + message.IsRead + "')";
+            " values ('" + message.getSenderUsername + "','" + message.getReceiverUsername + "','" + message.getText + "','" + message.getDateTime + "','" + message.getIsRead + "')";
 
   connection.query(sql, function (err, result) {
     if (err) throw err;
@@ -129,14 +132,16 @@ function saveMessage(message){
 }
 
 function deleteMessage(message) {
-
+  if (!message instanceof messageClass.Message) {
+    throw new ParamError("Incorrect parameter!");
+  }
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
 
-  var sql = "delete from 1001db.messages where SenderUsername = '" + message.SenderUsername + "' and ReceiverUsername = '" + message.ReceiverUsername + "' and DateTime = '" + message.DateTime + "'";
+  var sql = "delete from 1001db.messages where SenderUsername = '" + message.getSenderUsername + "' and ReceiverUsername = '" + message.getReceiverUsername + "' and DateTime = '" + message.getDateTime + "'";
   connection.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record deleted");
@@ -146,9 +151,38 @@ function deleteMessage(message) {
   connection.end();
 }
 
+function getMessages(SenderUsername, ReceiverUsername, limit, callback){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "select * "+
+            "from 1001db.messages" +
+            " where SenderUsername = '" + SenderUsername + "' and ReceiverUsername = '" + ReceiverUsername + "'" +
+            " order by Datetime limit " + limit
+  connection.query(sql, function (err, result) {
+    if (err) callback(err, null);
+    else {
+      var messageArrayDim = 0;
+      var message;
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        message[messageArrayDim] = new messageClass.Message(row.SenderUsername, row.ReceiverUsername, row.Text, row.IsRead, row.DateTime);
+        messageArrayDim = messageArrayDim + 1;
+      });
+      console.log(message)
+      callback(null, message);
+    }
+  });
+  connection.end();
+
+}
+
 exports.getUser = getUser;
 exports.updateUser = updateUser;
 exports.saveUser = saveUser;
 exports.deleteUser = deleteUser;
 exports.saveMessage = saveMessage;
 exports.deleteMessage = deleteMessage;
+exports.getMessages = getMessages;

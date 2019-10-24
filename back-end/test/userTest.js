@@ -11,8 +11,8 @@ var postData = JSON.stringify({
     
   });
 
-c.switchRequest(postData);
-console.log(c.currentUser);
+
+console.log(postData.error);
   //pm.saveUser(user)
 //pm.deleteUser(user);
 

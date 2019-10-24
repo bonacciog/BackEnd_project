@@ -2,8 +2,9 @@ var http = require('http');
 
 
 var postData = JSON.stringify({ 
-    request : "saveMessage", 
-    message : { SenderUsername : "simo", ReceiverUsername : "test1", Text : "ehi terry", DateTime : "2019-10-23 18:54:00", IsRead : "N"  }
+    request : "getChat", 
+    message : { SenderUsername : "simo", ReceiverUsername : "test1" },
+    limit : 2
 })
 var options = {
     hostname: 'localhost',

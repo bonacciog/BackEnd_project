@@ -150,7 +150,15 @@ function deleteMessage(message) {
 
   connection.end();
 }
-
+/**
+ * 
+ * @param {*} SenderUsername 
+ * @param {*} ReceiverUsername 
+ * @param {*} limit 
+ * @param {*} callback 
+ * 
+ * @returns returns only messages sended from sender to receiver
+ */
 function getMessages(SenderUsername, ReceiverUsername, limit, callback){
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
@@ -178,6 +186,45 @@ function getMessages(SenderUsername, ReceiverUsername, limit, callback){
 
 }
 
+/**
+ * 
+ * @param {*} Username_1 
+ * @param {*} Username_2 
+ * @param {*} limit 
+ * @param {*} callback 
+ * 
+ * @returns returns all messages sended from 1 to 2 and viceversa
+ * 
+ */
+
+function getAllMessages(Username_1, Username_2, limit, callback){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "select * "+
+            "from 1001db.messages" +
+            " where (SenderUsername = '" + Username_1 + "' and ReceiverUsername = '" + Username_2 + "')" +
+            " or (SenderUsername = '" + Username_2 + "' and ReceiverUsername = '" + Username_1 + "')" +
+            " order by Datetime limit " + limit
+  connection.query(sql, function (err, result) {
+    if (err) callback(err, null);
+    else {
+      var messageArrayDim = 0;
+      var message = new Array();
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        message[messageArrayDim] = new messageClass.Message(row.SenderUsername, row.ReceiverUsername, row.Text, row.IsRead, row.DateTime);
+        messageArrayDim++;
+      });
+      callback(null, message);
+    }
+  });
+  connection.end();
+
+}
+
 exports.getUser = getUser;
 exports.updateUser = updateUser;
 exports.saveUser = saveUser;
@@ -185,3 +232,4 @@ exports.deleteUser = deleteUser;
 exports.saveMessage = saveMessage;
 exports.deleteMessage = deleteMessage;
 exports.getMessages = getMessages;
+exports.getAllMessages = getAllMessages;

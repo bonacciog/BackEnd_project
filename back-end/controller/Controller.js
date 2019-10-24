@@ -22,7 +22,7 @@ function switchRequestsAndServe(req, res) {
                             response = JSON.stringify(user);
                     }
                     else {
-                        errorJSON.error = "Error in DB interation: " +err;
+                        errorJSON.error = "Error in DB interation: " + err;
                         response = JSON.stringify(errorJSON);
                     }
                     res.end(response);
@@ -51,7 +51,7 @@ function switchRequestsAndServe(req, res) {
                 res.end(response);
             }
             break;
-        case "getChat":
+        case "getMessages":
             try {
                 pm.getMessages(request.message.SenderUsername, request.message.ReceiverUsername, request.limit, function (err, messages) {
                     if (err == null) {
@@ -63,7 +63,30 @@ function switchRequestsAndServe(req, res) {
                             response = JSON.stringify(messages);
                     }
                     else {
-                        errorJSON.error = "Error in DB interation: " +err;
+                        errorJSON.error = "Error in DB interation: " + err;
+                        response = JSON.stringify(errorJSON);
+                    }
+                    res.end(response);
+                });
+            } catch (err) {
+                errorJSON.error = err.message;
+                response = JSON.stringify(errorJSON);
+                res.end(response);
+            }
+            break;
+        case "getChat":
+            try {
+                pm.getAllMessages(request.Username_1, request.Username_2, request.limit, function (err, messages) {
+                    if (err == null) {
+                        if (messages == null) {
+                            errorJSON.error = "Incorrect username and/or password";
+                            response = JSON.stringify(errorJSON);
+                        }
+                        else
+                            response = JSON.stringify(messages);
+                    }
+                    else {
+                        errorJSON.error = "Error in DB interation: " + err;
                         response = JSON.stringify(errorJSON);
                     }
                     res.end(response);

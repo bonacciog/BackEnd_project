@@ -3,8 +3,9 @@ var http = require('http');
 
 var postData = JSON.stringify({ 
     request : "getChat", 
-    message : { SenderUsername : "simo", ReceiverUsername : "test1" },
-    limit : 2
+    Username_1 :  "simo",
+    Username_2 :  "test1",
+    limit : 10
 })
 var options = {
     hostname: 'localhost',
@@ -22,7 +23,7 @@ var req = http.request(options, function (res) {
     res.setEncoding('utf8');
 
     res.on('data', function (chunk) {
-        console.log('BODY:', chunk);
+        console.log('BODY: \n', JSON.parse(chunk));
     });
 
     res.on('end', function () {

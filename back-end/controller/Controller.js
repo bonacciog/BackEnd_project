@@ -94,7 +94,7 @@ function switchRequestsAndServe(req, res) {
             } catch (err) {
                 errorJSON.error = err.message;
                 response = JSON.stringify(errorJSON);
-                res.end(response);
+                res.end(response);s
             }
             break;
         default:

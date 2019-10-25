@@ -2,10 +2,8 @@ var http = require('http');
 
 
 var postData = JSON.stringify({ 
-    request : "getChat", 
-    Username_1 :  "simo",
-    Username_2 :  "test1",
-    limit : 10
+    request : "login", 
+    user: {Username :  "giov", Password :  "bon"}
 })
 var options = {
     hostname: 'localhost',

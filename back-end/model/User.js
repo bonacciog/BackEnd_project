@@ -11,7 +11,6 @@ class User {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.XP = 0;
         this.university = university;
         this.fieldStudy = fieldStudy;
         this.degreeType = degreeType;
@@ -35,8 +34,8 @@ class User {
         return this.password;
     }
 
-    get getXP(){
-        return this.XP;
+    get getID(){
+        return this.ID;
     }
     get getUniversity(){
         return this.university;
@@ -69,8 +68,8 @@ class User {
     /**
      * @param {number} XP
      */
-    set setXP(XP){
-        this.XP=XP;
+    set setID(ID){
+        this.ID=ID;
     }
     
     /**

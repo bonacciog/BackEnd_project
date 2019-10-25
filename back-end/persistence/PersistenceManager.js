@@ -27,8 +27,8 @@ function saveUser(user) {
     console.log("Connected to DB!");
   });
 
-  var sql = "insert into 1001db.users(FirstName, LastName, Email, Username, Password, XP, FieldOfStudy, TypeOfDegree, University) values	('" +
-    user.getFirtName + "','" + user.getLastName + "','" + user.getEmail + "','" + user.getUsername + "','" + user.getPassword + "'," + user.getXP + ",'" + user.getFieldStudy + "','" + user.getDegreeType + "','" + user.getUniversity + "')";
+  var sql = "insert into 1001db.users(FirstName, LastName, Email, Username, Password, FieldOfStudy, TypeOfDegree, University) values	('" +
+    user.getFirtName + "','" + user.getLastName + "','" + user.getEmail + "','" + user.getUsername + "','" + user.getPassword + "'," + user.getFieldStudy + "','" + user.getDegreeType + "','" + user.getUniversity + "')";
 
   connection.query(sql, function (err, result) {
     if (err) throw err;
@@ -75,7 +75,6 @@ function getUser(username, password, callback) {
       Object.keys(result).forEach(function (key) {
         var row = result[key];
         user = new userClass.User(row.FirstName, row.LastName, row.Username, row.Email, row.Password, row.University, row.FieldOfStudy, row.TypeOfDegree);
-        user.setXP = row.XP;
       });
       callback(null, user);
     }

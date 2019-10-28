@@ -27,8 +27,8 @@ function saveUser(user) {
     console.log("Connected to DB!");
   });
 
-  var sql = "insert into 1001db.users(FirstName, LastName, Email, Username, Password, FieldOfStudy, TypeOfDegree, University) values	('" +
-    user.getFirtName + "','" + user.getLastName + "','" + user.getEmail + "','" + user.getUsername + "','" + user.getPassword + "','" + user.getFieldStudy + "','" + user.getDegreeType + "','" + user.getUniversity + "')";
+  var sql = "insert into 1001db.users(FirstName, LastName) values	('" +
+    user.getFirtName + "','" + user.getLastName + "')";
 
   connection.query(sql, function (err, result) {
     if (err) throw err;
@@ -38,14 +38,15 @@ function saveUser(user) {
   connection.end();
 }
 
-function deleteUser(Username) {
+function deleteUser(ID) {
+
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
 
-  var sql = "delete from 1001db.users where username = '" + Username + "'";
+  var sql = "delete from 1001db.users where ID = '" + ID + "'";
   connection.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record deleted");
@@ -55,7 +56,7 @@ function deleteUser(Username) {
   connection.end();
 }
 
-function getUser(username, password, callback) {
+function getUser(firstName, lastName, ID, callback) {
 
   var user = null;
 
@@ -64,14 +65,15 @@ function getUser(username, password, callback) {
     if (err) callback(err, null);
     console.log("Connected to DB!");
   });
-  var sql = "select * from 1001db.users where username = '" + username + "' and password = '" + password + "'";
+  var sql = "select * from 1001db.users where FirstName = '" + firstName + "' and LastName = '" + lastName + "' and ID = '" + ID + "'";
 
   connection.query(sql, function (err, result) {
     if (err) callback(err, null);
     else {
       Object.keys(result).forEach(function (key) {
         var row = result[key];
-        user = new userClass.User(row.FirstName, row.LastName, row.Username, row.Email, row.Password, row.University, row.FieldOfStudy, row.TypeOfDegree);
+        user = new userClass.User(row.FirstName, row.LastName);
+        user.setID(row.ID);
       });
       callback(null, user);
     }
@@ -91,13 +93,7 @@ function updateUser(user) {
 
   var sql = "UPDATE 1001DB.USERS SET FirstName = '" + user.getFirtName + "'," +
     "LastName = '" + user.getLastName + "'," +
-    "Email = '" + user.getEmail + "'," +
-    "Username = '" + user.getUsername + "'," +
-    "Password = '" + user.getPassword + "'," +
-    "FieldOfStudy = '" + user.getFieldStudy + "'," +
-    "TypeOfDegree = '" + user.getDegreeType + "'," +
-    "University = '" + user.getUniversity + "'" +
-    "WHERE USERNAME = '" + user.getUsername + "'";
+    "WHERE ID = '" + user.getID + "'";
   connection.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record updated");
@@ -115,8 +111,8 @@ function saveMessage(message){
     console.log("Connected to DB!");
   });
 
-  var sql = "insert into 1001db.messages(SenderUsername, ReceiverUsername, Text, DateTime, IsRead)" +
-            " values ('" + message.getSenderUsername + "','" + message.getReceiverUsername + "','" + message.getText + "','" + message.getDateTime + "','" + message.getIsRead + "')";
+  var sql = "insert into 1001db.messages(SenderUsers_ID, ReceiverUsers_ID, Text, DateTime, IsRead)" +
+            " values ('" + message.getSenderUserID + "','" + message.getReceiverUserID + "','" + message.getText + "','" + message.getDateTime + "','" + message.getIsRead + "')";
 
   connection.query(sql, function (err, result) {
     if (err) throw err;
@@ -136,7 +132,7 @@ function deleteMessage(message) {
     console.log("Connected to DB!");
   });
 
-  var sql = "delete from 1001db.messages where SenderUsername = '" + message.getSenderUsername + "' and ReceiverUsername = '" + message.getReceiverUsername + "' and DateTime = '" + message.getDateTime + "'";
+  var sql = "delete from 1001db.messages where SenderUser_ID = '" + message.getSenderUserID + "' and ReceiverUser_ID = '" + message.getReceiverUserID + "' and DateTime = '" + message.getDateTime + "'";
   connection.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record deleted");
@@ -154,7 +150,7 @@ function deleteMessage(message) {
  * 
  * @returns returns only messages sended from sender to receiver
  */
-function getMessages(SenderUsername, ReceiverUsername, limit, callback){
+function getMessages(SenderUserID, ReceiverUserID, limit, callback){
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
@@ -162,7 +158,7 @@ function getMessages(SenderUsername, ReceiverUsername, limit, callback){
   });
   var sql = "select * "+
             "from 1001db.messages" +
-            " where SenderUsername = '" + SenderUsername + "' and ReceiverUsername = '" + ReceiverUsername + "'" +
+            " where SenderUser_ID = '" + SenderUserID + "' and ReceiverUser_ID = '" + ReceiverUserID + "'" +
             " order by Datetime limit " + limit
   connection.query(sql, function (err, result) {
     if (err) callback(err, null);
@@ -171,7 +167,7 @@ function getMessages(SenderUsername, ReceiverUsername, limit, callback){
       var message = new Array();
       Object.keys(result).forEach(function (key) {
         var row = result[key];
-        message[messageArrayDim] = new messageClass.Message(row.SenderUsername, row.ReceiverUsername, row.Text, row.IsRead, row.DateTime);
+        message[messageArrayDim] = new messageClass.Message(row.SenderUser_ID, row.ReceiverUser_ID, row.Text, row.IsRead, row.DateTime);
         messageArrayDim++;
       });
       callback(null, message);
@@ -192,7 +188,7 @@ function getMessages(SenderUsername, ReceiverUsername, limit, callback){
  * 
  */
 
-function getAllMessages(Username_1, Username_2, limit, callback){
+function getAllMessages(ID_1, ID_2, limit, callback){
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
@@ -200,8 +196,8 @@ function getAllMessages(Username_1, Username_2, limit, callback){
   });
   var sql = "select * "+
             "from 1001db.messages" +
-            " where (SenderUsername = '" + Username_1 + "' and ReceiverUsername = '" + Username_2 + "')" +
-            " or (SenderUsername = '" + Username_2 + "' and ReceiverUsername = '" + Username_1 + "')" +
+            " where (SenderUser_ID = '" + ID_1 + "' and ReceiverUser_ID = '" + ID_2 + "')" +
+            " or (SenderUser_ID = '" + ID_2 + "' and ReceiverUser_ID = '" + ID_1 + "')" +
             " order by Datetime limit " + limit
   connection.query(sql, function (err, result) {
     if (err) callback(err, null);
@@ -210,7 +206,7 @@ function getAllMessages(Username_1, Username_2, limit, callback){
       var message = new Array();
       Object.keys(result).forEach(function (key) {
         var row = result[key];
-        message[messageArrayDim] = new messageClass.Message(row.SenderUsername, row.ReceiverUsername, row.Text, row.IsRead, row.DateTime);
+        message[messageArrayDim] = new messageClass.Message(row.SenderUser_ID, row.ReceiverUser_ID, row.Text, row.IsRead, row.DateTime);
         messageArrayDim++;
       });
       callback(null, message);

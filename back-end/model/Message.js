@@ -1,18 +1,18 @@
 class Message {
-    constructor(senderUsername, receiverUsername, text, isRead, dateTime){
-        this.senderUsername = senderUsername;
-        this.receiverUsername = receiverUsername;
+    constructor(senderUserID, receiverUserID, text, isRead, dateTime){
+        this.senderUserID = senderUserID;
+        this.receiverUserID = receiverUserID;
         this.text = text;
         this.isRead = isRead;
         this.dateTime = dateTime;
     }
 
-    get getSenderUsername(){
-        return this.senderUsername
+    get getSenderUserID(){
+        return this.senderUserID
     }
 
-    get getReceiverUsername(){
-        return this.receiverUsername
+    get getReceiverUserID(){
+        return this.receiverUserID
     }
 
     get getText(){

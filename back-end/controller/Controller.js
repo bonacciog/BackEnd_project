@@ -33,6 +33,24 @@ function switchRequestsAndServe(req, res) {
                 res.end(response);
             }
             break;
+        case "saveUser":
+            try {
+                pm.saveUser(new userClass.User(request.user.Firstname, request.user.LastName, request.user.Username, request.user.Email, request.user.Password, request.user.University, request.user.FieldStudy, request.user.DegreeType));
+            } catch (err) {
+                errorJSON.error = err.message;
+                response = JSON.stringify(errorJSON);
+                res.end(response);
+            }
+            break;
+        case "deleteUser":
+            try {
+                pm.deleteUser(request.Username);
+            } catch (err) {
+                errorJSON.error = err.message;
+                response = JSON.stringify(errorJSON);
+                res.end(response);
+            }
+            break;
         case "saveMessage":
             try {
                 pm.saveMessage(new messageClass.Message(request.message.SenderUsername, request.message.ReceiverUsername, request.message.Text, request.message.IsRead, request.message.DateTime));
@@ -94,7 +112,7 @@ function switchRequestsAndServe(req, res) {
             } catch (err) {
                 errorJSON.error = err.message;
                 response = JSON.stringify(errorJSON);
-                res.end(response);s
+                res.end(response); s
             }
             break;
         default:

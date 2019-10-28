@@ -1,9 +1,13 @@
 var http = require('http');
 
 
+/*var postData = JSON.stringify({ 
+    request : "saveUser", 
+    user: {FirstName : 'Pol', LastName : "Caligiana", Username : "Pol", Email : "pol@gianni.it", Password : "giannone", University : "test", FieldStudy : "test", DegreeType : "test"}
+})*/
 var postData = JSON.stringify({ 
-    request : "login", 
-    user: {Username :  "giov", Password :  "bon"}
+    request : "deleteUser", 
+    Username : "Pol"
 })
 var options = {
     hostname: 'localhost',

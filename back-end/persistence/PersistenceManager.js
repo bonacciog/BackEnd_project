@@ -28,7 +28,7 @@ function saveUser(user) {
   });
 
   var sql = "insert into 1001db.users(FirstName, LastName, Email, Username, Password, FieldOfStudy, TypeOfDegree, University) values	('" +
-    user.getFirtName + "','" + user.getLastName + "','" + user.getEmail + "','" + user.getUsername + "','" + user.getPassword + "'," + user.getFieldStudy + "','" + user.getDegreeType + "','" + user.getUniversity + "')";
+    user.getFirtName + "','" + user.getLastName + "','" + user.getEmail + "','" + user.getUsername + "','" + user.getPassword + "','" + user.getFieldStudy + "','" + user.getDegreeType + "','" + user.getUniversity + "')";
 
   connection.query(sql, function (err, result) {
     if (err) throw err;
@@ -38,17 +38,14 @@ function saveUser(user) {
   connection.end();
 }
 
-function deleteUser(user) {
-  if (!user instanceof userClass.User) {
-    throw new ParamError("Incorrect parameter!");
-  }
+function deleteUser(Username) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
 
-  var sql = "delete from 1001db.users where username = '" + user.getUsername + "'";
+  var sql = "delete from 1001db.users where username = '" + Username + "'";
   connection.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record deleted");
@@ -97,7 +94,6 @@ function updateUser(user) {
     "Email = '" + user.getEmail + "'," +
     "Username = '" + user.getUsername + "'," +
     "Password = '" + user.getPassword + "'," +
-    "XP = '" + user.getXP + "'," +
     "FieldOfStudy = '" + user.getFieldStudy + "'," +
     "TypeOfDegree = '" + user.getDegreeType + "'," +
     "University = '" + user.getUniversity + "'" +

@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `1001db`.`Messages` (
   CONSTRAINT `fk_Users_has_Users_Users1`
     FOREIGN KEY (`ReceiverUsers_ID`)
     REFERENCES `1001db`.`Users` (`ID`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -65,13 +65,13 @@ CREATE TABLE IF NOT EXISTS `1001db`.`AccumulatedPoints` (
   CONSTRAINT `fk_Users_has_Topics_Users1`
     FOREIGN KEY (`Users_ID`)
     REFERENCES `1001db`.`Users` (`ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Users_has_Topics_Topics1`
     FOREIGN KEY (`Topics_ID`)
     REFERENCES `1001db`.`Topics` (`ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`ExecutionTable` (

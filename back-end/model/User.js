@@ -18,8 +18,8 @@ class User {
         return this.lastName;
     }
 
-    get getID{
-        this.ID = ID;
+    get getID(){
+        return this.ID;
     }
 
     /**

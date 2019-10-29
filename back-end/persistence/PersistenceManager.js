@@ -6,6 +6,8 @@
 const mysql = require('mysql');
 const userClass = require('../model/User');
 const messageClass = require('../model/Message');
+const topicClass = require('../model/Topic');
+const questionClass = require('../model/Question');
 
 var dbParam = {
   host: "localhost",
@@ -216,6 +218,159 @@ function getAllMessages(ID_1, ID_2, limit, callback){
 
 }
 
+function saveKey(key){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "insert into 1001db.ExecutionTable(KEY) values ('" + key + "'";
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record inserted");
+  });
+
+  connection.end();
+}
+
+function deleteKey(key){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "delete from 1001db.ExecutionTable where KEY = '" + key + "'";
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record deleted");
+  });
+
+  connection.end();
+}
+
+function getKey(callback){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "select * "+
+            "from 1001db.ExecutionTable"
+  connection.query(sql, function (err, result) {
+    if (err) callback(err, null);
+    else {
+      var exKey;
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        exKey = row.KEY;
+      });
+      callback(null, exKey);
+    }
+  });
+  connection.end();
+
+}
+
+function saveTopic(topic){
+  if (!topic instanceof topicClass.Topic) {
+    throw new ParamError("Incorrect parameter!");
+  }
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+
+  var sql = "insert into 1001db.Topics(FatherCategory, TopicsName)" +
+            " values ('" + topic.getFatherCategory + "','" + topic.getTopicsName +  "')";
+
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record inserted");
+  });
+
+  connection.end();
+}
+
+function deleteTopic(topicName){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "delete from 1001db.Topics where TopicName = '" + topicName + "'";
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record deleted");
+  });
+
+  connection.end();
+}
+
+function getAllTopics(callback){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "select * "+
+            "from 1001db.Topics" ;
+  connection.query(sql, function (err, result) {
+    if (err) callback(err, null);
+    else {
+      var topicArrayDim = 0;
+      var topics = new Array();
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        topics[topicArrayDim] = new topicClass.Topic(row.FatherCategory, row.TopicName);
+        topicArrayDim++;
+      });
+      callback(null, topics);
+    }
+  });
+  connection.end();
+}
+
+function saveChallengeQuestion(question){
+  if (!question instanceof questionClass.Question) {
+    throw new ParamError("Incorrect parameter!");
+  }
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+
+  var sql = "insert into 1001db.Questions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID)" +
+            " values ('" + question.getQuestionText + "','" + question.getAnswer_A + "','" + question.getAnswer_B +  "','" + question.getAnswer_C +  "','" + question.getAnswer_D + "','" + question.getXPValue + "','" + question.getTopic_ID +"')" 
+
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record inserted");
+  });
+
+  connection.end();
+}
+
+function deleteChallengeQuestion(questionID){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "delete from 1001db.ChallangeQuestions where ID = '" + questionID + "'";
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record deleted");
+  });
+
+  connection.end();
+}
+
+function getNQuestions(){
+
+}
+
 exports.getUser = getUser;
 exports.updateUser = updateUser;
 exports.saveUser = saveUser;
@@ -224,3 +379,11 @@ exports.saveMessage = saveMessage;
 exports.deleteMessage = deleteMessage;
 exports.getMessages = getMessages;
 exports.getAllMessages = getAllMessages;
+exports.saveKey = saveKey;
+exports.saveTopic = saveTopic;
+exports.deleteKey = deleteKey;
+exports.deleteTopic = deleteTopic;
+exports.saveChallengeQuestion = saveChallengeQuestion;
+exports.deleteChallengeQuestion = deleteChallengeQuestion;
+exports.getAllTopics = getAllTopics;
+exports.getKey = getKey;

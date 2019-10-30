@@ -6,8 +6,8 @@ var http = require('http');
     user: {FirstName : 'Pol', LastName : "Caligiana", Username : "Pol", Email : "pol@gianni.it", Password : "giannone", University : "test", FieldStudy : "test", DegreeType : "test"}
 })*/
 var postData = JSON.stringify({ 
-    request : "deleteUser", 
-    Username : "Pol"
+    request : "saveUser", 
+    User : { FirstName : 'Pol', LastName : "Caligiana", University : "Unibo"}
 })
 var options = {
     hostname: 'localhost',

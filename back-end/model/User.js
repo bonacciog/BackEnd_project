@@ -5,9 +5,10 @@
 
 
 class User {
-    constructor(firstName, lastName){
+    constructor(firstName, lastName, university){
         this.firstName = firstName;
         this.lastName = lastName;
+        this.university = university;
     }
 
     get getFirtName(){
@@ -18,16 +19,30 @@ class User {
         return this.lastName;
     }
 
+    get getUniversity(){
+        return this.university;
+    }
+
     get getID(){
         return this.ID;
     }
-
+    
     /**
-     * @param {number} XP
+     * @param {any} ID
      */
     set setID(ID){
         this.ID=ID;
     }
+
+    /**
+     * @param {any} university
+     */
+    set setUniversity(university){
+        this.university = university;
+    }
+
+
+
     
     
     /**

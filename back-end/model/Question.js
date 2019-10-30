@@ -1,12 +1,12 @@
 class Question {
-    constructor(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID){
+    constructor(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topic_ID){
         this.questionText = QuestionText;
         this.answer_A = Answer_A;
         this.answer_B = Answer_B;
         this.answer_C = Answer_C;
         this.answer_D = Answer_D;
         this.XPValue = XPValue;
-        this.topics_ID = Topics_ID; 
+        this.topic_ID = Topic_ID; 
     }
 
     get getQuestionText(){
@@ -28,8 +28,8 @@ class Question {
     get getXPValue(){
         return this.XPValue;
     }
-    get getTopics_ID(){
-        return this.topics_ID;
+    get getTopic_ID(){
+        return this.topic_ID;
     }
 
     /**
@@ -70,10 +70,10 @@ class Question {
         this.XPValue=XPValue;
     }
     /**
-     * @param {any} topics_ID
+     * @param {any} topic_ID
      */
-    set setTopics_ID(topics_ID){
-        this.topics_ID = topics_ID;
+    set setTopic_ID(topic_ID){
+        this.topic_ID = topic_ID;
     }
     
 }

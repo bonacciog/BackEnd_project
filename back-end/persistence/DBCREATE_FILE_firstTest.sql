@@ -4,26 +4,27 @@ CREATE TABLE IF NOT EXISTS `1001db`.`Users` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `FirstName` VARCHAR(45) NOT NULL,
   `LastName` VARCHAR(45) NOT NULL,
+  `University` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`ID`))
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`Messages` (
-  `SenderUsers_ID` INT NOT NULL,
-  `ReceiverUsers_ID` INT NOT NULL,
+  `SenderUser_ID` INT NOT NULL,
+  `ReceiverUser_ID` INT NOT NULL,
   `Text` LONGTEXT NOT NULL,
   `DateTime` DATETIME NOT NULL,
   `IsRead` CHAR(1) NOT NULL,
-  PRIMARY KEY (`SenderUsers_ID`, `ReceiverUsers_ID`),
-  INDEX `fk_Users_has_Users_Users1_idx` (`ReceiverUsers_ID` ASC) VISIBLE,
-  INDEX `fk_Users_has_Users_Users_idx` (`SenderUsers_ID` ASC) VISIBLE,
+  PRIMARY KEY (`SenderUser_ID`, `ReceiverUser_ID`),
+  INDEX `fk_Users_has_Users_Users1_idx` (`ReceiverUser_ID` ASC) VISIBLE,
+  INDEX `fk_Users_has_Users_Users_idx` (`SenderUser_ID` ASC) VISIBLE,
   UNIQUE INDEX `DateTime_UNIQUE` (`DateTime` ASC) VISIBLE,
   CONSTRAINT `fk_Users_has_Users_Users`
-    FOREIGN KEY (`SenderUsers_ID`)
+    FOREIGN KEY (`SenderUser_ID`)
     REFERENCES `1001db`.`Users` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Users_has_Users_Users1`
-    FOREIGN KEY (`ReceiverUsers_ID`)
+    FOREIGN KEY (`ReceiverUser_ID`)
     REFERENCES `1001db`.`Users` (`ID`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
@@ -32,14 +33,14 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `1001db`.`Topics` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `FatherCategory` VARCHAR(45) NOT NULL,
-  `TopicsName` VARCHAR(45) NOT NULL,
+  `TopicName` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`ID`),
-  UNIQUE INDEX `TopicsName_UNIQUE` (`TopicsName` ASC) VISIBLE)
+  UNIQUE INDEX `TopicName_UNIQUE` (`TopicName` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeQuestions` (
   `ID` INT NOT NULL AUTO_INCREMENT,
-  `QuestionsText` LONGTEXT NOT NULL,
+  `QuestionText` LONGTEXT NOT NULL,
   `Answer_A` LONGTEXT NOT NULL,
   `Answer_B` LONGTEXT NOT NULL,
   `Answer_C` LONGTEXT NOT NULL,
@@ -78,3 +79,5 @@ CREATE TABLE IF NOT EXISTS `1001db`.`ExecutionTable` (
   `KEY` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`KEY`))
 ENGINE = InnoDB;
+
+-- ALTER TABLE 1001db.users AUTO_INCREMENT=1

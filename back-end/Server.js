@@ -14,7 +14,8 @@ server.on('request', function (req, res) {
 
     req.on('end', function () {
         console.log("Arrived Data:\n" + body)
-        c.switchRequestsAndServe(body, res);
+        var req = JSON.parse(body);
+        c.eventRequest.emit(req.request, req, res);
     });
 });
 

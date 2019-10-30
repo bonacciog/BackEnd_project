@@ -1,8 +1,35 @@
-const userClass = require('../model/User');
 const pm = require('../persistence/PersistenceManager');
+const userClass = require('../model/User');
 const messageClass = require('../model/Message');
+const topicClass = require('../model/Topic');
+const questionClass = require('../model/Question');
+const  EventEmitter = require('events').EventEmitter;
 
-function switchRequestsAndServe(req, res) {
+var eventRequest = new EventEmitter();
+var errorJSON = {
+    error: ""
+};
+var response;
+
+eventRequest.on('saveUser', function(req,res){
+    try {
+        pm.saveUser(new userClass.User(req.User.Firstname, req.User.LastName, req.User.University), function(err, id){
+            response = JSON.stringify({
+                UserID : id
+            });
+            res.end(response);
+        });
+         
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+})
+
+
+exports.eventRequest = eventRequest;
+/*function switchRequestsAndServe(req, res) {
     var errorJSON = {
         error: ""
     };
@@ -124,4 +151,4 @@ function switchRequestsAndServe(req, res) {
 
 function checkToNotify() { }
 
-exports.switchRequestsAndServe = switchRequestsAndServe;
+exports.switchRequestsAndServe = switchRequestsAndServe;*/

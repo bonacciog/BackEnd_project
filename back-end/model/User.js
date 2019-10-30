@@ -5,16 +5,10 @@
 
 
 class User {
-    constructor(firstName, lastName, username, email, password, university, fieldStudy, degreeType){
+    constructor(firstName, lastName, university){
         this.firstName = firstName;
         this.lastName = lastName;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.XP = 0;
         this.university = university;
-        this.fieldStudy = fieldStudy;
-        this.degreeType = degreeType;
     }
 
     get getFirtName(){
@@ -25,53 +19,31 @@ class User {
         return this.lastName;
     }
 
-    get getUsername(){
-        return this.username;
-    }
-    get getEmail(){
-        return this.email;
-    }
-    get getPassword(){
-        return this.password;
-    }
-
-    get getXP(){
-        return this.XP;
-    }
     get getUniversity(){
         return this.university;
     }
-    get getFieldStudy(){
-        return this.fieldStudy;
+
+    get getID(){
+        return this.ID;
     }
-    get getDegreeType(){
-        return this.degreeType;
+    
+    /**
+     * @param {any} ID
+     */
+    set setID(ID){
+        this.ID=ID;
     }
+
     /**
      * @param {any} university
      */
     set setUniversity(university){
-        this.university=university;
-    }
-    /**
-     * @param {any} fieldStudy
-     */
-    set setFieldStudy(fieldStudy){
-        this.fieldStudy=fieldStudy;
-    }
-    /**
-     * @param {any} degreeType
-     */
-    set setDegreeType(degreeType){
-        this.degreeType=degreeType;
+        this.university = university;
     }
 
-    /**
-     * @param {number} XP
-     */
-    set setXP(XP){
-        this.XP=XP;
-    }
+
+
+    
     
     /**
      * @param {any} firstName
@@ -87,26 +59,6 @@ class User {
         this.lastName = lastName;
     }
 
-    /**
-     * @param {any} username
-     */
-    set setUsername(username){
-        this.username = username;
-    }
-
-    /**
-     * @param {any} email
-     */
-    set setEmail(email){
-        this.email = email;
-    }
-
-    /**
-     * @param {any} password
-     */
-    set setPassword(password){
-        this.password = password;
-    }
 }
 
 

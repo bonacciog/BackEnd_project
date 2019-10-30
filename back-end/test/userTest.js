@@ -1,13 +1,22 @@
 const userClass = require('../model/User');
 const pm = require('../persistence/PersistenceManager');
+const c = require('../controller/Controller');
 
-var user = new userClass.User("Giovanni", "Bonaccio", "test1", "test@gmail.com", "test","test","test","test");
+var user = new userClass.User("Simone", "Bartoli", "simo", "test@gmail.com", "bartoli","test","test","test");
+
+var postData = JSON.stringify({ 
+    request : "login",
+    user: 
+      { Username : "simo", Password : "bartoli" }
+    
+  });
 
 
-//pm.saveUser(user)
+console.log(postData.error);
+  //pm.saveUser(user)
 //pm.deleteUser(user);
 
-
+/*
 pm.getUser(user.username, user.password, function (err, user) {
     if (err == null) {
         send(user);
@@ -25,5 +34,5 @@ function send(user) {
     else
         console.log(user);
 
-}
+}*/
 

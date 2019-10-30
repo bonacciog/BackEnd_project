@@ -1,18 +1,30 @@
 import React, { Component } from 'react'
-import { View, Image, TextInput, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import styles from './styles'
 
-class Login extends Component{
+class LoginTest extends Component{
 
     constructor(props){
         super(props)
     }
 
-    state = {username: "", password: "", isLoading: false}
+    state = {nickname: "", key: "", isLoading: false}
+
+    setValue = async () => {
+        try {
+          await AsyncStorage.setItem('key', this.state.key)
+        } catch(e) {
+          // save error
+        }
+      
+        console.log('Done.')
+    }
 
     checkLogin(){
         this.state.isLoading = true;
-        const {username,password,isLoading} = this.state;
+        const {name,surname,university,key,isLoading} = this.state;
        /* fetch('http://192.168.43.120:3000',{
             method: 'POST',
             headers: {
@@ -41,13 +53,8 @@ class Login extends Component{
                     }])
         });*/
 
-        if(username == 'admin' && password == 'admin'){
-            this.props.navigation.navigate('home')
-        }else{
-            Alert.alert('Error','Username/Password mismatch',[{
-                text:'Okay'
-            }])
-        }
+        this.setValue()
+        this.props.navigation.navigate('homeTest')
     }
 
     render() {
@@ -60,19 +67,20 @@ class Login extends Component{
                     />
                 </View>
                 <View style={styles.customLogin}>
-                    <TextInput style={styles.input} placeholder="Username" onChangeText = { text => this.setState({ username: text }) } />
-                    <TextInput style={styles.input} placeholder="Password" secureTextEntry = { true } onChangeText = { text => this.setState({ password: text }) } />
+                    <TextInput style={styles.input} placeholder="NAME" onChangeText = { text => this.setState({ name: text }) } />
+                    <TextInput style={styles.input} placeholder="SURNAME" onChangeText = { text => this.setState({ surname: text }) } />
+                    <TextInput style={styles.input} placeholder="UNIVERSITY" onChangeText = { text => this.setState({ university: text }) } />
+                    <TextInput style={styles.input} placeholder="KEY" onChangeText = { text => this.setState({ key: text }) } />
                     <TouchableOpacity
                             style={[styles.button,styles.loginButton]}
                             onPress={_ => this.checkLogin()}
                         >
-                        <Text style={[styles.loginText,styles.heading]}> LOGIN </Text>
+                        <Text style={[styles.loginText,styles.heading]}> START </Text>
                     </TouchableOpacity>
                 </View>
             </View>
-            
         );
     }
 }
 
-export default Login
+export default LoginTest

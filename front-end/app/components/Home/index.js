@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { View,Text, TouchableOpacity, ImageBackground, Image, Avatar } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-//import Icon from 'react-native-vector-icons/FontAwesome';
+
 import styles from './styles'
+import CustomIcon from '../CustomIcon';
 
 class Home extends Component{
 
@@ -22,9 +23,9 @@ class Home extends Component{
                 style = {styles.parent}
             >
                 <View style={styles.optionsBar}>
-                    <Icon reverse name="users" size={30} style={{marginRight:15}} color="#1e6602"/>
-                    <Icon reverse name="comment" size={30} style={{marginRight:15}} color="#1e6602"/>
-                    <Icon reverse name="bell" size={30} style={{marginRight:15}} color="#1e6602"/>
+                <Icon reverse name="users" size={25} style={{marginRight:20}} color="#004d1a"/>
+                <Icon reverse name="comment" size={25} style={{marginRight:20}} color="#004d1a"/>
+                <Icon reverse name="bell" size={25} style={{marginRight:20}} color="#004d1a"/>
                 </View>
                 <View style={styles.curriculumCard}>
                     <TouchableOpacity style ={styles.card}>
@@ -56,6 +57,13 @@ class Home extends Component{
                             <View style={styles.margin}>
                                 
                                 <Icon reverse name="star" size={45} style={{marginRight:15}} color="#d6c800"/>
+                            </View>
+                            <View style={styles.margin}>
+                                <CustomIcon
+                                    name="asterisk"
+                                    color="red"
+                                    size={50}
+                                />
                             </View>
                             
                         </View>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import styles from './styles';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 class Dashboard extends Component{
 
@@ -10,7 +11,8 @@ class Dashboard extends Component{
 
     static navigationOptions = {
         mode: 'modal',
-        title: 'Zack',
+        //title: 'Zack',
+        //header: null,
         transparentCard: true,
         cardStyle: {
             backgroundColor: 'black',
@@ -26,11 +28,90 @@ class Dashboard extends Component{
         } 
     }
 
+    goToChallenge(){
+        this.props.navigation.navigate('challenge')
+    }
+
     render() {
         return(
-            <View style={styles.parent}>
-                <Text style={styles.heading}> Hello Zac! </Text>
-            </View>
+            <ImageBackground 
+                source = {require('../../assets/images/backgroundImageDashboard.jpg')}
+                style = {styles.parent}
+            >
+                <View style={styles.headerLine}>
+                    <Image
+                        style={styles.logo}
+                        source={require('../../assets/images/logoWhite.png')}
+                    />
+                </View>
+                <View style={styles.line}>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style ={styles.button} onPress={_ => this.goToChallenge()} >
+                                <View style={styles.buttonContent}>
+                                    <Icon reverse name="play" size={30} color="#006622"/>
+                                </View>
+                                <View style={styles.buttonHeader}>
+                                    <Text style={styles.heading}>CHALLENGE</Text>
+                                </View>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style ={styles.button}>
+                                <View style={styles.buttonContent}>
+                                    <Icon reverse name="exclamation-triangle" size={30} color="gray"/>
+                                </View>
+                                <View style={styles.buttonHeader}>
+                                    <Text style={[styles.heading,{color:'gray'}]}>UNDER CONSTRUCTION</Text>
+                                </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={styles.line}>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style ={styles.button}>
+                                <View style={styles.buttonContent}>
+                                    <Icon reverse name="exclamation-triangle" size={30} color="gray"/>
+                                </View>
+                                <View style={styles.buttonHeader}>
+                                    <Text style={[styles.heading,{color:'gray'}]}>UNDER CONSTRUCTION</Text>
+                                </View>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style ={styles.button}>
+                                <View style={styles.buttonContent}>
+                                    <Icon reverse name="exclamation-triangle" size={30} color="gray"/>
+                                </View>
+                                <View style={styles.buttonHeader}>
+                                    <Text style={[styles.heading,{color:'gray'}]}>UNDER CONSTRUCTION</Text>
+                                </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={styles.line}>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style ={styles.button}>
+                                <View style={styles.buttonContent}>
+                                    <Icon reverse name="exclamation-triangle" size={30} color="gray"/>
+                                </View>
+                                <View style={styles.buttonHeader}>
+                                    <Text style={[styles.heading,{color:'gray'}]}>UNDER CONSTRUCTION</Text>
+                                </View>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style ={styles.button}>
+                                <View style={styles.buttonContent}>
+                                    <Icon reverse name="exclamation-triangle" size={30} color="gray"/>
+                                </View>
+                                <View style={styles.buttonHeader}>
+                                    <Text style={[styles.heading,{color:'gray'}]}>UNDER CONSTRUCTION</Text>
+                                </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                
+            </ImageBackground>
         );
     }
 }

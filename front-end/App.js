@@ -9,6 +9,13 @@ import Home from './app/components/Home';
 import Login from './app/components/Login';
 import Signup from './app/components/Signup';
 import Dashboard from './app/components/Dashboard';
+import Challenge from './app/components/Challenge';
+import UserSelection from './app/components/UserSelection';
+import FirstPageTest from './app/components/FirstPageTest';
+import LoginTest from './app/components/LoginTest';
+import HomeTest from './app/components/HomeTest';
+import WaitingReval from './app/components/WaitingReval';
+import Cover from './app/components/Cover';
 
 //import { enableScreens } from 'react-native-screens';
 //enableScreens();
@@ -52,29 +59,43 @@ const NavigationConfig = () => {
   }
 }
 
-const RootStack = createStackNavigator(
+const RootStack = {
+  firstPageTest: { screen: FirstPageTest },
+  signup: { screen: Signup },
+  login: { screen: Login },
+  home: { screen: Home },
+  dashboard: { screen: Dashboard },
+  challenge: { screen: Challenge },
+  userSelection: { screen: UserSelection },
+  loginTest: {screen: LoginTest},
+  homeTest:{screen: HomeTest},
+  waitingReval:{screen: WaitingReval},
+  cover:{screen: Cover}
+}
+
+const NormalNavigator = createStackNavigator(
+  RootStack,
   {
-    firstPage: { screen: FirstPage },
-    signup: { screen: Signup },
-    login: { screen: Login },
-    home: { screen: Home },
-    dashboard: { screen: Dashboard }
-  },
-  {
-    initialRouteName: 'firstPage',
+    initialRouteName: 'cover',
   },
   {
     transitionConfig: NavigationConfig
   }
 )
 
-const AppContainer = createAppContainer(RootStack)
+const AppContainerNormal = createAppContainer(NormalNavigator)
 
 export default class App extends Component {
+
+  constructor(props){
+    super(props)
+  }
+  
   render(){
-    return(
-     <AppContainer />
-    )
+      return(
+          <AppContainerNormal />
+        )      
+    
   }
 }
 

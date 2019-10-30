@@ -10,7 +10,7 @@ var postData = JSON.stringify({
     Topic : { FatherCategory : "rr", TopicName: "rrrddddd"}
 })
 var options = {
-    hostname: 'localhost',
+    hostname: '192.168.43.120',
     port: 3000,
     method: 'POST',
     headers: {

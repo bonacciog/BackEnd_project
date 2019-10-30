@@ -1,4 +1,5 @@
-import {StyleSheet} from 'react-native'
+import {StyleSheet} from 'react-native';
+//import Constants from 'expo-constants';
 
 export default StyleSheet.create({
     heading:{
@@ -7,6 +8,17 @@ export default StyleSheet.create({
         color:'#006622',
         fontWeight:'bold'
     },
+    title:{
+        fontSize:25,
+        textAlign:'center',
+        color:'#006622',
+        fontWeight:'bold'
+    },
+    subtitle:{
+        fontSize:20,
+        textAlign:'center',
+        color:'#006622'
+    },
     parent:{
         flex:1,
 
@@ -14,26 +26,22 @@ export default StyleSheet.create({
     headerLine:{
         flex:1,
         justifyContent:'center',
-        flexDirection:'row',
         paddingTop:20
     },
     line:{
         flex:1,
-        flexDirection:'row',
         justifyContent:'center'
         
     },
     buttonContainer:{
         flex:1,
-        padding:20
+        padding:10
         
     },
     button:{
-        padding:20,
         borderRadius: 5,
         justifyContent:'center',
         backgroundColor:'white',
-        flexDirection:'column',
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -45,10 +53,12 @@ export default StyleSheet.create({
         flex:1
     },
     buttonHeader:{
-        flex:2
+        flex:3,
+        alignItems:'flex-start',
+        justifyContent:'center'
     },
     buttonContent:{
-        flex:3,
+        flex:1,
         alignItems:'center',
         justifyContent:'center'
     },
@@ -60,5 +70,12 @@ export default StyleSheet.create({
     logo:{
         height:150,
         width:150
+    },
+    container: {
+        flex: 1,
+        //marginTop: Constants.statusBarHeight,
+    },
+    scrollView: {
+       // marginHorizontal: 20,
     }
 })

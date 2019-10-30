@@ -1,5 +1,5 @@
 class Question {
-    constructor(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topic_ID){
+    constructor(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topic_ID, Type, TimeInSec){
         this.questionText = QuestionText;
         this.answer_A = Answer_A;
         this.answer_B = Answer_B;
@@ -7,6 +7,16 @@ class Question {
         this.answer_D = Answer_D;
         this.XPValue = XPValue;
         this.topic_ID = Topic_ID; 
+        this.type=Type;
+        this.timeInSec=TimeInSec;
+    }
+
+    get getType(){
+        return this.type;
+    }
+
+    get getTimeInSec(){
+        return this.timeInSec;
     }
 
     get getQuestionText(){
@@ -75,7 +85,19 @@ class Question {
     set setTopic_ID(topic_ID){
         this.topic_ID = topic_ID;
     }
-    
+    /**
+     * @param {any} type
+     */
+    set setType(type){
+        this.type=type;
+    }
+
+    /**
+     * @param {any} timeInSec
+     */
+    set setTimeInSec(timeInSec){
+        this.timeInSec=timeInSec;
+    }
 }
 
 exports.Question = Question;

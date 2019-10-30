@@ -47,6 +47,8 @@ CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeQuestions` (
   `Answer_D` LONGTEXT NOT NULL,
   `XPValue` INT NULL,
   `Topics_ID` INT NOT NULL,
+  `TimeInSec` INT NULL,
+  `Type` VARCHAR(45) NULL,
   PRIMARY KEY (`ID`, `Topics_ID`),
   INDEX `fk_ChallengeQuestions_Topics1_idx` (`Topics_ID` ASC) VISIBLE,
   CONSTRAINT `fk_ChallengeQuestions_Topics1`

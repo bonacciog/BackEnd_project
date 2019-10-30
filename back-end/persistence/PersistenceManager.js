@@ -30,7 +30,7 @@ function saveUser(user, callback) {
   });
 
   var sql = "insert into 1001db.users(FirstName, LastName, University) values	('" +
-    user.getFirtName + "','" + user.getLastName + "','" + user.getUniversity +"')";
+    user.getFirstName + "','" + user.getLastName + "','" + user.getUniversity +"')";
 
   connection.query(sql, function (err, result) {
     if (err) throw err;
@@ -348,8 +348,9 @@ function saveChallengeQuestion(question){
     console.log("Connected to DB!");
   });
 
-  var sql = "insert into 1001db.ChallengeQuestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID)" +
-            " values ('" + question.getQuestionText + "','" + question.getAnswer_A + "','" + question.getAnswer_B +  "','" + question.getAnswer_C +  "','" + question.getAnswer_D + "','" + question.getXPValue + "','" + question.getTopic_ID +"')" 
+  var sql = "insert into 1001db.ChallengeQuestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Type, TimeInSec)" +
+            " values ('" + question.getQuestionText + "','" + question.getAnswer_A + "','" + question.getAnswer_B +  "','" + question.getAnswer_C +  "','" + question.getAnswer_D + "'," + question.getXPValue + "," + question.getTopic_ID + ",'"+
+            question.getType + "',"+question.getTimeInSec +")" 
 
   connection.query(sql, function (err, result) {
     if (err) throw err;

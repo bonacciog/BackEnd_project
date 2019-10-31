@@ -1,6 +1,34 @@
 { 
-  "request" : "SaveUser",
-  "user": [
-    { "FirstName : "user.getFirtName", "LastName" = "user.getLastName" }
-  ]
+    request : "saveUser", 
+    User: {Firstname : 'Pol', Lastname : "Caligiana", University : "UniGianni"},
+    key : "chiave"
+}
+{ 
+    request : "login", 
+    UserID: 1
+}
+{ 
+    request : "saveTopic", 
+    Topic: {FatherCategory : 'Finance', TopicName : "ECM"}
+}
+
+{ 
+    request : "savePoints", 
+    TopicID : 1,
+    UserID : 1,
+    XP : 10
+}
+
+{ 
+    request : "saveChallengeQuestion", 
+    Question : {ID : 1, QuestionText: "Vez?", Answer_A : "A", Answer_B : "B", Answer_C : "C", Answer_D : "D", XPValue : 50, Topics_ID : 1, TimeInSec : 10, Type : "Teory"}
+}
+
+{ 
+    request : "deleteChallengeQuestion", 
+    QuestionID : 1
+}
+
+{ 
+    request : "getAllTopics"
 }

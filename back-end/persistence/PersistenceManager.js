@@ -28,7 +28,7 @@ function saveUser(user, callback) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
-
+  console.log(user);
   var sql = "insert into 1001db.users(Firstname, Lastname, University) values	('" +
     user.getFirstname + "','" + user.getLastname + "','" + user.getUniversity +"')";
 

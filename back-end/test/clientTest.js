@@ -3,7 +3,7 @@ var http = require('http');
 
 var postData = JSON.stringify({ 
     request : "login", 
-    UserID: 1
+    UserID: 4
 })
 
 var options = {

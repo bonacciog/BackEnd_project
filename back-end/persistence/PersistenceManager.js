@@ -28,9 +28,9 @@ function saveUser(user, callback) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
-
-  var sql = "insert into 1001db.users(FirstName, LastName, University) values	('" +
-    user.getFirstName + "','" + user.getLastName + "','" + user.getUniversity +"')";
+  console.log(user);
+  var sql = "insert into 1001db.users(Firstname, Lastname, University) values	('" +
+    user.getFirstname + "','" + user.getLastname + "','" + user.getUniversity +"')";
 
   connection.query(sql, function (err, result) {
     if (err) throw err;
@@ -79,7 +79,7 @@ function getUser(ID, callback) {
       var user;
       Object.keys(result).forEach(function (key) {
         var row = result[key];
-        user = new userClass.User(row.FirstName, row.LastName, row.University);
+        user = new userClass.User(row.Firstname, row.Lastname, row.University);
         user.setID = row.ID;
       });
       callback(null, user);
@@ -98,8 +98,8 @@ function updateUser(user) {
     console.log("Connected to DB!");
   });
 
-  var sql = "UPDATE 1001DB.USERS SET FirstName = '" + user.getFirtName + "'," +
-    "LastName = '" + user.getLastName + "'," +
+  var sql = "UPDATE 1001DB.USERS SET Firstname = '" + user.getFirstname + "'," +
+    "Lastname = '" + user.getLastname + "'," +
     "University = '" + user.getUniversity + "'" +
     " WHERE ID = " + user.getID ;
   connection.query(sql, function (err, result) {
@@ -366,7 +366,7 @@ function deleteChallengeQuestion(questionID){
     if (err) throw err;
     console.log("Connected to DB!");
   });
-  var sql = "delete from 1001db.ChallengeQuestions where ID = '" + questionID + "'";
+  var sql = "delete from 1001db.ChallengeQuestions where ID = " + questionID;
   connection.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record deleted");
@@ -375,6 +375,78 @@ function deleteChallengeQuestion(questionID){
   connection.end();
 }
 
+function saveAccumulatedPoints(UserID, TopicID, XP){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "insert into 1001db.AccumulatedPoints(Users_ID, Topics_ID, XP)" +
+        " values (" + UserID +","+TopicID + "," + XP + ")";
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record inserted");
+  });
+
+  connection.end();
+}
+
+function deleteAccumulatedPoints(UserID, TopicID){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "delete from 1001db.AccumulatedPoints where  Users_ID = " + UserID + " and Topics_ID = " + TopicID;
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record deleted");
+  });
+
+  connection.end();
+}
+
+function getUserTopicPoints(UserID, TopicID, callback){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "select XP "+
+            "from 1001db.AccumulatedPoints" +
+            " where User_ID = " + UserID +
+            " and Topic_ID = " + TopicID;
+  connection.query(sql, function (err, result) {
+    if (err) callback(err, null);
+    else {
+      var XP;
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        XP = row.XP;
+      });
+      callback(null, XP);
+    }
+  });
+  connection.end();
+}
+
+function updateAccumulatedPoints(UserID, TopicID, XP){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "update 1001db.AccumulatedPoints "+
+            "set XP = " + XP + " " +
+            " where User_ID = " + UserID +
+            " and Topic_ID = " + TopicID;
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record updated");
+  });
+
+  connection.end();
+}
 
 exports.getUser = getUser;
 exports.updateUser = updateUser;
@@ -392,3 +464,7 @@ exports.saveChallengeQuestion = saveChallengeQuestion;
 exports.deleteChallengeQuestion = deleteChallengeQuestion;
 exports.getAllTopics = getAllTopics;
 exports.getKey = getKey;
+exports.saveAccumulatedPoints = saveAccumulatedPoints;
+exports.deleteAccumulatedPoints = deleteAccumulatedPoints;
+exports.getUserTopicPoints = getUserTopicPoints;
+exports.updateAccumulatedPoints = updateAccumulatedPoints;

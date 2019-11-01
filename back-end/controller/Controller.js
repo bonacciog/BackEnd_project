@@ -13,37 +13,12 @@ var response;
 
 eventRequest.on('saveUser', function (req, res) {
     try {
-        pm.saveUser(new userClass.User(req.User.Firstname, req.User.LastName, req.User.University), function (err, id) {
-            response = JSON.stringify({
-                UserID: id
-            });
-            res.end(response);
-        });
-
-    } catch (err) {
-        errorJSON.error = err.message;
-        response = JSON.stringify(errorJSON);
-        res.end(response);
-    }
-});
-
-eventRequest.on('login', function (req, res) {
-    try {
         pm.getKey(function (err, key) {
             if (key === req.key) {
-                pm.getUser(req.UserID, function (err, user) {
-                    if (err == null) {
-                        if (user == null) {
-                            errorJSON.error = "Incorrect parameter";
-                            response = JSON.stringify(errorJSON);
-                        }
-                        else
-                            response = JSON.stringify(user);
-                    }
-                    else {
-                        errorJSON.error = "Error in DB interation: " + err;
-                        response = JSON.stringify(errorJSON);
-                    }
+                pm.saveUser(new userClass.User(req.User.Firstname, req.User.Lastname, req.User.University), function (err, id) {
+                    response = JSON.stringify({
+                        UserID: id
+                    });
                     res.end(response);
                 });
             }
@@ -53,6 +28,30 @@ eventRequest.on('login', function (req, res) {
                 res.end(response);
             }
 
+        });
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
+eventRequest.on('login', function (req, res) {
+    try {
+        pm.getUser(req.UserID, function (err, user) {
+            if (err == null) {
+                if (user == null) {
+                    errorJSON.error = "Incorrect parameter";
+                    response = JSON.stringify(errorJSON);
+                }
+                else
+                    response = JSON.stringify(user);
+            }
+            else {
+                errorJSON.error = "Error in DB interation: " + err;
+                response = JSON.stringify(errorJSON);
+            }
+            res.end(response);
         });
 
     } catch (err) {
@@ -174,7 +173,7 @@ eventRequest.on('getAllTopics', function (req, res) {
             else {
                 errorJSON.error = "There aren't topics";
                 response = JSON.stringify(errorJSON);
-            }            
+            }
             res.end(response);
         });
     } catch (err) {
@@ -186,9 +185,9 @@ eventRequest.on('getAllTopics', function (req, res) {
 
 eventRequest.on('saveChallengeQuestion', function (req, res) {
     try {
-        pm.saveChallengeQuestion(new questionClass.Question(req.Question.QuestionText,req.Question.Answer_A,
+        pm.saveChallengeQuestion(new questionClass.Question(req.Question.QuestionText, req.Question.Answer_A,
             req.Question.Answer_B, req.Question.Answer_C, req.Question.Answer_D, req.Question.XPValue,
-            req.Question.TopicID, res.Question.Type, res.Question.TimeInSec));
+            req.Question.Topics_ID, req.Question.Type, req.Question.TimeInSec));
         res.end();
     } catch (err) {
         errorJSON.error = err.message;
@@ -200,6 +199,28 @@ eventRequest.on('saveChallengeQuestion', function (req, res) {
 eventRequest.on('deleteChallengeQuestion', function (req, res) {
     try {
         pm.deleteChallengeQuestion(req.QuestionID);
+        res.end();
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
+eventRequest.on('savePoints', function (req, res) {
+    try {
+        pm.saveAccumulatedPoints(req.UserID, req.TopicID, req.XP);
+        res.end();
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
+eventRequest.on('deletePoints', function (req, res) {
+    try {
+        pm.deleteAccumulatedPoints(req.UserID, req.TopicID);
         res.end();
     } catch (err) {
         errorJSON.error = err.message;

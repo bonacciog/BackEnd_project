@@ -11,11 +11,11 @@ class User {
         this.university = university;
     }
 
-    get getFirtName(){
+    get getFirstname(){
         return this.firstName;
     }
 
-    get getLastName(){
+    get getLastname(){
         return this.lastName;
     }
 

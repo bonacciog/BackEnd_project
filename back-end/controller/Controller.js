@@ -231,7 +231,7 @@ eventRequest.on('deletePoints', function (req, res) {
 
 eventRequest.on('getLeaderBoard', function (req, res) {
     try {
-        pm.getLeaderBoard(req.FatherCategory, function (err, leaderBoard) {
+        pm.getLeaderBoard(function (err, leaderBoard) {
             if (leaderBoard != "")
                 response = JSON.stringify(leaderBoard);
             else {

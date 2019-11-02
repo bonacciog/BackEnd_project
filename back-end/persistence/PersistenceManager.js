@@ -448,7 +448,7 @@ function updateAccumulatedPoints(UserID, TopicID, XP) {
   connection.end();
 }
 
-function getLeaderBoard(fatherCategory, callback) {
+function getLeaderBoard(callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
@@ -458,7 +458,6 @@ function getLeaderBoard(fatherCategory, callback) {
     "from 1001db.topics T, 1001db.users U, 1001db.accumulatedpoints P\n" +
     "where T.ID=P.Topics_ID\n" +
     "and  U.ID=P.Users_ID\n" +
-    "and FatherCategory = '" + fatherCategory + "'\n" +
     "group by U.ID\n" +
     "order by sum(XP) DESC";
   connection.query(sql, function (err, result) {

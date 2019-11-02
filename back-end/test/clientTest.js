@@ -2,8 +2,7 @@ var http = require('http');
 
 
 var postData = JSON.stringify({ 
-    request : "getLeaderBoard", 
-    FatherCategory: "Informatica"
+    request : "getLeaderBoard"
 })
 
 var options = {

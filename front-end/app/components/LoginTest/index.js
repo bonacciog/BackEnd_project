@@ -8,13 +8,14 @@ class LoginTest extends Component{
 
     constructor(props){
         super(props)
+        
     }
 
-    state = {nickname: "", key: "", isLoading: false}
+    state = {id: "",firstname: "", lastname: "", university:"", key: "", isLoading: false}
 
     setValue = async () => {
         try {
-          await AsyncStorage.setItem('key', this.state.key)
+          await AsyncStorage.setItem('id', this.state.id)
         } catch(e) {
           // save error
         }
@@ -25,22 +26,25 @@ class LoginTest extends Component{
     checkLogin(){
         this.state.isLoading = true;
         const {firstname,lastname,university,key,isLoading} = this.state;
-        fetch('http://127.0.0.1:3000',{
+        fetch('http://192.168.1.107:3000',{
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                request: 'login',
-                user: {Firstname: firstname, Lastname: lastname, University: university, Key: key},
+                request: 'saveUser',
+                User: {Firstname: firstname, Lastname: lastname, University: university, Key: key},
               }),
         })
             .then((response) => response.json())
                 .then((responseJson) => {
                     this.state.isLoading= false;
                     if(responseJson.error === undefined){
-                        this.props.navigation.navigate('home')
+                        console.log(responseJson)
+                        this.setState({id:responseJson.UserID})
+                        this.setValue()
+                        this.props.navigation.navigate('homeTest')
                     }else{
                         Alert.alert('Error',responseJson.error,[{
                             text:'Okay'
@@ -53,7 +57,7 @@ class LoginTest extends Component{
                     }])
         });
 
-        //this.setValue()
+        
         //this.props.navigation.navigate('homeTest')
     }
 

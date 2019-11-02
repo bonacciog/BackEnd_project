@@ -48,6 +48,18 @@ class Challenge extends Component{
                 </View>
                 <View style={styles.line}>
                     <View style={styles.buttonContainer}>
+                        <TouchableOpacity style={styles.button} onPress={_ => this.goToUserSelection()}>
+                            <CustomListItem
+                                iconName="database"
+                                iconColor="green"
+                                title="PROGRAMMING TOOLS"
+                                titleColor="#006622"
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={styles.line}>
+                    <View style={styles.buttonContainer}>
                         <TouchableOpacity style ={styles.button}>
                             <CustomListItem
                                 iconName="exclamation-triangle"

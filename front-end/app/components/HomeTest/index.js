@@ -37,6 +37,42 @@ class HomeTest extends Component{
 
     constructor(props){
         super(props)
+        this.state = {
+            loading: false,
+            data: [],
+            error: null
+        }
+        this.loadLeaderboard()
+    }
+
+    loadLeaderboard(){
+        //const {firstname,lastname,university,key,isLoading} = this.state;
+        fetch('http://192.168.1.107:3000',{
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                request: 'getLeaderBoard',
+                FatherCategory: 'Finance',
+              }),
+        })
+            .then((response) => response.json())
+                .then((responseJson) => {
+
+                    if(responseJson.error === undefined){
+                        console.log(responseJson)
+                        this.setState({data: DATA})
+                    }else{
+                        
+                        console.log(responseJson.error)
+
+                    }
+                })
+                .catch((error) =>{
+                    
+        });
     }
 
     static navigationOptions = {
@@ -75,7 +111,7 @@ class HomeTest extends Component{
                     >
                         <SafeAreaView style={styles.container}>
                             <FlatList
-                                data={DATA}
+                                data={this.state.data}
                                 renderItem={({ item }) => <CustomItem title={item.title} subtitle={item.profession} id={item.id} info={item.exp} />}
                                 keyExtractor={item => item.id}
                             />

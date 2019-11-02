@@ -13,7 +13,7 @@ class Cover extends Component{
     getMyValue = async (key) => {
         try {
             const value = await AsyncStorage.getItem(key)
-            fetch('http://127.0.0.1:3000',{
+            fetch('http://192.168.1.107:3000',{
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -21,12 +21,11 @@ class Cover extends Component{
                   },
                   body: JSON.stringify({
                     request: 'login',
-                    key: value,
+                    UserID: value,
                   }),
             })
                 .then((response) => response.json())
                     .then((responseJson) => {
-                        this.state.isLoading= false;
                         if(responseJson.error === undefined){
                             console.log('Found')
                             this.props.navigation.navigate("homeTest")
@@ -36,10 +35,10 @@ class Cover extends Component{
                         }
                     })
                     .catch((error) =>{
-                        Alert.alert('Error','Connection lost',[{
+                        Alert.alert('Error',"Connection lost",[{
                             text:'Okay'
                         }])
-                        console.log('Not found')
+                        console.log(error.message)
             });
 
         } catch(e) {
@@ -50,7 +49,7 @@ class Cover extends Component{
 
     constructor(props){
         super(props)
-        this.getMyValue("key")
+        this.getMyValue('id')
     }    
 
     render() {

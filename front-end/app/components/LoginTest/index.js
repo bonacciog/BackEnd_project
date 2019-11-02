@@ -24,8 +24,8 @@ class LoginTest extends Component{
 
     checkLogin(){
         this.state.isLoading = true;
-        const {name,surname,university,key,isLoading} = this.state;
-       /* fetch('http://192.168.43.120:3000',{
+        const {firstname,lastname,university,key,isLoading} = this.state;
+        fetch('http://127.0.0.1:3000',{
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -33,7 +33,7 @@ class LoginTest extends Component{
               },
               body: JSON.stringify({
                 request: 'login',
-                user: {Username: username, Password: password},
+                user: {Firstname: firstname, Lastname: lastname, University: university, Key: key},
               }),
         })
             .then((response) => response.json())
@@ -51,10 +51,10 @@ class LoginTest extends Component{
                     Alert.alert('Error','Connection lost',[{
                         text:'Okay'
                     }])
-        });*/
+        });
 
-        this.setValue()
-        this.props.navigation.navigate('homeTest')
+        //this.setValue()
+        //this.props.navigation.navigate('homeTest')
     }
 
     render() {
@@ -67,8 +67,8 @@ class LoginTest extends Component{
                     />
                 </View>
                 <View style={styles.customLogin}>
-                    <TextInput style={styles.input} placeholder="NAME" onChangeText = { text => this.setState({ name: text }) } />
-                    <TextInput style={styles.input} placeholder="SURNAME" onChangeText = { text => this.setState({ surname: text }) } />
+                    <TextInput style={styles.input} placeholder="NAME" onChangeText = { text => this.setState({ firstname: text }) } />
+                    <TextInput style={styles.input} placeholder="SURNAME" onChangeText = { text => this.setState({ lastname: text }) } />
                     <TextInput style={styles.input} placeholder="UNIVERSITY" onChangeText = { text => this.setState({ university: text }) } />
                     <TextInput style={styles.input} placeholder="KEY" onChangeText = { text => this.setState({ key: text }) } />
                     <TouchableOpacity

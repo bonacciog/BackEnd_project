@@ -32,3 +32,8 @@
 { 
     request : "getAllTopics"
 }
+
+{ 
+    request : "getLeaderBoard", 
+    FatherCategory: "Informatica"
+}

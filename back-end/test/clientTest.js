@@ -2,8 +2,8 @@ var http = require('http');
 
 
 var postData = JSON.stringify({ 
-    request : "login", 
-    UserID: 4
+    request : "getLeaderBoard", 
+    FatherCategory: "Informatica"
 })
 
 var options = {

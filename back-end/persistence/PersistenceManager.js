@@ -30,7 +30,7 @@ function saveUser(user, callback) {
   });
   console.log(user);
   var sql = "insert into 1001db.users(Firstname, Lastname, University) values	('" +
-    user.getFirstname + "','" + user.getLastname + "','" + user.getUniversity +"')";
+    user.getFirstname + "','" + user.getLastname + "','" + user.getUniversity + "')";
 
   connection.query(sql, function (err, result) {
     if (err) throw err;
@@ -39,7 +39,7 @@ function saveUser(user, callback) {
     callback(err, id);
 
   });
-  
+
 
 
   connection.end();
@@ -57,7 +57,7 @@ function deleteUser(ID) {
   connection.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record deleted");
-    
+
   });
   connection.end();
 }
@@ -101,7 +101,7 @@ function updateUser(user) {
   var sql = "UPDATE 1001DB.USERS SET Firstname = '" + user.getFirstname + "'," +
     "Lastname = '" + user.getLastname + "'," +
     "University = '" + user.getUniversity + "'" +
-    " WHERE ID = " + user.getID ;
+    " WHERE ID = " + user.getID;
   connection.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record updated");
@@ -109,7 +109,7 @@ function updateUser(user) {
   connection.end();
 }
 
-function saveMessage(message){
+function saveMessage(message) {
   if (!message instanceof messageClass.Message) {
     throw new ParamError("Incorrect parameter!");
   }
@@ -120,7 +120,7 @@ function saveMessage(message){
   });
 
   var sql = "insert into 1001db.messages(SenderUser_ID, ReceiverUser_ID, Text, DateTime, IsRead)" +
-            " values ('" + message.getSenderUserID + "','" + message.getReceiverUserID + "','" + message.getText + "','" + message.getDateTime + "','" + message.getIsRead + "')";
+    " values ('" + message.getSenderUserID + "','" + message.getReceiverUserID + "','" + message.getText + "','" + message.getDateTime + "','" + message.getIsRead + "')";
 
   connection.query(sql, function (err, result) {
     if (err) throw err;
@@ -158,16 +158,16 @@ function deleteMessage(message) {
  * 
  * @returns returns only messages sended from sender to receiver
  */
-function getMessages(SenderUserID, ReceiverUserID, limit, callback){
+function getMessages(SenderUserID, ReceiverUserID, limit, callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
-  var sql = "select * "+
-            "from 1001db.messages" +
-            " where SenderUser_ID = " + SenderUserID + " and ReceiverUser_ID = " + ReceiverUserID  +
-            " order by Datetime limit " + limit
+  var sql = "select * " +
+    "from 1001db.messages" +
+    " where SenderUser_ID = " + SenderUserID + " and ReceiverUser_ID = " + ReceiverUserID +
+    " order by Datetime limit " + limit
   connection.query(sql, function (err, result) {
     if (err) callback(err, null);
     else {
@@ -196,17 +196,17 @@ function getMessages(SenderUserID, ReceiverUserID, limit, callback){
  * 
  */
 
-function getAllMessages(ID_1, ID_2, limit, callback){
+function getAllMessages(ID_1, ID_2, limit, callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
-  var sql = "select * "+
-            "from 1001db.messages" +
-            " where (SenderUser_ID = " + ID_1 + " and ReceiverUser_ID = " + ID_2 + ")" +
-            " or (SenderUser_ID = " + ID_2 + " and ReceiverUser_ID = " + ID_1 + ")" +
-            " order by Datetime limit " + limit
+  var sql = "select * " +
+    "from 1001db.messages" +
+    " where (SenderUser_ID = " + ID_1 + " and ReceiverUser_ID = " + ID_2 + ")" +
+    " or (SenderUser_ID = " + ID_2 + " and ReceiverUser_ID = " + ID_1 + ")" +
+    " order by Datetime limit " + limit
   connection.query(sql, function (err, result) {
     if (err) callback(err, null);
     else {
@@ -224,7 +224,7 @@ function getAllMessages(ID_1, ID_2, limit, callback){
 
 }
 
-function saveKey(key){
+function saveKey(key) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
@@ -239,7 +239,7 @@ function saveKey(key){
   connection.end();
 }
 
-function deleteKey(key){
+function deleteKey(key) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
@@ -254,14 +254,14 @@ function deleteKey(key){
   connection.end();
 }
 
-function getKey(callback){
+function getKey(callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
-  var sql = "select * "+
-            "from 1001db.ExecutionTable"
+  var sql = "select * " +
+    "from 1001db.ExecutionTable"
   connection.query(sql, function (err, result) {
     if (err) callback(err, null);
     else {
@@ -277,7 +277,7 @@ function getKey(callback){
 
 }
 
-function saveTopic(topic){
+function saveTopic(topic) {
   if (!topic instanceof topicClass.Topic) {
     throw new ParamError("Incorrect parameter!");
   }
@@ -288,7 +288,7 @@ function saveTopic(topic){
   });
 
   var sql = "insert into 1001db.Topics(FatherCategory, TopicName)" +
-            " values ('" + topic.getFatherCategory + "','" + topic.getTopicsName +  "')";
+    " values ('" + topic.getFatherCategory + "','" + topic.getTopicsName + "')";
 
   connection.query(sql, function (err, result) {
     if (err) throw err;
@@ -298,14 +298,14 @@ function saveTopic(topic){
   connection.end();
 }
 
-function deleteTopic(topicName){
+function deleteTopic(topicName) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
-  var sql = "delete from 1001db.Topics "+
-            "where ID in (select ID from (SELECT * FROM 1001db.Topics) as T2 where TopicName = '" + topicName + "')";
+  var sql = "delete from 1001db.Topics " +
+    "where ID in (select ID from (SELECT * FROM 1001db.Topics) as T2 where TopicName = '" + topicName + "')";
   connection.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record deleted");
@@ -314,14 +314,14 @@ function deleteTopic(topicName){
   connection.end();
 }
 
-function getAllTopics(callback){
+function getAllTopics(callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
-  var sql = "select * "+
-            "from 1001db.Topics" ;
+  var sql = "select * " +
+    "from 1001db.Topics";
   connection.query(sql, function (err, result) {
     if (err) callback(err, null);
     else {
@@ -338,7 +338,7 @@ function getAllTopics(callback){
   connection.end();
 }
 
-function saveChallengeQuestion(question){
+function saveChallengeQuestion(question) {
   if (!question instanceof questionClass.Question) {
     throw new ParamError("Incorrect parameter!");
   }
@@ -349,8 +349,8 @@ function saveChallengeQuestion(question){
   });
 
   var sql = "insert into 1001db.ChallengeQuestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Type, TimeInSec)" +
-            " values ('" + question.getQuestionText + "','" + question.getAnswer_A + "','" + question.getAnswer_B +  "','" + question.getAnswer_C +  "','" + question.getAnswer_D + "'," + question.getXPValue + "," + question.getTopic_ID + ",'"+
-            question.getType + "',"+question.getTimeInSec +")" 
+    " values ('" + question.getQuestionText + "','" + question.getAnswer_A + "','" + question.getAnswer_B + "','" + question.getAnswer_C + "','" + question.getAnswer_D + "'," + question.getXPValue + "," + question.getTopic_ID + ",'" +
+    question.getType + "'," + question.getTimeInSec + ")"
 
   connection.query(sql, function (err, result) {
     if (err) throw err;
@@ -360,7 +360,7 @@ function saveChallengeQuestion(question){
   connection.end();
 }
 
-function deleteChallengeQuestion(questionID){
+function deleteChallengeQuestion(questionID) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
@@ -375,14 +375,14 @@ function deleteChallengeQuestion(questionID){
   connection.end();
 }
 
-function saveAccumulatedPoints(UserID, TopicID, XP){
+function saveAccumulatedPoints(UserID, TopicID, XP) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
   var sql = "insert into 1001db.AccumulatedPoints(Users_ID, Topics_ID, XP)" +
-        " values (" + UserID +","+TopicID + "," + XP + ")";
+    " values (" + UserID + "," + TopicID + "," + XP + ")";
   connection.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record inserted");
@@ -391,7 +391,7 @@ function saveAccumulatedPoints(UserID, TopicID, XP){
   connection.end();
 }
 
-function deleteAccumulatedPoints(UserID, TopicID){
+function deleteAccumulatedPoints(UserID, TopicID) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
@@ -406,16 +406,16 @@ function deleteAccumulatedPoints(UserID, TopicID){
   connection.end();
 }
 
-function getUserTopicPoints(UserID, TopicID, callback){
+function getUserTopicPoints(UserID, TopicID, callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
-  var sql = "select XP "+
-            "from 1001db.AccumulatedPoints" +
-            " where User_ID = " + UserID +
-            " and Topic_ID = " + TopicID;
+  var sql = "select XP " +
+    "from 1001db.AccumulatedPoints" +
+    " where User_ID = " + UserID +
+    " and Topic_ID = " + TopicID;
   connection.query(sql, function (err, result) {
     if (err) callback(err, null);
     else {
@@ -430,22 +430,56 @@ function getUserTopicPoints(UserID, TopicID, callback){
   connection.end();
 }
 
-function updateAccumulatedPoints(UserID, TopicID, XP){
+function updateAccumulatedPoints(UserID, TopicID, XP) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
-  var sql = "update 1001db.AccumulatedPoints "+
-            "set XP = " + XP + " " +
-            " where User_ID = " + UserID +
-            " and Topic_ID = " + TopicID;
+  var sql = "update 1001db.AccumulatedPoints " +
+    "set XP = " + XP + " " +
+    " where User_ID = " + UserID +
+    " and Topic_ID = " + TopicID;
   connection.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record updated");
   });
 
   connection.end();
+}
+
+function getLeaderBoard(fatherCategory, callback) {
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "select U.ID, Firstname, Lastname, sum(XP) AS SUMXPs\n" +
+    "from 1001db.topics T, 1001db.users U, 1001db.accumulatedpoints P\n" +
+    "where T.ID=P.Topics_ID\n" +
+    "and  U.ID=P.Users_ID\n" +
+    "and FatherCategory = '" + fatherCategory + "'\n" +
+    "group by U.ID\n" +
+    "order by sum(XP) DESC";
+  connection.query(sql, function (err, result) {
+    if (err) callback(err, null);
+    else {
+      var resArrayDim = 0;
+      var res = new Array();
+      Object.keys(result).forEach(function (key) {        
+        var row = result[key];
+        res[resArrayDim] = {
+          Firstname : row.Firstname,
+          Lastname : row.Lastname,
+          XP : row.SUMXPs
+        }
+        resArrayDim++;
+      });
+      callback(null, res);
+    }
+  });
+  connection.end();
+
 }
 
 exports.getUser = getUser;
@@ -468,3 +502,4 @@ exports.saveAccumulatedPoints = saveAccumulatedPoints;
 exports.deleteAccumulatedPoints = deleteAccumulatedPoints;
 exports.getUserTopicPoints = getUserTopicPoints;
 exports.updateAccumulatedPoints = updateAccumulatedPoints;
+exports.getLeaderBoard=getLeaderBoard;

@@ -229,4 +229,22 @@ eventRequest.on('deletePoints', function (req, res) {
     }
 });
 
+eventRequest.on('getLeaderBoard', function (req, res) {
+    try {
+        pm.getLeaderBoard(req.FatherCategory, function (err, leaderBoard) {
+            if (leaderBoard != "")
+                response = JSON.stringify(leaderBoard);
+            else {
+                errorJSON.error = "There aren't users, topics or accumulated points";
+                response = JSON.stringify(errorJSON);
+            }
+            res.end(response);
+        });
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
 exports.eventRequest = eventRequest

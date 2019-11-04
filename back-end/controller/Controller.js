@@ -5,6 +5,7 @@ const topicClass = require('../model/Topic');
 const questionClass = require('../model/Question');
 const EventEmitter = require('events').EventEmitter;
 
+const users = new Map();
 
 var eventRequest = new EventEmitter();
 var errorJSON = {
@@ -263,7 +264,7 @@ eventRequest.on('chooseRandomOpponent', function (req, res) {
     try {
         pm.getRandomPlayer(req.UserID, function(err, result){
             if (err == null) {
-                if (result == null) {
+                if (result === null) {
                     errorJSON.error = "Incorrect parameter";
                     response = JSON.stringify(errorJSON);
                 }
@@ -283,5 +284,58 @@ eventRequest.on('chooseRandomOpponent', function (req, res) {
     }
 });
 
+eventRequest.on('challengeSpecificUserHTTP', function (req, res) {
+    try {
+        pm.isPlaying(req.opponentID, function(err, result){
+            if (err == null) {
+                if (result == null) 
+                    pm.saveChallenge(req.myID, req.opponentID);
+                else{                    
+                    errorJSON.error = "Opponent is playing another challenge";
+                    response = JSON.stringify(errorJSON);
+                }                    
+            }
+            else {
+                errorJSON.error = "Error in DB interation: " + err;
+                response = JSON.stringify(errorJSON);
+            }
+            res.end(response);
+        });
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
+eventRequest.on('challengeSpecificUser', function (req, ws) {
+    try {
+        pm.isPlaying(req.opponentID, function(err, result){
+            if (err == null) {
+                if (result == null) {
+                    pm.saveChallenge(req.myID, req.opponentID);
+                    users.get(req.opponentID).send("Vuoi Giocare?");
+                }
+                else{                    
+                    errorJSON.error = "Opponent is playing another challenge";
+                    response = JSON.stringify(errorJSON);
+                }                    
+            }
+            else {
+                errorJSON.error = "Error in DB interation: " + err;
+                response = JSON.stringify(errorJSON);
+            }
+            ws.send(response);
+        });
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        ws.send(response);
+    }
+});
+
+eventRequest.on('addmyIDWS', function(req,ws){
+    users.set(req.myID, ws);
+});
 
 exports.eventRequest = eventRequest

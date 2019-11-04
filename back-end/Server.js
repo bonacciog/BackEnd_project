@@ -6,7 +6,6 @@ const server = http.createServer().listen(3000, 'localhost');
 const wss = new WebSocket.Server({ server });
 
 
-
 server.on('request', function (req, res) {
     if (req.method == 'POST') {
         var body = '';
@@ -24,9 +23,10 @@ server.on('request', function (req, res) {
 });
 
 wss.on('connection', function (ws) {
-    ws.on('message', function (req, ws) {
+
+    ws.on('message', function (req) {
         var request = JSON.parse(req);
-        c.eventRequest.emit(request.request, ws);
+        c.eventRequest.emit(request.request, request, this);
     });
 });
 

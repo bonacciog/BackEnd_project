@@ -3,8 +3,9 @@ const WebSocket = require('ws');
 const ws = new WebSocket('ws://localhost:3000');
 
 const message = JSON.stringify({ 
-    request : "chooseRandomOpponent", 
-    UserID: 1
+  request : "challengeSpecificUser", 
+  myID: 3,
+  opponentID: 4
 })
 
 ws.on('open', function open() {

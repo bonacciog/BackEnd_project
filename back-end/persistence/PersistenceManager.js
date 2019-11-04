@@ -527,6 +527,26 @@ function saveChallenge(ID1, ID2) {
   connection.end();
 }
 
+function isPlaying(ID, callback){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw callback(err,null);
+    console.log("Connected to DB!");
+  });
+  var sql = "select * from 1001db.challenge where ID_Player1 = "+ID+" or ID_Player2 = " + ID 
+  connection.query(sql, function (err, result) {
+    if (err) throw callback(err,null);
+    else {
+      if(Object.keys(result).length==0)
+        callback(err,null);
+      else
+        callback(err,result);
+    }
+  });
+  connection.end();
+
+}
+
 exports.getUser = getUser;
 exports.updateUser = updateUser;
 exports.saveUser = saveUser;
@@ -550,3 +570,4 @@ exports.updateAccumulatedPoints = updateAccumulatedPoints;
 exports.getLeaderBoard = getLeaderBoard;
 exports.getRandomPlayer = getRandomPlayer;
 exports.saveChallenge = saveChallenge;
+exports.isPlaying = isPlaying;

@@ -4,6 +4,11 @@
     key : "chiave"
 }
 { 
+    request : "challengeSpecificUser", 
+    myID: 3,
+    opponentID: 2
+}
+{ 
     request : "login", 
     UserID: 1,
     key : 'chiave'

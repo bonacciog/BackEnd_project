@@ -86,9 +86,11 @@ CREATE TABLE IF NOT EXISTS `1001db`.`Challenge` (
   `idChallenge` INT NOT NULL AUTO_INCREMENT,
   `ID_Player1` INT NOT NULL,
   `ID_Player2` INT NOT NULL,
-  PRIMARY KEY (`idChallenge`, `ID_Player1`, `ID_Player2`),
+  PRIMARY KEY (`idChallenge`),
   INDEX `Player1_idx` (`ID_Player1` ASC) VISIBLE,
   INDEX `Player2_idx` (`ID_Player2` ASC) VISIBLE,
+  UNIQUE INDEX `ID_Player1_UNIQUE` (`ID_Player1` ASC) VISIBLE,
+  UNIQUE INDEX `ID_Player2_UNIQUE` (`ID_Player2` ASC) VISIBLE,
   CONSTRAINT `Player1`
     FOREIGN KEY (`ID_Player1`)
     REFERENCES `1001db`.`Users` (`ID`)

@@ -547,6 +547,22 @@ function isPlaying(ID, callback){
 
 }
 
+function deleteChallenge(ID_Player1, ID_Player2){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "delete from 1001db.challenge where  idChallenge in (select idChallenge from 1001db.challenge" +
+  " where ID_Player1 = " + ID_Player1 + " and ID_Player2 = " + ID_Player2;
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record deleted");
+  });
+
+  connection.end();
+}
+
 exports.getUser = getUser;
 exports.updateUser = updateUser;
 exports.saveUser = saveUser;
@@ -571,3 +587,4 @@ exports.getLeaderBoard = getLeaderBoard;
 exports.getRandomPlayer = getRandomPlayer;
 exports.saveChallenge = saveChallenge;
 exports.isPlaying = isPlaying;
+exports.deleteChallenge = deleteChallenge;

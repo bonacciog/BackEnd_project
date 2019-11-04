@@ -13,6 +13,7 @@
     UserID: 1,
     key : 'chiave'
 }
+{"request" : "login","UserID": 1,"key" : "chiave"}
 { 
     request : "saveTopic", 
     Topic: {FatherCategory : 'Finance', TopicName : "ECM"}
@@ -45,4 +46,9 @@
 { 
     request : "chooseRandomOpponent", 
     UserID: 3
+}
+{
+    request : "challengeRejected",
+    myID : 1,
+    opponentID : 2
 }

@@ -13,7 +13,7 @@ var errorJSON = {
 };
 var response;
 
-eventRequest.on('saveUser', function (req, res) {
+eventRequest.on('saveUser', function (req, ws) {
     try {
         pm.getKey(function (err, key) {
             if (key === req.key) {
@@ -21,24 +21,26 @@ eventRequest.on('saveUser', function (req, res) {
                     response = JSON.stringify({
                         UserID: id
                     });
-                    res.end(response);
+                    if (!users.has(id))
+                        users.set(id, ws);
+                    ws.send(response);
                 });
             }
             else {
                 errorJSON.error = "key does not coincide";
                 response = JSON.stringify(errorJSON);
-                res.end(response);
+                ws.send(response);
             }
 
         });
     } catch (err) {
         errorJSON.error = err.message;
         response = JSON.stringify(errorJSON);
-        res.end(response);
+        ws.send(response);
     }
 });
 
-eventRequest.on('login', function (req, res) {
+eventRequest.on('login', function (req, ws) {
     try {
         pm.getKey(function (err, key) {
             if (key === req.key) {
@@ -48,20 +50,23 @@ eventRequest.on('login', function (req, res) {
                             errorJSON.error = "Incorrect parameter";
                             response = JSON.stringify(errorJSON);
                         }
-                        else
+                        else {
                             response = JSON.stringify(user);
+                            if (!users.has(req.UserID))
+                                users.set(req.UserID, ws);
+                        }
                     }
                     else {
                         errorJSON.error = "Error in DB interation: " + err;
                         response = JSON.stringify(errorJSON);
                     }
-                    res.end(response);
+                    ws.send(response);
                 });
             }
             else {
                 errorJSON.error = "key does not coincide";
                 response = JSON.stringify(errorJSON);
-                res.end(response);
+                ws.send(response);
             }
 
         });
@@ -69,7 +74,7 @@ eventRequest.on('login', function (req, res) {
     } catch (err) {
         errorJSON.error = err.message;
         response = JSON.stringify(errorJSON);
-        res.end(response);
+        ws.send(response);
     }
 });
 
@@ -259,67 +264,25 @@ eventRequest.on('getLeaderBoard', function (req, res) {
     }
 });
 
-
-eventRequest.on('chooseRandomOpponent', function (req, res) {
+/**
+ *  Who send a proposal is always ID_PLAYER1. 
+ *  Obviously ID_PLAYER2 is who received the proposal
+ */
+eventRequest.on('chooseRandomOpponent', function (req, ws) {
     try {
-        pm.getRandomPlayer(req.UserID, function(err, result){
+        pm.getRandomPlayer(req.UserID, function (err, result) {
             if (err == null) {
-                if (result === null) {
+                if (result == null) {
                     errorJSON.error = "Incorrect parameter";
                     response = JSON.stringify(errorJSON);
                 }
-                else
+                else {
                     pm.saveChallenge(req.UserID, result);
-            }
-            else {
-                errorJSON.error = "Error in DB interation: " + err;
-                response = JSON.stringify(errorJSON);
-            }
-            res.end(response);
-        });
-    } catch (err) {
-        errorJSON.error = err.message;
-        response = JSON.stringify(errorJSON);
-        res.end(response);
-    }
-});
-
-eventRequest.on('challengeSpecificUserHTTP', function (req, res) {
-    try {
-        pm.isPlaying(req.opponentID, function(err, result){
-            if (err == null) {
-                if (result == null) 
-                    pm.saveChallenge(req.myID, req.opponentID);
-                else{                    
-                    errorJSON.error = "Opponent is playing another challenge";
-                    response = JSON.stringify(errorJSON);
-                }                    
-            }
-            else {
-                errorJSON.error = "Error in DB interation: " + err;
-                response = JSON.stringify(errorJSON);
-            }
-            res.end(response);
-        });
-    } catch (err) {
-        errorJSON.error = err.message;
-        response = JSON.stringify(errorJSON);
-        res.end(response);
-    }
-});
-
-eventRequest.on('challengeSpecificUser', function (req, ws) {
-    try {
-        pm.isPlaying(req.opponentID, function(err, result){
-            if (err == null) {
-                if (result == null) {
-                    pm.saveChallenge(req.myID, req.opponentID);
-                    users.get(req.opponentID).send("Vuoi Giocare?");
+                    users.get(result).send(JSON.stringify({
+                        request: "challengeProposal",
+                        opponentID: req.UserID
+                    }));
                 }
-                else{                    
-                    errorJSON.error = "Opponent is playing another challenge";
-                    response = JSON.stringify(errorJSON);
-                }                    
             }
             else {
                 errorJSON.error = "Error in DB interation: " + err;
@@ -334,8 +297,45 @@ eventRequest.on('challengeSpecificUser', function (req, ws) {
     }
 });
 
-eventRequest.on('addmyIDWS', function(req,ws){
-    users.set(req.myID, ws);
+
+eventRequest.on('challengeSpecificUser', function (req, ws) {
+    try {
+        pm.isPlaying(req.opponentID, function (err, result) {
+            if (err == null) {
+                if (result == null) {
+                    pm.saveChallenge(req.myID, req.opponentID);
+                    users.get(result).send(JSON.stringify({
+                        request: "challengeProposal",
+                        opponentID: req.myID
+                    }));
+                }
+                else {
+                    errorJSON.error = "Opponent is playing another challenge";
+                    response = JSON.stringify(errorJSON);
+                }
+            }
+            else {
+                errorJSON.error = "Error in DB interation: " + err;
+                response = JSON.stringify(errorJSON);
+            }
+            ws.send(response);
+        });
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        ws.send(response);
+    }
+});
+
+eventRequest.on('challengeRejected', function (req, ws) {
+    try {
+        pm.deleteChallenge(req.opponentID, req.myID);
+        ws.send();
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        ws.send(response);
+    }
 });
 
 exports.eventRequest = eventRequest

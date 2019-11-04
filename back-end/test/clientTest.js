@@ -2,9 +2,7 @@ var http = require('http');
 
 
 var postData = JSON.stringify({ 
-    request : "challengeSpecificUser", 
-    myID: 3,
-    opponentID: 4
+    request : "getAllTopics"
 })
 
 var options = {

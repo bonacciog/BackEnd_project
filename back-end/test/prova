@@ -36,3 +36,7 @@
 { 
     request : "getLeaderBoard"
 }
+{ 
+    request : "chooseRandomOpponent", 
+    UserID: 3
+}

@@ -454,7 +454,7 @@ function getLeaderBoard(callback) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
-  var sql = "select U.ID, Firstname, Lastname, sum(XP) AS SUMXPs\n" +
+  var sql = "select U.ID, Firstname, Lastname, University, sum(XP) AS SUMXPs\n" +
     "from 1001db.topics T, 1001db.users U, 1001db.accumulatedpoints P\n" +
     "where T.ID=P.Topics_ID\n" +
     "and  U.ID=P.Users_ID\n" +
@@ -465,12 +465,13 @@ function getLeaderBoard(callback) {
     else {
       var resArrayDim = 0;
       var res = new Array();
-      Object.keys(result).forEach(function (key) {        
+      Object.keys(result).forEach(function (key) {
         var row = result[key];
         res[resArrayDim] = {
-          Firstname : row.Firstname,
-          Lastname : row.Lastname,
-          XP : row.SUMXPs
+          Firstname: row.Firstname,
+          Lastname: row.Lastname,
+          University: row.University,
+          XP: row.SUMXPs
         }
         resArrayDim++;
       });
@@ -479,6 +480,51 @@ function getLeaderBoard(callback) {
   });
   connection.end();
 
+}
+
+function getRandomPlayer(ID,callback) {
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw callback(err,null);
+    console.log("Connected to DB!");
+  });
+  var sql = "select ID\n" +
+    "from 1001db.users\n" +
+    "where ID not in (select ID_Player1\n" +
+    "from 1001db.challenge)\n" +
+    "and ID not in (select ID_Player1\n" +
+    "from 1001db.challenge)\n" +
+    "and ID <> " + ID + "\n" +
+    "order by RAND()\n" +
+    "limit 1\n"
+
+  connection.query(sql, function (err, result) {
+    if (err) throw callback(err,null);
+    else {
+      var resultID;
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        resultID = row.ID
+      });
+
+      callback(err,resultID)
+    }
+  });
+  connection.end();
+}
+
+function saveChallenge(ID1, ID2) {
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "insert into 1001db.challenge(ID_Player1, ID_Player2) values(" + ID1 + "," + ID2 + ")";
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record inserted");
+  });
+  connection.end();
 }
 
 exports.getUser = getUser;
@@ -501,4 +547,6 @@ exports.saveAccumulatedPoints = saveAccumulatedPoints;
 exports.deleteAccumulatedPoints = deleteAccumulatedPoints;
 exports.getUserTopicPoints = getUserTopicPoints;
 exports.updateAccumulatedPoints = updateAccumulatedPoints;
-exports.getLeaderBoard=getLeaderBoard;
+exports.getLeaderBoard = getLeaderBoard;
+exports.getRandomPlayer = getRandomPlayer;
+exports.saveChallenge = saveChallenge;

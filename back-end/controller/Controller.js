@@ -5,6 +5,7 @@ const topicClass = require('../model/Topic');
 const questionClass = require('../model/Question');
 const EventEmitter = require('events').EventEmitter;
 
+
 var eventRequest = new EventEmitter();
 var errorJSON = {
     error: ""
@@ -246,5 +247,31 @@ eventRequest.on('getLeaderBoard', function (req, res) {
         res.end(response);
     }
 });
+
+
+eventRequest.on('chooseRandomOpponent', function (req, res) {
+    try {
+        pm.getRandomPlayer(req.UserID, function(err, result){
+            if (err == null) {
+                if (result == null) {
+                    errorJSON.error = "Incorrect parameter";
+                    response = JSON.stringify(errorJSON);
+                }
+                else
+                    pm.saveChallenge(req.UserID, result);
+            }
+            else {
+                errorJSON.error = "Error in DB interation: " + err;
+                response = JSON.stringify(errorJSON);
+            }
+            res.end(response);
+        });
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
 
 exports.eventRequest = eventRequest

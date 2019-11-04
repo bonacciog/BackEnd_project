@@ -39,20 +39,30 @@ eventRequest.on('saveUser', function (req, res) {
 
 eventRequest.on('login', function (req, res) {
     try {
-        pm.getUser(req.UserID, function (err, user) {
-            if (err == null) {
-                if (user == null) {
-                    errorJSON.error = "Incorrect parameter";
-                    response = JSON.stringify(errorJSON);
-                }
-                else
-                    response = JSON.stringify(user);
+        pm.getKey(function (err, key) {
+            if (key === req.key) {
+                pm.getUser(req.UserID, function (err, user) {
+                    if (err == null) {
+                        if (user == null) {
+                            errorJSON.error = "Incorrect parameter";
+                            response = JSON.stringify(errorJSON);
+                        }
+                        else
+                            response = JSON.stringify(user);
+                    }
+                    else {
+                        errorJSON.error = "Error in DB interation: " + err;
+                        response = JSON.stringify(errorJSON);
+                    }
+                    res.end(response);
+                });
             }
             else {
-                errorJSON.error = "Error in DB interation: " + err;
+                errorJSON.error = "key does not coincide";
                 response = JSON.stringify(errorJSON);
+                res.end(response);
             }
-            res.end(response);
+
         });
 
     } catch (err) {

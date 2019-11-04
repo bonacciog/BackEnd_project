@@ -2,8 +2,9 @@ var http = require('http');
 
 
 var postData = JSON.stringify({ 
-    request : "chooseRandomOpponent", 
-    UserID: 3
+    request : "login", 
+    UserID: 1,
+    key : 'chdiave'
 })
 
 var options = {

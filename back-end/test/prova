@@ -5,7 +5,8 @@
 }
 { 
     request : "login", 
-    UserID: 1
+    UserID: 1,
+    key : 'chiave'
 }
 { 
     request : "saveTopic", 

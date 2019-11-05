@@ -28,7 +28,6 @@ function saveUser(user, callback) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
-  console.log(user);
   var sql = "insert into 1001db.users(Firstname, Lastname, University) values	('" +
     user.getFirstname + "','" + user.getLastname + "','" + user.getUniversity + "')";
 
@@ -330,6 +329,7 @@ function getAllTopics(callback) {
       Object.keys(result).forEach(function (key) {
         var row = result[key];
         topics[topicArrayDim] = new topicClass.Topic(row.FatherCategory, row.TopicName);
+        topics[topicArrayDim].setID = row.ID;
         topicArrayDim++;
       });
       callback(null, topics);
@@ -471,6 +471,7 @@ function getLeaderBoard(callback) {
           Firstname: row.Firstname,
           Lastname: row.Lastname,
           University: row.University,
+          UserID: row.ID,
           XP: row.SUMXPs
         }
         resArrayDim++;
@@ -513,7 +514,7 @@ function getRandomPlayer(ID,callback) {
   connection.end();
 }
 
-function saveChallenge(ID1, ID2) {
+function saveChallenge(ID1, ID2, callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
@@ -521,8 +522,10 @@ function saveChallenge(ID1, ID2) {
   });
   var sql = "insert into 1001db.challenge(SenderProposal_ID, ReceiverProposal_ID) values(" + ID1 + "," + ID2 + ")";
   connection.query(sql, function (err, result) {
-    if (err) throw err;
+    if (err) throw callback(err,null);
     console.log("1 record inserted");
+    var id = result.insertId;
+    callback(null, id);
   });
   connection.end();
 }
@@ -547,14 +550,13 @@ function isPlaying(ID, callback){
 
 }
 
-function deleteChallenge(ID_Player1, ID_Player2){
+function deleteChallenge(ID){
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
-  var sql = "delete from 1001db.challenge where  idChallenge in (select idChallenge from 1001db.challenge" +
-  " where SenderProposal_IDPlayer1 = " + ID_Player1 + " and ReceiverProposal_ID = " + ID_Player2;
+  var sql = "delete from 1001db.challenge where  idChallenge = "+ ID;
   connection.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record deleted");
@@ -563,7 +565,7 @@ function deleteChallenge(ID_Player1, ID_Player2){
   connection.end();
 }
 
-function getRandomQuestions(limit, callback){
+function getRandomQuestions(limit, topicID, callback){
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw callback(err,null);
@@ -571,6 +573,7 @@ function getRandomQuestions(limit, callback){
   });
   var sql = "select *\n"+ 
             "from 1001db.challengequestions\n"+
+            "where Topics_ID =" + topicID + "\n"+
             "order by rand()\n"+
             "limit " + limit;
   connection.query(sql, function (err, result) {

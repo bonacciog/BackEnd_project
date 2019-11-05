@@ -23,8 +23,21 @@ eventRequest.on('saveUser', function (req, ws) {
                     response = JSON.stringify({
                         UserID: id
                     });
-                    if (!users.has(id))
+                    pm.getAllTopics(function (err, topics) {
+                        if (topics != ""){
+                            topics.forEach(element => {
+                                pm.saveAccumulatedPoints(id, element.getID, 0);
+                            });
+                        }
+                        else
+                            console.log("There aren't topics for user initialization");
+                        
+                    });
+
+                    if (!users.has(id)){
                         users.set(id, ws);
+                        console.log("A WebSocket saved!");
+                    }
                     ws.send(response);
                 });
             }
@@ -54,8 +67,10 @@ eventRequest.on('login', function (req, ws) {
                         }
                         else {
                             response = JSON.stringify(user);
-                            if (!users.has(req.UserID))
+                            if (!users.has(req.UserID)){
                                 users.set(req.UserID, ws);
+                                console.log("A WebSocket saved!");
+                            }
                         }
                     }
                     else {
@@ -273,20 +288,25 @@ eventRequest.on('chooseRandomOpponent', function (req, res) {
                 if (result == null) {
                     errorJSON.error = "Incorrect parameter";
                     response = JSON.stringify(errorJSON);
+                    res.end(response);
                 }
                 else {
-                    pm.saveChallenge(req.UserID, result);
-                    users.get(result).send(JSON.stringify({
-                        request: "challengeProposal",
-                        SenderProposal_ID: req.UserID
-                    }));
+                    pm.saveChallenge(req.UserID, result, function(err,id){
+                        users.get(result).send(JSON.stringify({
+                            request: "challengeProposal",                        
+                            TopicID: req.TopicID,
+                            SenderProposal_ID: req.UserID,
+                            challangeID : id
+                        }));
+                        res.end();
+                    });
                 }
             }
             else {
                 errorJSON.error = "Error in DB interation: " + err;
                 response = JSON.stringify(errorJSON);
-            }
-            res.end(response);
+                res.end(response);
+            }            
         });
     } catch (err) {
         errorJSON.error = err.message;
@@ -298,25 +318,31 @@ eventRequest.on('chooseRandomOpponent', function (req, res) {
 
 eventRequest.on('challengeSpecificUser', function (req, res) {
     try {
-        pm.isPlaying(req.opponentID, function (err, result) {
+        pm.isPlaying(req.SenderProposal_ID, function (err, result) {
             if (err == null) {
                 if (result == null) {
-                    pm.saveChallenge(req.myID, req.opponentID);
-                    users.get(result).send(JSON.stringify({
-                        request: "challengeProposal",
-                        SenderProposal_ID: req.UserID
-                    }));
+                    pm.saveChallenge(req.SenderProposal_ID, req.ReceiverProposal_ID, function(err,id){
+                        users.get(req.ReceiverProposal_ID).send(JSON.stringify({
+                            request: "challengeProposal",                        
+                            TopicID: req.TopicID,
+                            SenderProposal_ID: req.SenderProposal_ID,
+                            challangeID : id
+                        }));
+                        res.end();
+                    });
+                    
                 }
                 else {
                     errorJSON.error = "Opponent is playing another challenge";
                     response = JSON.stringify(errorJSON);
+                    res.end(response);
                 }
             }
             else {
                 errorJSON.error = "Error in DB interation: " + err;
                 response = JSON.stringify(errorJSON);
+                res.end(response);
             }
-            res.end(response);
         });
     } catch (err) {
         errorJSON.error = err.message;
@@ -327,8 +353,8 @@ eventRequest.on('challengeSpecificUser', function (req, res) {
 
 eventRequest.on('challengeRejected', function (req, res) {
     try {
-        pm.deleteChallenge(req.SenderProposal_ID, req.ReceiverProposal_ID);
-        users.get(req.SenderProposal_ID).send(JSON.parse({
+        pm.deleteChallenge(req.challangeID);
+        users.get(req.SenderProposal_ID).send(JSON.stringify({
             request: "challengeRejected",
             ReceiverProposal_ID: req.ReceiverProposal_ID
         }));
@@ -342,21 +368,22 @@ eventRequest.on('challengeRejected', function (req, res) {
 
 eventRequest.on('challengeAccepted', function (req, res) {
     try {
-        pm.getRandomQuestions(limitQuestions, function (err, result){
+        pm.getRandomQuestions(limitQuestions, req.TopicID, function (err, result) {
             if (err == null) {
-                if (user == null) {
+                if (result == null) {
                     errorJSON.error = "There aren't questions in DB";
                     response = JSON.stringify(errorJSON);
                     res.end(response);
                 }
                 else {
+                    console.log(result);
                     res.end();
                     var challange = {
-                        request : req.request,
-                        Questions : result
+                        request: req.request,
+                        Questions: result
                     }
-                    users.get(req.SenderProposal_ID).send(challange);
-                    users.get(req.ReceiverProposal_ID).send(challange);
+                    users.get(req.SenderProposal_ID).send(JSON.stringify(challange));
+                    users.get(req.ReceiverProposal_ID).send(JSON.stringify(challange));
                 }
             }
             else {
@@ -365,7 +392,7 @@ eventRequest.on('challengeAccepted', function (req, res) {
                 res.end(response);
             }
         });
-        
+
     } catch (err) {
         errorJSON.error = err.message;
         response = JSON.stringify(errorJSON);
@@ -373,4 +400,4 @@ eventRequest.on('challengeAccepted', function (req, res) {
     }
 });
 
-exports.eventRequest = eventRequest
+exports.eventRequest = eventRequest;

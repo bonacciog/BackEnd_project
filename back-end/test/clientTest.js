@@ -3,8 +3,16 @@ var http = require('http');
 
 var postData = JSON.stringify({ 
     request : "chooseRandomOpponent", 
-    UserID: 3
+    UserID: 3,
+    TopicID : 1
 })
+/*
+var postData = JSON.stringify({ 
+    request : "challengeSpecificUser", 
+    ReceiverProposal_ID : 12,
+    SenderProposal_ID : 11,
+    TopicID : 1
+});*/
 
 var options = {
     hostname: 'localhost',

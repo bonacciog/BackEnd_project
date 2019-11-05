@@ -4,11 +4,6 @@
     key : "chiave"
 }
 { 
-    request : "challengeSpecificUser", 
-    myID: 3,
-    opponentID: 2
-}
-{ 
     request : "login", 
     UserID: 1,
     key : 'chiave'
@@ -45,22 +40,36 @@
 }
 { 
     request : "chooseRandomOpponent", 
-    UserID: 3
+    UserID: 3,
+    TopicID : 1
 }
 {
     request : "challengeRejected",
-    ReceiverProposalID : 1,
-    SenderProposalID : 2
+    ReceiverProposal_ID : 12,
+    SenderProposal_ID : 11,
+    challangeID : 14
 }
 
 {
     request : "challengeAccepted",
-    ReceiverProposalID : 1,
-    SenderProposalID : 2
+    ReceiverProposal_ID : 1,
+    SenderProposal_ID : 2,
+    TopicID : 1
 }
 
-Entrata Front-End
-{
-    request: "challengeProposal",
-    SenderProposal_ID: 3
+{ 
+    request : "challengeSpecificUser", 
+    ReceiverProposal_ID : 12,
+    SenderProposal_ID : 11,
+    TopicID : 1
 }
+-----------------------
+    Entrata Front-End
+-----------------------
+{
+    request: "challengeProposal",                        
+    TopicID: req.TopicID,
+    SenderProposal_ID: req.UserID,
+    challangeID : id
+}
+

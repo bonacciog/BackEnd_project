@@ -17,8 +17,6 @@ pm.saveUser(user, function (err, result){
     console.log(result);
 });*/
 
-for(i = 2; i < 40; i++){
-var question = new questionClass.Question("?" + i, "A", "B", "C", "D", 10, 1, "Teoria", 10);
-
-pm.saveChallengeQuestion(question);
-}
+pm.getRandomQuestions(10, 1, function (err, result) {
+    console.log(result);
+});

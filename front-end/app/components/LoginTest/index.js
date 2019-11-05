@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import { REACT_APP_API_URL } from 'react-native-dotenv';
 
 import styles from './styles'
 
@@ -11,11 +12,11 @@ class LoginTest extends Component{
         
     }
 
-    state = {id: "",firstname: "", lastname: "", university:"", key: "", isLoading: false}
+    state = {firstname: "", lastname: "", university:"", key: "", isLoading: false}
 
-    setValue = async () => {
+    setValue = async id => {
         try {
-          await AsyncStorage.setItem('id', this.state.id)
+            AsyncStorage.setItem('userID', JSON.stringify(id))
         } catch(e) {
           // save error
         }
@@ -26,7 +27,8 @@ class LoginTest extends Component{
     checkLogin(){
         this.state.isLoading = true;
         const {firstname,lastname,university,key,isLoading} = this.state;
-        fetch('http://192.168.1.107:3000',{
+        process.env.
+        fetch(REACT_APP_API_URL,{
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -41,9 +43,7 @@ class LoginTest extends Component{
                 .then((responseJson) => {
                     this.state.isLoading= false;
                     if(responseJson.error === undefined){
-                        console.log(responseJson)
-                        this.setState({id:responseJson.UserID})
-                        this.setValue()
+                        this.setValue(responseJson.UserID)
                         this.props.navigation.navigate('homeTest')
                     }else{
                         Alert.alert('Error',responseJson.error,[{

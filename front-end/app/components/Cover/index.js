@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, ImageBackground, Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import { REACT_APP_API_URL } from 'react-native-dotenv';
 //import styles from './styles'
 
 class Cover extends Component{
@@ -13,7 +14,9 @@ class Cover extends Component{
     getMyValue = async (key) => {
         try {
             const value = await AsyncStorage.getItem(key)
-            fetch('http://192.168.1.107:3000',{
+            console.log(value)
+            
+            fetch(REACT_APP_API_URL,{
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -21,7 +24,7 @@ class Cover extends Component{
                   },
                   body: JSON.stringify({
                     request: 'login',
-                    UserID: value,
+                    UserID: JSON.parse(value),
                   }),
             })
                 .then((response) => response.json())
@@ -49,7 +52,7 @@ class Cover extends Component{
 
     constructor(props){
         super(props)
-        this.getMyValue('id')
+        this.getMyValue('userID')
     }    
 
     render() {

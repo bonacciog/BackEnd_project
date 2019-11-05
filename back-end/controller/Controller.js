@@ -5,13 +5,17 @@ const topicClass = require('../model/Topic');
 const questionClass = require('../model/Question');
 const EventEmitter = require('events').EventEmitter;
 
+const limitQuestions = 10;
+
+const users = new Map();
+
 var eventRequest = new EventEmitter();
 var errorJSON = {
     error: ""
 };
 var response;
 
-eventRequest.on('saveUser', function (req, res) {
+eventRequest.on('saveUser', function (req, ws) {
     try {
         pm.getKey(function (err, key) {
             if (key === req.key) {
@@ -19,45 +23,75 @@ eventRequest.on('saveUser', function (req, res) {
                     response = JSON.stringify({
                         UserID: id
                     });
-                    res.end(response);
+                    pm.getAllTopics(function (err, topics) {
+                        if (topics != ""){
+                            topics.forEach(element => {
+                                pm.saveAccumulatedPoints(id, element.getID, 0);
+                            });
+                        }
+                        else
+                            console.log("There aren't topics for user initialization");
+                        
+                    });
+
+                    if (!users.has(id)){
+                        users.set(id, ws);
+                        console.log("A WebSocket saved!");
+                    }
+                    ws.send(response);
                 });
             }
             else {
                 errorJSON.error = "key does not coincide";
                 response = JSON.stringify(errorJSON);
-                res.end(response);
+                ws.send(response);
             }
 
         });
     } catch (err) {
         errorJSON.error = err.message;
         response = JSON.stringify(errorJSON);
-        res.end(response);
+        ws.send(response);
     }
 });
 
-eventRequest.on('login', function (req, res) {
+eventRequest.on('login', function (req, ws) {
     try {
-        pm.getUser(req.UserID, function (err, user) {
-            if (err == null) {
-                if (user == null) {
-                    errorJSON.error = "Incorrect parameter";
-                    response = JSON.stringify(errorJSON);
-                }
-                else
-                    response = JSON.stringify(user);
+        pm.getKey(function (err, key) {
+            if (key === req.key) {
+                pm.getUser(req.UserID, function (err, user) {
+                    if (err == null) {
+                        if (user == null) {
+                            errorJSON.error = "Incorrect parameter";
+                            response = JSON.stringify(errorJSON);
+                        }
+                        else {
+                            response = JSON.stringify(user);
+                            if (!users.has(req.UserID)){
+                                users.set(req.UserID, ws);
+                                console.log("A WebSocket saved!");
+                            }
+                        }
+                    }
+                    else {
+                        errorJSON.error = "Error in DB interation: " + err;
+                        response = JSON.stringify(errorJSON);
+                    }
+                    ws.send(response);
+                });
             }
             else {
-                errorJSON.error = "Error in DB interation: " + err;
+                errorJSON.error = "key does not coincide";
                 response = JSON.stringify(errorJSON);
+                ws.send(response);
             }
-            res.end(response);
+
         });
 
     } catch (err) {
         errorJSON.error = err.message;
         response = JSON.stringify(errorJSON);
-        res.end(response);
+        ws.send(response);
     }
 });
 
@@ -231,7 +265,7 @@ eventRequest.on('deletePoints', function (req, res) {
 
 eventRequest.on('getLeaderBoard', function (req, res) {
     try {
-        pm.getLeaderBoard(req.FatherCategory, function (err, leaderBoard) {
+        pm.getLeaderBoard(function (err, leaderBoard) {
             if (leaderBoard != "")
                 response = JSON.stringify(leaderBoard);
             else {
@@ -247,4 +281,123 @@ eventRequest.on('getLeaderBoard', function (req, res) {
     }
 });
 
-exports.eventRequest = eventRequest
+eventRequest.on('chooseRandomOpponent', function (req, res) {
+    try {
+        pm.getRandomPlayer(req.UserID, function (err, result) {
+            if (err == null) {
+                if (result == null) {
+                    errorJSON.error = "Incorrect parameter";
+                    response = JSON.stringify(errorJSON);
+                    res.end(response);
+                }
+                else {
+                    pm.saveChallenge(req.UserID, result, function(err,id){
+                        users.get(result).send(JSON.stringify({
+                            request: "challengeProposal",                        
+                            TopicID: req.TopicID,
+                            SenderProposal_ID: req.UserID,
+                            challangeID : id
+                        }));
+                        res.end();
+                    });
+                }
+            }
+            else {
+                errorJSON.error = "Error in DB interation: " + err;
+                response = JSON.stringify(errorJSON);
+                res.end(response);
+            }            
+        });
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
+
+eventRequest.on('challengeSpecificUser', function (req, res) {
+    try {
+        pm.isPlaying(req.SenderProposal_ID, function (err, result) {
+            if (err == null) {
+                if (result == null) {
+                    pm.saveChallenge(req.SenderProposal_ID, req.ReceiverProposal_ID, function(err,id){
+                        users.get(req.ReceiverProposal_ID).send(JSON.stringify({
+                            request: "challengeProposal",                        
+                            TopicID: req.TopicID,
+                            SenderProposal_ID: req.SenderProposal_ID,
+                            challangeID : id
+                        }));
+                        res.end();
+                    });
+                    
+                }
+                else {
+                    errorJSON.error = "Opponent is playing another challenge";
+                    response = JSON.stringify(errorJSON);
+                    res.end(response);
+                }
+            }
+            else {
+                errorJSON.error = "Error in DB interation: " + err;
+                response = JSON.stringify(errorJSON);
+                res.end(response);
+            }
+        });
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
+eventRequest.on('challengeRejected', function (req, res) {
+    try {
+        pm.deleteChallenge(req.challangeID);
+        users.get(req.SenderProposal_ID).send(JSON.stringify({
+            request: "challengeRejected",
+            ReceiverProposal_ID: req.ReceiverProposal_ID
+        }));
+        res.end();
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
+eventRequest.on('challengeAccepted', function (req, res) {
+    try {
+        pm.getRandomQuestions(limitQuestions, req.TopicID, function (err, result) {
+            if (err == null) {
+                if (result == null) {
+                    errorJSON.error = "There aren't questions in DB";
+                    response = JSON.stringify(errorJSON);
+                    res.end(response);
+                }
+                else {
+                    console.log(result);
+                    res.end();
+                    var challange = {
+                        request: req.request,
+                        Questions: result
+                    }
+                    users.get(req.SenderProposal_ID).send(JSON.stringify(challange));
+                    users.get(req.ReceiverProposal_ID).send(JSON.stringify(challange));
+                }
+            }
+            else {
+                errorJSON.error = "Error in DB interation: " + err;
+                response = JSON.stringify(errorJSON);
+                res.end(response);
+            }
+        });
+
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
+exports.eventRequest = eventRequest;

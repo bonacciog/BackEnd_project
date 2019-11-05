@@ -28,7 +28,6 @@ function saveUser(user, callback) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
-  console.log(user);
   var sql = "insert into 1001db.users(Firstname, Lastname, University) values	('" +
     user.getFirstname + "','" + user.getLastname + "','" + user.getUniversity + "')";
 
@@ -330,6 +329,7 @@ function getAllTopics(callback) {
       Object.keys(result).forEach(function (key) {
         var row = result[key];
         topics[topicArrayDim] = new topicClass.Topic(row.FatherCategory, row.TopicName);
+        topics[topicArrayDim].setID = row.ID;
         topicArrayDim++;
       });
       callback(null, topics);
@@ -448,17 +448,16 @@ function updateAccumulatedPoints(UserID, TopicID, XP) {
   connection.end();
 }
 
-function getLeaderBoard(fatherCategory, callback) {
+function getLeaderBoard(callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
-  var sql = "select U.ID, Firstname, Lastname, sum(XP) AS SUMXPs\n" +
+  var sql = "select U.ID, Firstname, Lastname, University, sum(XP) AS SUMXPs\n" +
     "from 1001db.topics T, 1001db.users U, 1001db.accumulatedpoints P\n" +
     "where T.ID=P.Topics_ID\n" +
     "and  U.ID=P.Users_ID\n" +
-    "and FatherCategory = '" + fatherCategory + "'\n" +
     "group by U.ID\n" +
     "order by sum(XP) DESC";
   connection.query(sql, function (err, result) {
@@ -466,12 +465,14 @@ function getLeaderBoard(fatherCategory, callback) {
     else {
       var resArrayDim = 0;
       var res = new Array();
-      Object.keys(result).forEach(function (key) {        
+      Object.keys(result).forEach(function (key) {
         var row = result[key];
         res[resArrayDim] = {
-          Firstname : row.Firstname,
-          Lastname : row.Lastname,
-          XP : row.SUMXPs
+          Firstname: row.Firstname,
+          Lastname: row.Lastname,
+          University: row.University,
+          UserID: row.ID,
+          XP: row.SUMXPs
         }
         resArrayDim++;
       });
@@ -480,6 +481,116 @@ function getLeaderBoard(fatherCategory, callback) {
   });
   connection.end();
 
+}
+
+function getRandomPlayer(ID,callback) {
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw callback(err,null);
+    console.log("Connected to DB!");
+  });
+  var sql = "select ID\n" +
+    "from 1001db.users\n" +
+    "where ID not in (select SenderProposal_ID\n" +
+    "from 1001db.challenge)\n" +
+    "and ID not in (select ReceiverProposal_ID\n" +
+    "from 1001db.challenge)\n" +
+    "and ID <> " + ID + "\n" +
+    "order by RAND()\n" +
+    "limit 1\n"
+
+  connection.query(sql, function (err, result) {
+    if (err) throw callback(err,null);
+    else {
+      var resultID;
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        resultID = row.ID
+      });
+
+      callback(err,resultID)
+    }
+  });
+  connection.end();
+}
+
+function saveChallenge(ID1, ID2, callback) {
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "insert into 1001db.challenge(SenderProposal_ID, ReceiverProposal_ID) values(" + ID1 + "," + ID2 + ")";
+  connection.query(sql, function (err, result) {
+    if (err) throw callback(err,null);
+    console.log("1 record inserted");
+    var id = result.insertId;
+    callback(null, id);
+  });
+  connection.end();
+}
+
+function isPlaying(ID, callback){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw callback(err,null);
+    console.log("Connected to DB!");
+  });
+  var sql = "select * from 1001db.challenge where SenderProposal_ID = "+ID+" or ReceiverProposal_ID = " + ID 
+  connection.query(sql, function (err, result) {
+    if (err) throw callback(err,null);
+    else {
+      if(Object.keys(result).length==0)
+        callback(err,null);
+      else
+        callback(err,result);
+    }
+  });
+  connection.end();
+
+}
+
+function deleteChallenge(ID){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "delete from 1001db.challenge where  idChallenge = "+ ID;
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record deleted");
+  });
+
+  connection.end();
+}
+
+function getRandomQuestions(limit, topicID, callback){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw callback(err,null);
+    console.log("Connected to DB!");
+  });
+  var sql = "select *\n"+ 
+            "from 1001db.challengequestions\n"+
+            "where Topics_ID =" + topicID + "\n"+
+            "order by rand()\n"+
+            "limit " + limit;
+  connection.query(sql, function (err, result) {
+    if (err) throw callback(err,null);
+    else {
+      var questionArray = new Array();
+      var questionDim = 0;
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        questionArray[questionDim] = new questionClass.Question(row.QuestionText, row.Answer_A, 
+          row.Answer_B, row.Answer_C,row.Answer_D, row.XPValue, row.Topics_ID, row.Type, row.TimeInSec);
+        questionDim++;
+      });
+      callback(err,questionArray)
+    }
+  });
+  connection.end();
 }
 
 exports.getUser = getUser;
@@ -502,4 +613,9 @@ exports.saveAccumulatedPoints = saveAccumulatedPoints;
 exports.deleteAccumulatedPoints = deleteAccumulatedPoints;
 exports.getUserTopicPoints = getUserTopicPoints;
 exports.updateAccumulatedPoints = updateAccumulatedPoints;
-exports.getLeaderBoard=getLeaderBoard;
+exports.getLeaderBoard = getLeaderBoard;
+exports.getRandomPlayer = getRandomPlayer;
+exports.saveChallenge = saveChallenge;
+exports.isPlaying = isPlaying;
+exports.deleteChallenge = deleteChallenge;
+exports.getRandomQuestions = getRandomQuestions;

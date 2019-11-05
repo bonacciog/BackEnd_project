@@ -5,8 +5,10 @@
 }
 { 
     request : "login", 
-    UserID: 1
+    UserID: 1,
+    key : 'chiave'
 }
+{"request" : "login","UserID": 1,"key" : "chiave"}
 { 
     request : "saveTopic", 
     Topic: {FatherCategory : 'Finance', TopicName : "ECM"}
@@ -34,6 +36,40 @@
 }
 
 { 
-    request : "getLeaderBoard", 
-    FatherCategory: "Informatica"
+    request : "getLeaderBoard"
 }
+{ 
+    request : "chooseRandomOpponent", 
+    UserID: 3,
+    TopicID : 1
+}
+{
+    request : "challengeRejected",
+    ReceiverProposal_ID : 12,
+    SenderProposal_ID : 11,
+    challangeID : 14
+}
+
+{
+    request : "challengeAccepted",
+    ReceiverProposal_ID : 1,
+    SenderProposal_ID : 2,
+    TopicID : 1
+}
+
+{ 
+    request : "challengeSpecificUser", 
+    ReceiverProposal_ID : 12,
+    SenderProposal_ID : 11,
+    TopicID : 1
+}
+-----------------------
+    Entrata Front-End
+-----------------------
+{
+    request: "challengeProposal",                        
+    TopicID: req.TopicID,
+    SenderProposal_ID: req.UserID,
+    challangeID : id
+}
+

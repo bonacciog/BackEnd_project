@@ -29,6 +29,5 @@ select U.ID, Firstname, Lastname, sum(XP) AS SUMXPs
 from 1001db.topics T, 1001db.users U, 1001db.accumulatedpoints P
 where T.ID=P.Topics_ID
 and  U.ID=P.Users_ID
-and FatherCategory = 'Informatica'
 group by U.ID
 order by sum(XP) DESC

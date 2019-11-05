@@ -1,7 +1,10 @@
-var c = require('./controller/Controller');
-var http = require('http');
+const c = require('./controller/Controller');
+const http = require('http');
+const WebSocket = require('ws');
 
-var server = http.createServer().listen(3000, 'localhost');
+const server = http.createServer().listen(3000, 'localhost');
+const wss = new WebSocket.Server({ server });
+
 
 server.on('request', function (req, res) {
     if (req.method == 'POST') {
@@ -16,6 +19,14 @@ server.on('request', function (req, res) {
         console.log("Arrived Data:\n" + body)
         var req = JSON.parse(body);
         c.eventRequest.emit(req.request, req, res);
+    });
+});
+
+wss.on('connection', function (ws) {
+
+    ws.on('message', function (req) {
+        var request = JSON.parse(req);
+        c.eventRequest.emit(request.request, request, this);
     });
 });
 

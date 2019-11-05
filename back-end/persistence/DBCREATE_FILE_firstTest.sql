@@ -82,4 +82,25 @@ CREATE TABLE IF NOT EXISTS `1001db`.`ExecutionTable` (
   PRIMARY KEY (`KEY`))
 ENGINE = InnoDB;
 
+CREATE TABLE IF NOT EXISTS `1001db`.`Challenge` (
+  `idChallenge` INT NOT NULL AUTO_INCREMENT,
+  `SenderProposal_ID` INT NOT NULL,
+  `ReceiverProposal_ID` INT NOT NULL,
+  PRIMARY KEY (`idChallenge`),
+  INDEX `Player1_idx` (`SenderProposal_ID` ASC) VISIBLE,
+  INDEX `Player2_idx` (`ReceiverProposal_ID` ASC) VISIBLE,
+  UNIQUE INDEX `ID_Player1_UNIQUE` (`SenderProposal_ID` ASC) VISIBLE,
+  UNIQUE INDEX `ID_Player2_UNIQUE` (`ReceiverProposal_ID` ASC) VISIBLE,
+  CONSTRAINT `Player1`
+    FOREIGN KEY (`SenderProposal_ID`)
+    REFERENCES `1001db`.`Users` (`ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `Player2`
+    FOREIGN KEY (`ReceiverProposal_ID`)
+    REFERENCES `1001db`.`Users` (`ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
 -- ALTER TABLE 1001db.users AUTO_INCREMENT=1

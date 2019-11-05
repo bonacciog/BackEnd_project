@@ -49,6 +49,18 @@
 }
 {
     request : "challengeRejected",
-    myID : 1,
-    opponentID : 2
+    ReceiverProposalID : 1,
+    SenderProposalID : 2
+}
+
+{
+    request : "challengeAccepted",
+    ReceiverProposalID : 1,
+    SenderProposalID : 2
+}
+
+Entrata Front-End
+{
+    request: "challengeProposal",
+    SenderProposal_ID: 3
 }

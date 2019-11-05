@@ -2,7 +2,8 @@ var http = require('http');
 
 
 var postData = JSON.stringify({ 
-    request : "getAllTopics"
+    request : "chooseRandomOpponent", 
+    UserID: 3
 })
 
 var options = {

@@ -490,9 +490,9 @@ function getRandomPlayer(ID,callback) {
   });
   var sql = "select ID\n" +
     "from 1001db.users\n" +
-    "where ID not in (select ID_Player1\n" +
+    "where ID not in (select SenderProposal_ID\n" +
     "from 1001db.challenge)\n" +
-    "and ID not in (select ID_Player1\n" +
+    "and ID not in (select ReceiverProposal_ID\n" +
     "from 1001db.challenge)\n" +
     "and ID <> " + ID + "\n" +
     "order by RAND()\n" +
@@ -519,7 +519,7 @@ function saveChallenge(ID1, ID2) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
-  var sql = "insert into 1001db.challenge(ID_Player1, ID_Player2) values(" + ID1 + "," + ID2 + ")";
+  var sql = "insert into 1001db.challenge(SenderProposal_ID, ReceiverProposal_ID) values(" + ID1 + "," + ID2 + ")";
   connection.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record inserted");
@@ -533,7 +533,7 @@ function isPlaying(ID, callback){
     if (err) throw callback(err,null);
     console.log("Connected to DB!");
   });
-  var sql = "select * from 1001db.challenge where ID_Player1 = "+ID+" or ID_Player2 = " + ID 
+  var sql = "select * from 1001db.challenge where SenderProposal_ID = "+ID+" or ReceiverProposal_ID = " + ID 
   connection.query(sql, function (err, result) {
     if (err) throw callback(err,null);
     else {
@@ -554,12 +554,39 @@ function deleteChallenge(ID_Player1, ID_Player2){
     console.log("Connected to DB!");
   });
   var sql = "delete from 1001db.challenge where  idChallenge in (select idChallenge from 1001db.challenge" +
-  " where ID_Player1 = " + ID_Player1 + " and ID_Player2 = " + ID_Player2;
+  " where SenderProposal_IDPlayer1 = " + ID_Player1 + " and ReceiverProposal_ID = " + ID_Player2;
   connection.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record deleted");
   });
 
+  connection.end();
+}
+
+function getRandomQuestions(limit, callback){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw callback(err,null);
+    console.log("Connected to DB!");
+  });
+  var sql = "select *\n"+ 
+            "from 1001db.challengequestions\n"+
+            "order by rand()\n"+
+            "limit " + limit;
+  connection.query(sql, function (err, result) {
+    if (err) throw callback(err,null);
+    else {
+      var questionArray = new Array();
+      var questionDim = 0;
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        questionArray[questionDim] = new questionClass.Question(row.QuestionText, row.Answer_A, 
+          row.Answer_B, row.Answer_C,row.Answer_D, row.XPValue, row.Topics_ID, row.Type, row.TimeInSec);
+        questionDim++;
+      });
+      callback(err,questionArray)
+    }
+  });
   connection.end();
 }
 
@@ -588,3 +615,4 @@ exports.getRandomPlayer = getRandomPlayer;
 exports.saveChallenge = saveChallenge;
 exports.isPlaying = isPlaying;
 exports.deleteChallenge = deleteChallenge;
+exports.getRandomQuestions = getRandomQuestions;

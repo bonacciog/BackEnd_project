@@ -52,7 +52,7 @@ class UserSelection extends Component{
     }
 
     startChallenge(){
-        this.props.navigation.navigate('waitingReval')
+        this.props.navigation.navigate('challengeRecap')
     }
 
     updateSearch = text => {

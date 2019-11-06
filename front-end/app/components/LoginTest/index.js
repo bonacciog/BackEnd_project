@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import { REACT_APP_API_URL } from 'react-native-dotenv';
 
 import styles from './styles'
 
@@ -8,13 +9,14 @@ class LoginTest extends Component{
 
     constructor(props){
         super(props)
+        
     }
 
-    state = {nickname: "", key: "", isLoading: false}
+    state = {firstname: "", lastname: "", university:"", key: "", isLoading: false}
 
-    setValue = async () => {
+    setValue = async id => {
         try {
-          await AsyncStorage.setItem('key', this.state.key)
+            AsyncStorage.setItem('userID', JSON.stringify(id))
         } catch(e) {
           // save error
         }
@@ -25,22 +27,24 @@ class LoginTest extends Component{
     checkLogin(){
         this.state.isLoading = true;
         const {firstname,lastname,university,key,isLoading} = this.state;
-        fetch('http://127.0.0.1:3000',{
+        process.env.
+        fetch(REACT_APP_API_URL,{
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                request: 'login',
-                user: {Firstname: firstname, Lastname: lastname, University: university, Key: key},
+                request: 'saveUser',
+                User: {Firstname: firstname, Lastname: lastname, University: university, Key: key},
               }),
         })
             .then((response) => response.json())
                 .then((responseJson) => {
                     this.state.isLoading= false;
                     if(responseJson.error === undefined){
-                        this.props.navigation.navigate('home')
+                        this.setValue(responseJson.UserID)
+                        this.props.navigation.navigate('homeTest')
                     }else{
                         Alert.alert('Error',responseJson.error,[{
                             text:'Okay'
@@ -53,7 +57,7 @@ class LoginTest extends Component{
                     }])
         });
 
-        //this.setValue()
+        
         //this.props.navigation.navigate('homeTest')
     }
 

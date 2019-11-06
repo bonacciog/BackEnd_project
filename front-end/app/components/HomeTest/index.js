@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { View, Image, ImageBackground, Text, TouchableOpacity, SafeAreaView, FlatList } from 'react-native';
+import { View, Image, ImageBackground, Text, Picker, TouchableOpacity, SafeAreaView, FlatList } from 'react-native';
 import styles from './styles'
 import CustomItem from '../CustomItem';
+import { REACT_APP_API_URL } from 'react-native-dotenv';
 
 const DATA = [
     {
@@ -37,6 +38,45 @@ class HomeTest extends Component{
 
     constructor(props){
         super(props)
+        this.state = {
+            loading: false,
+            data: [],
+            error: null
+        }
+        this.loadLeaderboard()
+    }
+
+    loadLeaderboard(){
+        //const {firstname,lastname,university,key,isLoading} = this.state;
+        fetch(REACT_APP_API_URL,{
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                request: 'getLeaderBoard',
+                FatherCategory: 'Finance',
+              }),
+        })
+            .then((response) => response.json())
+                .then((responseJson) => {
+
+                    if(responseJson.error === undefined){
+                        responseJson.forEach(function(element,index) {
+                            element.id = "" + (index+1) + ""
+                        });
+                        this.setState({data: responseJson})
+                        console.log(this.state.data)
+                    }else{
+                        
+                        console.log(responseJson.error)
+
+                    }
+                })
+                .catch((error) =>{
+                    
+        });
     }
 
     static navigationOptions = {
@@ -71,12 +111,29 @@ class HomeTest extends Component{
                     <View style={styles.margin} />
                 </View>
                 <View style={styles.leaderBoard}>
-                    <View style={styles.leaderBoardList}
-                    >
+                    <View style={styles.leaderBoardTitle}>
+                        <Text style={styles.title}> LEADERBOARD </Text>
+                        <View style={{flex:1, flexDirection:'row'}}>
+                            <View style={{flex:2, flexDirection:'column',justifyContent:'center',paddingLeft:5}}>
+                                <Text style={{fontSize:20, fontWeight:'bold',color:'#006622'}}>Topic</Text>
+                            </View>
+                            <View style={{flex:7, flexDirection:'column',justifyContent:'center'}}>
+                                <Picker
+                                    selectedValue={"BUSINESS AND FINANCE"}
+                                    style={{height: 50, alignSelf: 'stretch'}}
+                                    >
+                                    <Picker.Item label="BUSINESS AND FINANCE" value="FINANCE" />
+                                    <Picker.Item label="JavaScript" value="js" />
+                                </Picker>
+                            </View>
+                        </View>
+                        
+                    </View>
+                    <View style={styles.leaderBoardList}>
                         <SafeAreaView style={styles.container}>
                             <FlatList
-                                data={DATA}
-                                renderItem={({ item }) => <CustomItem title={item.title} subtitle={item.profession} id={item.id} info={item.exp} />}
+                                data={this.state.data}
+                                renderItem={({ item }) => <CustomItem title={item.Lastname + item.Firstname} subtitle={""} id={item.id} info={item.XP} />}
                                 keyExtractor={item => item.id}
                             />
                         </SafeAreaView> 

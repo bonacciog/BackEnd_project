@@ -61,10 +61,26 @@ export default StyleSheet.create({
         padding:10,
         justifyContent:'center',
     },
+    leaderBoardTitle:{
+        flex:1,
+        paddingTop:3,
+        backgroundColor:"white",
+        borderTopLeftRadius:10,
+        borderTopRightRadius:10,
+        alignItems:'center',
+        borderBottomWidth:1,
+        borderBottomColor:"#006622"
+    },
+    title:{
+        fontSize:25,
+        color:'#006622',
+        flex:1
+        
+    },
     leaderBoardList:{
         padding:10,
         borderRadius:5,
-        flex:1,
+        flex:3,
         shadowColor: "#000",
         shadowColor: "#000",
         shadowOffset: {

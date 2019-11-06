@@ -16,6 +16,7 @@ import LoginTest from './app/components/LoginTest';
 import HomeTest from './app/components/HomeTest';
 import WaitingReval from './app/components/WaitingReval';
 import Cover from './app/components/Cover';
+import ChallengeRecap from './app/components/ChallengeRecap';
 
 //import { enableScreens } from 'react-native-screens';
 //enableScreens();
@@ -66,11 +67,13 @@ const RootStack = {
   home: { screen: Home },
   dashboard: { screen: Dashboard },
   challenge: { screen: Challenge },
+  challengeRecap:{screen: ChallengeRecap},
   userSelection: { screen: UserSelection },
   loginTest: {screen: LoginTest},
   homeTest:{screen: HomeTest},
   waitingReval:{screen: WaitingReval},
   cover:{screen: Cover}
+
 }
 
 const NormalNavigator = createStackNavigator(

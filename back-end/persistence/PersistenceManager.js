@@ -338,7 +338,7 @@ function getAllTopics(callback) {
   connection.end();
 }
 
-function saveChallengeQuestion(question) {
+function saveChallengeQuestion(question, callback) {
   if (!question instanceof questionClass.Question) {
     throw new ParamError("Incorrect parameter!");
   }
@@ -347,14 +347,18 @@ function saveChallengeQuestion(question) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
-
-  var sql = "insert into 1001db.ChallengeQuestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Type, TimeInSec)" +
-    " values ('" + question.getQuestionText + "','" + question.getAnswer_A + "','" + question.getAnswer_B + "','" + question.getAnswer_C + "','" + question.getAnswer_D + "'," + question.getXPValue + "," + question.getTopic_ID + ",'" +
-    question.getType + "'," + question.getTimeInSec + ")"
+  if (question.getExplanation === undefined)
+    var sql = "insert into 1001db.ChallengeQuestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID)" +
+      " values ('" + question.getQuestionText + "','" + question.getAnswer_A + "','" + question.getAnswer_B + "','" + question.getAnswer_C + "','" + question.getAnswer_D + "'," + question.getXPValue + "," + question.getTopic_ID + ")";
+  else
+    var sql = "insert into 1001db.ChallengeQuestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Explanation)" +
+      " values ('" + question.getQuestionText + "','" + question.getAnswer_A + "','" + question.getAnswer_B + "','" + question.getAnswer_C + "','" + question.getAnswer_D + "'," + question.getXPValue + "," + question.getTopic_ID + ",'"+question.getExplanation+"')";
 
   connection.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record inserted");
+    var id = result.insertId;
+    callback(null, id);
   });
 
   connection.end();
@@ -483,10 +487,10 @@ function getLeaderBoard(callback) {
 
 }
 
-function getRandomPlayer(ID,callback) {
+function getRandomPlayer(ID, callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
-    if (err) throw callback(err,null);
+    if (err) throw callback(err, null);
     console.log("Connected to DB!");
   });
   var sql = "select ID\n" +
@@ -500,7 +504,7 @@ function getRandomPlayer(ID,callback) {
     "limit 1\n"
 
   connection.query(sql, function (err, result) {
-    if (err) throw callback(err,null);
+    if (err) throw callback(err, null);
     else {
       var resultID;
       Object.keys(result).forEach(function (key) {
@@ -508,7 +512,7 @@ function getRandomPlayer(ID,callback) {
         resultID = row.ID
       });
 
-      callback(err,resultID)
+      callback(err, resultID);
     }
   });
   connection.end();
@@ -522,7 +526,7 @@ function saveChallenge(ID1, ID2, callback) {
   });
   var sql = "insert into 1001db.challenge(SenderProposal_ID, ReceiverProposal_ID) values(" + ID1 + "," + ID2 + ")";
   connection.query(sql, function (err, result) {
-    if (err) throw callback(err,null);
+    if (err) throw callback(err, null);
     console.log("1 record inserted");
     var id = result.insertId;
     callback(null, id);
@@ -530,33 +534,33 @@ function saveChallenge(ID1, ID2, callback) {
   connection.end();
 }
 
-function isPlaying(ID, callback){
+function isPlaying(ID, callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
-    if (err) throw callback(err,null);
+    if (err) throw callback(err, null);
     console.log("Connected to DB!");
   });
-  var sql = "select * from 1001db.challenge where SenderProposal_ID = "+ID+" or ReceiverProposal_ID = " + ID 
+  var sql = "select * from 1001db.challenge where SenderProposal_ID = " + ID + " or ReceiverProposal_ID = " + ID
   connection.query(sql, function (err, result) {
-    if (err) throw callback(err,null);
+    if (err) throw callback(err, null);
     else {
-      if(Object.keys(result).length==0)
-        callback(err,null);
+      if (Object.keys(result).length == 0)
+        callback(err, null);
       else
-        callback(err,result);
+        callback(err, result);
     }
   });
   connection.end();
 
 }
 
-function deleteChallenge(ID){
+function deleteChallenge(ID) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw err;
     console.log("Connected to DB!");
   });
-  var sql = "delete from 1001db.challenge where  idChallenge = "+ ID;
+  var sql = "delete from 1001db.challenge where  ID = " + ID;
   connection.query(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record deleted");
@@ -565,29 +569,98 @@ function deleteChallenge(ID){
   connection.end();
 }
 
-function getRandomQuestions(limit, topicID, callback){
+function getRandomQuestions(limit, topicID, callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
-    if (err) throw callback(err,null);
+    if (err) throw callback(err, null);
     console.log("Connected to DB!");
   });
-  var sql = "select *\n"+ 
-            "from 1001db.challengequestions\n"+
-            "where Topics_ID =" + topicID + "\n"+
-            "order by rand()\n"+
-            "limit " + limit;
+  var sql = "select *\n" +
+    "from 1001db.challengequestions\n" +
+    "where Topics_ID =" + topicID + "\n" +
+    "order by rand()\n" +
+    "limit " + limit;
   connection.query(sql, function (err, result) {
-    if (err) throw callback(err,null);
+    if (err) throw callback(err, null);
     else {
       var questionArray = new Array();
       var questionDim = 0;
       Object.keys(result).forEach(function (key) {
         var row = result[key];
-        questionArray[questionDim] = new questionClass.Question(row.QuestionText, row.Answer_A, 
-          row.Answer_B, row.Answer_C,row.Answer_D, row.XPValue, row.Topics_ID, row.Type, row.TimeInSec);
+        questionArray[questionDim] = new questionClass.Question(row.QuestionText, row.Answer_A,
+          row.Answer_B, row.Answer_C, row.Answer_D, row.XPValue, row.Topics_ID, row.Type, row.TimeInSec);
         questionDim++;
       });
-      callback(err,questionArray)
+      callback(err, questionArray);
+    }
+  });
+  connection.end();
+}
+
+function addQuestionTypeInformations(questionID, typeID){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "insert into 1001db.questiontypeinformations(ChallengeQuestions_ID, TypeInformations_ID)\n"+
+           "values(" + questionID +","+ typeID+ ")";
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record inserted");
+  });
+
+  connection.end();
+}
+
+function saveTypeInformations(type, timeInSec) {
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "insert into 1001db.typeinformations(Type, TimeInSec) values('" + type +"',"+ timeInSec+ ")";
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record inserted");
+  });
+
+  connection.end();
+}
+
+function deleteTypeInformations(ID){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected to DB!");
+  });
+  var sql = "delete from 1001db.typeinformations where  ID = " + ID;
+  connection.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record deleted");
+  });
+
+  connection.end();
+}
+
+function getTypeInformationsID(type, callback){
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) throw callback(err, null);
+    console.log("Connected to DB!");
+  });
+  var sql = "select ID\n" +
+    "from 1001db.typeinformations\n" +
+    "where Type ='" + type + "'\n"
+  connection.query(sql, function (err, result) {
+    if (err) throw callback(err, null);
+    else {
+      var resultId;
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        resultId = row.ID;
+      });
+      callback(null, resultId);
     }
   });
   connection.end();
@@ -619,3 +692,7 @@ exports.saveChallenge = saveChallenge;
 exports.isPlaying = isPlaying;
 exports.deleteChallenge = deleteChallenge;
 exports.getRandomQuestions = getRandomQuestions;
+exports.saveTypeInformations = saveTypeInformations;
+exports.deleteTypeInformations = deleteTypeInformations;
+exports.getTypeInformationsID = getTypeInformationsID;
+exports.addQuestionTypeInformations = addQuestionTypeInformations;

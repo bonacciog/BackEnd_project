@@ -24,17 +24,17 @@ eventRequest.on('saveUser', function (req, ws) {
                         UserID: id
                     });
                     pm.getAllTopics(function (err, topics) {
-                        if (topics != ""){
+                        if (topics != "") {
                             topics.forEach(element => {
                                 pm.saveAccumulatedPoints(id, element.getID, 0);
                             });
                         }
                         else
                             console.log("There aren't topics for user initialization");
-                        
+
                     });
 
-                    if (!users.has(id)){
+                    if (!users.has(id)) {
                         users.set(id, ws);
                         console.log("A WebSocket saved!");
                     }
@@ -67,7 +67,7 @@ eventRequest.on('login', function (req, ws) {
                         }
                         else {
                             response = JSON.stringify(user);
-                            if (!users.has(req.UserID)){
+                            if (!users.has(req.UserID)) {
                                 users.set(req.UserID, ws);
                                 console.log("A WebSocket saved!");
                             }
@@ -221,8 +221,27 @@ eventRequest.on('saveChallengeQuestion', function (req, res) {
     try {
         pm.saveChallengeQuestion(new questionClass.Question(req.Question.QuestionText, req.Question.Answer_A,
             req.Question.Answer_B, req.Question.Answer_C, req.Question.Answer_D, req.Question.XPValue,
-            req.Question.Topics_ID, req.Question.Type, req.Question.TimeInSec));
-        res.end();
+            req.Question.Topics_ID, res.Question.Explanation), function(err,questionID){
+                if(err==null){
+                    pm.getTypeInformationsID(res.Question.Type, function (err, typeID){
+                        if(err==null){
+                            pm.addQuestionTypeInformations(questionID,typeID);
+                            res.end();
+                        }
+                        else{
+                            errorJSON.error = "Error in DB interation: " + err;
+                            response = JSON.stringify(errorJSON);
+                            res.end(response);
+                        }
+
+                    });
+                }
+                else{
+                    errorJSON.error = "Error in DB interation: " + err;
+                    response = JSON.stringify(errorJSON);
+                    res.end(response);
+                }
+            });
     } catch (err) {
         errorJSON.error = err.message;
         response = JSON.stringify(errorJSON);
@@ -291,12 +310,12 @@ eventRequest.on('chooseRandomOpponent', function (req, res) {
                     res.end(response);
                 }
                 else {
-                    pm.saveChallenge(req.UserID, result, function(err,id){
+                    pm.saveChallenge(req.UserID, result, function (err, id) {
                         users.get(result).send(JSON.stringify({
-                            request: "challengeProposal",                        
+                            request: "challengeProposal",
                             TopicID: req.TopicID,
                             SenderProposal_ID: req.UserID,
-                            challangeID : id
+                            challangeID: id
                         }));
                         res.end();
                     });
@@ -306,7 +325,7 @@ eventRequest.on('chooseRandomOpponent', function (req, res) {
                 errorJSON.error = "Error in DB interation: " + err;
                 response = JSON.stringify(errorJSON);
                 res.end(response);
-            }            
+            }
         });
     } catch (err) {
         errorJSON.error = err.message;
@@ -321,16 +340,16 @@ eventRequest.on('challengeSpecificUser', function (req, res) {
         pm.isPlaying(req.SenderProposal_ID, function (err, result) {
             if (err == null) {
                 if (result == null) {
-                    pm.saveChallenge(req.SenderProposal_ID, req.ReceiverProposal_ID, function(err,id){
+                    pm.saveChallenge(req.SenderProposal_ID, req.ReceiverProposal_ID, function (err, id) {
                         users.get(req.ReceiverProposal_ID).send(JSON.stringify({
-                            request: "challengeProposal",                        
+                            request: "challengeProposal",
                             TopicID: req.TopicID,
                             SenderProposal_ID: req.SenderProposal_ID,
-                            challangeID : id
+                            challangeID: id
                         }));
                         res.end();
                     });
-                    
+
                 }
                 else {
                     errorJSON.error = "Opponent is playing another challenge";
@@ -398,6 +417,38 @@ eventRequest.on('challengeAccepted', function (req, res) {
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
+});
+
+eventRequest.on('getUserByID', function (req, res) {
+    try {
+        pm.getUser(req.UserID, function (err, user) {
+            if (err == null) {
+                if (user == null) {
+                    errorJSON.error = "Incorrect parameter";
+                    response = JSON.stringify(errorJSON);
+                }
+                else 
+                    response = JSON.stringify(user);                
+            }
+            else {
+                errorJSON.error = "Error in DB interation: " + err;
+                response = JSON.stringify(errorJSON);
+            }
+            res.end(response);
+        });
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
+eventRequest.on('closeConnection', function (req, res) {
+    users.get(req.UserID).close();
+    if (users.has(req.UserID))
+        users.delete(req.UserID);
+    res.end();
+    console.log("A connection closed!");
 });
 
 exports.eventRequest = eventRequest;

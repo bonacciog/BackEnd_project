@@ -40,14 +40,14 @@
 }
 { 
     request : "chooseRandomOpponent", 
-    UserID: 3,
+    UserID: 11,
     TopicID : 1
 }
 {
     request : "challengeRejected",
     ReceiverProposal_ID : 12,
     SenderProposal_ID : 11,
-    challangeID : 14
+    challangeID : 21
 }
 
 {
@@ -62,6 +62,16 @@
     ReceiverProposal_ID : 12,
     SenderProposal_ID : 11,
     TopicID : 1
+}
+
+{ 
+    request : "getUserByID", 
+    UserID: 1
+}
+
+{ 
+    request : "closeConnection", 
+    UserID: 1
 }
 -----------------------
     Entrata Front-End

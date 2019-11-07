@@ -38,6 +38,14 @@ CREATE TABLE IF NOT EXISTS `1001db`.`Topics` (
   UNIQUE INDEX `TopicName_UNIQUE` (`TopicName` ASC) VISIBLE)
 ENGINE = InnoDB;
 
+CREATE TABLE IF NOT EXISTS `1001db`.`TypeInformations` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `Type` VARCHAR(45) NOT NULL,
+  `TimeInSec` INT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE INDEX `Type_UNIQUE` (`Type` ASC) VISIBLE)
+ENGINE = InnoDB;
+
 CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeQuestions` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `QuestionText` LONGTEXT NOT NULL,
@@ -47,8 +55,7 @@ CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeQuestions` (
   `Answer_D` LONGTEXT NOT NULL,
   `XPValue` INT NULL,
   `Topics_ID` INT NOT NULL,
-  `TimeInSec` INT NULL,
-  `Type` VARCHAR(45) NULL,
+  `Explanation` LONGTEXT NULL,
   PRIMARY KEY (`ID`, `Topics_ID`),
   INDEX `fk_ChallengeQuestions_Topics1_idx` (`Topics_ID` ASC) VISIBLE,
   CONSTRAINT `fk_ChallengeQuestions_Topics1`
@@ -56,6 +63,23 @@ CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeQuestions` (
     REFERENCES `1001db`.`Topics` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `1001db`.`QuestionTypeInformation` (
+  `ChallengeQuestions_ID` INT NOT NULL,
+  `TypeInformations_ID` INT NOT NULL,
+  PRIMARY KEY (`ChallengeQuestions_ID`, `TypeInformations_ID`),
+  INDEX `fk_TypeInformations_idx` (`TypeInformations_ID` ASC) VISIBLE,
+  CONSTRAINT `fk_QuestionTypeInformation_ChallengeQuestions1`
+    FOREIGN KEY (`ChallengeQuestions_ID`)
+    REFERENCES `1001db`.`ChallengeQuestions` (`ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_TypeInformations`
+    FOREIGN KEY (`TypeInformations_ID`)
+    REFERENCES `1001db`.`TypeInformations` (`ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`AccumulatedPoints` (
@@ -83,10 +107,10 @@ CREATE TABLE IF NOT EXISTS `1001db`.`ExecutionTable` (
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`Challenge` (
-  `idChallenge` INT NOT NULL AUTO_INCREMENT,
+  `ID` INT NOT NULL AUTO_INCREMENT,
   `SenderProposal_ID` INT NOT NULL,
   `ReceiverProposal_ID` INT NOT NULL,
-  PRIMARY KEY (`idChallenge`),
+  PRIMARY KEY (`ID`),
   INDEX `Player1_idx` (`SenderProposal_ID` ASC) VISIBLE,
   INDEX `Player2_idx` (`ReceiverProposal_ID` ASC) VISIBLE,
   UNIQUE INDEX `ID_Player1_UNIQUE` (`SenderProposal_ID` ASC) VISIBLE,

@@ -1,18 +1,16 @@
 var http = require('http');
 
 
-var postData = JSON.stringify({ 
-    request : "chooseRandomOpponent", 
-    UserID: 3,
-    TopicID : 1
-})
-/*
-var postData = JSON.stringify({ 
-    request : "challengeSpecificUser", 
-    ReceiverProposal_ID : 12,
-    SenderProposal_ID : 11,
-    TopicID : 1
-});*/
+ var postData = JSON.stringify({ 
+    request : "saveChallengeQuestion", 
+    Question : { QuestionText: "Vez?", Answer_A : "A", Answer_B : "B", Answer_C : "C", Answer_D : "D", XPValue : 50, Topics_ID : 1, Type : "Teory", Explanation : undefined}
+});
+
+/* var postData = JSON.stringify({ 
+    request : "saveUser", 
+    User: {Firstname : 'Pol', Lastname : "Caligiana", University : "UniGianni"},
+    key : "chiave"
+}); */
 
 var options = {
     hostname: 'localhost',

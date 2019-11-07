@@ -17,6 +17,8 @@ pm.saveUser(user, function (err, result){
     console.log(result);
 });*/
 
-pm.getRandomQuestions(10, 1, function (err, result) {
-    console.log(result);
+pm.saveTopic(new topicClass.Topic('Informatica', 'SQL'));
+var question = new questionClass.Question("?", "A", "B", "C", "D", 10, 1, undefined);
+pm.saveChallengeQuestion(question, function(err,id){
+    console.log(id)
 });

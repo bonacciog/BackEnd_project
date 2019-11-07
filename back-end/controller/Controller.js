@@ -6,6 +6,9 @@ const questionClass = require('../model/Question');
 const EventEmitter = require('events').EventEmitter;
 
 const limitQuestions = 10;
+const numberQuestionTypeDefinitions = 3;
+const numberQuestionTypeHandson = 5;
+const numberQuestionTypeCases = 2;
 
 const users = new Map();
 
@@ -179,7 +182,7 @@ eventRequest.on('getChat', function (req, res) {
 
 eventRequest.on('saveTopic', function (req, res) {
     try {
-        pm.saveTopic(new topicClass.Topic(req.Topic.FatherCategory, req.Topic.TopicName));
+        pm.saveTopic(new topicClass.Topic(req.Topic.TopicName));
         res.end();
     } catch (err) {
         errorJSON.error = err.message;
@@ -387,7 +390,7 @@ eventRequest.on('challengeRejected', function (req, res) {
 
 eventRequest.on('challengeAccepted', function (req, res) {
     try {
-        pm.getRandomQuestions(limitQuestions, req.TopicID, function (err, result) {
+        pm.getRandomQuestions(req.TopicID, 'Definitions', numberQuestionTypeDefinitions,function (err, resultDefinitions) {
             if (err == null) {
                 if (result == null) {
                     errorJSON.error = "There aren't questions in DB";
@@ -395,14 +398,57 @@ eventRequest.on('challengeAccepted', function (req, res) {
                     res.end(response);
                 }
                 else {
-                    console.log(result);
-                    res.end();
                     var challange = {
                         request: req.request,
-                        Questions: result
+                        Questions: resultDefinitions
                     }
                     users.get(req.SenderProposal_ID).send(JSON.stringify(challange));
                     users.get(req.ReceiverProposal_ID).send(JSON.stringify(challange));
+                    pm.getRandomQuestions(req.TopicID, 'HandsOn', numberQuestionTypeHandson,function (err, resultHandsOn) {
+                        if (err == null) {
+                            if (result == null) {
+                                errorJSON.error = "There aren't questions in DB";
+                                response = JSON.stringify(errorJSON);
+                                res.end(response);
+                            }
+                            else {
+                                var challange = {
+                                    request: req.request,
+                                    Questions: resultHandsOn
+                                }
+                                users.get(req.SenderProposal_ID).send(JSON.stringify(challange));
+                                users.get(req.ReceiverProposal_ID).send(JSON.stringify(challange));
+                                pm.getRandomQuestions(req.TopicID, 'Cases', numberQuestionTypeCases,function (err, resultCases) {
+                                    if (err == null) {
+                                        if (result == null) {
+                                            errorJSON.error = "There aren't questions in DB";
+                                            response = JSON.stringify(errorJSON);
+                                            res.end(response);
+                                        }
+                                        else {
+                                            res.end();
+                                            var challange = {
+                                                request: req.request,
+                                                Questions: result
+                                            }
+                                            users.get(req.SenderProposal_ID).send(JSON.stringify(challange));
+                                            users.get(req.ReceiverProposal_ID).send(JSON.stringify(challange));
+                                        }
+                                    }
+                                    else {
+                                        errorJSON.error = "Error in DB interation: " + err;
+                                        response = JSON.stringify(errorJSON);
+                                        res.end(response);
+                                    }
+                                });
+                            }
+                        }
+                        else {
+                            errorJSON.error = "Error in DB interation: " + err;
+                            response = JSON.stringify(errorJSON);
+                            res.end(response);
+                        }
+                    });
                 }
             }
             else {

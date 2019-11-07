@@ -2,17 +2,17 @@ const WebSocket = require('ws');
 
 const ws = new WebSocket('ws://localhost:3000');
 
-/* const message = JSON.stringify({ 
-  request : "saveUser", 
-  User: {Firstname : 'Pol', Lastname : "Caligiana", University : "UniGianni"},
-  key : "chiave"
-}); */
-
 const message = JSON.stringify({ 
+  request : "saveUser", 
+  User: {Firstname : 'Ianni', Lastname : "Bonaccio", University : "Unibo"},
+  key : "chiave"
+});
+
+/* const message = JSON.stringify({ 
   request : "login", 
   UserID: 1,
   key : 'chiave'
-});
+}); */
 
 ws.on('open', function open() {  
  ws.send(message);  

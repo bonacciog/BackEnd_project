@@ -32,10 +32,10 @@ ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`Topics` (
   `ID` INT NOT NULL AUTO_INCREMENT,
-  `FatherCategory` VARCHAR(45) NOT NULL,
+  `FatherCategory` VARCHAR(45) NULL,
   `TopicName` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`ID`),
-  UNIQUE INDEX `TopicName_UNIQUE` (`TopicName` ASC) VISIBLE)
+  UNIQUE INDEX `TopicsName_UNIQUE` (`TopicName` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`TypeInformations` (

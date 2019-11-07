@@ -286,8 +286,8 @@ function saveTopic(topic) {
     console.log("Connected to DB!");
   });
 
-  var sql = "insert into 1001db.Topics(FatherCategory, TopicName)" +
-    " values ('" + topic.getFatherCategory + "','" + topic.getTopicsName + "')";
+  var sql = "insert into 1001db.Topics(TopicName)" +
+    " values ('" + topic.getTopicsName + "')";
 
   connection.query(sql, function (err, result) {
     if (err) throw err;
@@ -328,7 +328,7 @@ function getAllTopics(callback) {
       var topics = new Array();
       Object.keys(result).forEach(function (key) {
         var row = result[key];
-        topics[topicArrayDim] = new topicClass.Topic(row.FatherCategory, row.TopicName);
+        topics[topicArrayDim] = new topicClass.Topic(row.TopicName);
         topics[topicArrayDim].setID = row.ID;
         topicArrayDim++;
       });
@@ -569,17 +569,20 @@ function deleteChallenge(ID) {
   connection.end();
 }
 
-function getRandomQuestions(limit, topicID, callback) {
+function getRandomQuestions(topicID, type, numberRows, callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) throw callback(err, null);
     console.log("Connected to DB!");
   });
-  var sql = "select *\n" +
-    "from 1001db.challengequestions\n" +
-    "where Topics_ID =" + topicID + "\n" +
-    "order by rand()\n" +
-    "limit " + limit;
+  var sql = "select *\n" + 
+  "from 1001db.challengequestions C, 1001db.questiontypeinformation Q, 1001db.typeinformations T\n" + 
+  "where C.ID = Q.ChallengeQuestions_ID\n"+
+  "and T.Type = '" + type +"'\n"+
+  "and T.ID = Q.TypeInformations_ID\n"+
+  "and C.Topics_ID = " + topicID + "\n"
+  "order by rand()\n"+
+  "limit " + numberRows;
   connection.query(sql, function (err, result) {
     if (err) throw callback(err, null);
     else {
@@ -588,7 +591,9 @@ function getRandomQuestions(limit, topicID, callback) {
       Object.keys(result).forEach(function (key) {
         var row = result[key];
         questionArray[questionDim] = new questionClass.Question(row.QuestionText, row.Answer_A,
-          row.Answer_B, row.Answer_C, row.Answer_D, row.XPValue, row.Topics_ID, row.Type, row.TimeInSec);
+          row.Answer_B, row.Answer_C, row.Answer_D, row.XPValue, row.Topics_ID, row.Explanation);
+        questionArray[questionDim].setType = row.Type;
+        questionArray[questionDim].setTimeInSec = row.TimeInSec;
         questionDim++;
       });
       callback(err, questionArray);
@@ -603,7 +608,7 @@ function addQuestionTypeInformations(questionID, typeID){
     if (err) throw err;
     console.log("Connected to DB!");
   });
-  var sql = "insert into 1001db.questiontypeinformations(ChallengeQuestions_ID, TypeInformations_ID)\n"+
+  var sql = "insert into 1001db.questiontypeinformation(ChallengeQuestions_ID, TypeInformations_ID)\n"+
            "values(" + questionID +","+ typeID+ ")";
   connection.query(sql, function (err, result) {
     if (err) throw err;

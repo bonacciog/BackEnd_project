@@ -1,9 +1,11 @@
 class Topic {
-    constructor(fatherCategory, topicsName){
-        this.fatherCategory = fatherCategory;
+    constructor(topicsName){
         this.topicsName = topicsName;
     }
 
+    /**
+     * Not useful now
+     */
     get getFatherCategory(){
         return this.fatherCategory;
     }
@@ -24,6 +26,7 @@ class Topic {
     }
 
     /**
+     * Not useful now
      * @param {any} fatherCategory
      */
     set setFatherCategory(fatherCategory){

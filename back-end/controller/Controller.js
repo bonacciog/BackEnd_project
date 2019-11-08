@@ -18,6 +18,24 @@ var errorJSON = {
 };
 var response;
 
+
+function notificationCheck(UserID, ws) {
+    try {
+        pm.getChallengePendingNotification(UserID, function(err,challangeID){
+            if(err) throw err;
+            else{
+                if(challangeID != ""){
+
+                }
+            }
+        })
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        ws.send(response);
+    }
+}
+
 eventRequest.on('saveUser', function (req, ws) {
     try {
         pm.getKey(function (err, key) {
@@ -29,7 +47,9 @@ eventRequest.on('saveUser', function (req, ws) {
                     pm.getAllTopics(function (err, topics) {
                         if (topics != "") {
                             topics.forEach(element => {
-                                pm.saveAccumulatedPoints(id, element.getID, 0);
+                                pm.saveAccumulatedPoints(id, element.getID, 0, (err, result) => {
+                                    if (err) throw err;
+                                });
                             });
                         }
                         else
@@ -39,7 +59,7 @@ eventRequest.on('saveUser', function (req, ws) {
 
                     if (!users.has(id)) {
                         users.set(id, ws);
-                        console.log("A WebSocket saved!");
+                        console.log("WebSocket for User " + id + " saved!");
                     }
                     ws.send(response);
                 });
@@ -67,20 +87,25 @@ eventRequest.on('login', function (req, ws) {
                         if (user == null) {
                             errorJSON.error = "Incorrect parameter";
                             response = JSON.stringify(errorJSON);
+                            ws.send(response);
                         }
                         else {
                             response = JSON.stringify(user);
                             if (!users.has(req.UserID)) {
                                 users.set(req.UserID, ws);
-                                console.log("A WebSocket saved!");
+                                console.log("WebSocket for User " + req.UserID + " saved!");
                             }
+                            notificationCheck(req.UserID, ws);
+                            ws.send(response);
+
                         }
                     }
                     else {
                         errorJSON.error = "Error in DB interation: " + err;
                         response = JSON.stringify(errorJSON);
+                        ws.send(response);
                     }
-                    ws.send(response);
+
                 });
             }
             else {
@@ -101,7 +126,9 @@ eventRequest.on('login', function (req, ws) {
 eventRequest.on('deleteUser', function (req, res) {
 
     try {
-        pm.deleteUser(req.UserID);
+        pm.deleteUser(req.UserID, (err, result) => {
+            if (err) throw err;
+        });
         res.end();
     } catch (err) {
         errorJSON.error = err.message;
@@ -112,7 +139,9 @@ eventRequest.on('deleteUser', function (req, res) {
 
 eventRequest.on('saveMessage', function (req, res) {
     try {
-        pm.saveMessage(new messageClass.Message(req.Message.SenderUser_ID, req.Message.ReceiverUser_ID, req.Message.Text, req.Message.IsRead, req.Message.DateTime));
+        pm.saveMessage(new messageClass.Message(req.Message.SenderUser_ID, req.Message.ReceiverUser_ID, req.Message.Text, req.Message.IsRead, req.Message.DateTime), (err, result) => {
+            if (err) throw err;
+        });
         res.end();
     } catch (err) {
         errorJSON.error = err.message;
@@ -123,7 +152,9 @@ eventRequest.on('saveMessage', function (req, res) {
 
 eventRequest.on('deleteMessage', function (req, res) {
     try {
-        pm.deleteMessage(new messageClass.Message(req.Message.SenderUser_ID, req.Message.ReceiverUser_ID, req.Message.Text, req.Message.IsRead, req.Message.DateTime));
+        pm.deleteMessage(new messageClass.Message(req.Message.SenderUser_ID, req.Message.ReceiverUser_ID, req.Message.Text, req.Message.IsRead, req.Message.DateTime), (err, result) => {
+            if (err) throw err;
+        });
         res.end();
     } catch (err) {
         errorJSON.error = err.message;
@@ -182,7 +213,9 @@ eventRequest.on('getChat', function (req, res) {
 
 eventRequest.on('saveTopic', function (req, res) {
     try {
-        pm.saveTopic(new topicClass.Topic(req.Topic.TopicName));
+        pm.saveTopic(new topicClass.Topic(req.Topic.TopicName), (err, result) => {
+            if (err) throw err;
+        });
         res.end();
     } catch (err) {
         errorJSON.error = err.message;
@@ -193,7 +226,9 @@ eventRequest.on('saveTopic', function (req, res) {
 
 eventRequest.on('deleteTopic', function (req, res) {
     try {
-        pm.deleteTopic(new topicClass.Topic(req.TopicName));
+        pm.deleteTopic(new topicClass.Topic(req.TopicName), (err, result) => {
+            if (err) throw err;
+        });
         res.end();
     } catch (err) {
         errorJSON.error = err.message;
@@ -224,14 +259,16 @@ eventRequest.on('saveChallengeQuestion', function (req, res) {
     try {
         pm.saveChallengeQuestion(new questionClass.Question(req.Question.QuestionText, req.Question.Answer_A,
             req.Question.Answer_B, req.Question.Answer_C, req.Question.Answer_D, req.Question.XPValue,
-            req.Question.Topics_ID, res.Question.Explanation), function(err,questionID){
-                if(err==null){
-                    pm.getTypeInformationsID(res.Question.Type, function (err, typeID){
-                        if(err==null){
-                            pm.addQuestionTypeInformations(questionID,typeID);
+            req.Question.Topics_ID, res.Question.Explanation), function (err, questionID) {
+                if (err == null) {
+                    pm.getTypeInformationsID(res.Question.Type, function (err, typeID) {
+                        if (err == null) {
+                            pm.addQuestionTypeInformations(questionID, typeID, (err, result) => {
+                                if (err) throw err;
+                            });
                             res.end();
                         }
-                        else{
+                        else {
                             errorJSON.error = "Error in DB interation: " + err;
                             response = JSON.stringify(errorJSON);
                             res.end(response);
@@ -239,7 +276,7 @@ eventRequest.on('saveChallengeQuestion', function (req, res) {
 
                     });
                 }
-                else{
+                else {
                     errorJSON.error = "Error in DB interation: " + err;
                     response = JSON.stringify(errorJSON);
                     res.end(response);
@@ -254,7 +291,9 @@ eventRequest.on('saveChallengeQuestion', function (req, res) {
 
 eventRequest.on('deleteChallengeQuestion', function (req, res) {
     try {
-        pm.deleteChallengeQuestion(req.QuestionID);
+        pm.deleteChallengeQuestion(req.QuestionID, (err, result) => {
+            if (err) throw err;
+        });
         res.end();
     } catch (err) {
         errorJSON.error = err.message;
@@ -265,7 +304,9 @@ eventRequest.on('deleteChallengeQuestion', function (req, res) {
 
 eventRequest.on('savePoints', function (req, res) {
     try {
-        pm.saveAccumulatedPoints(req.UserID, req.TopicID, req.XP);
+        pm.saveAccumulatedPoints(req.UserID, req.TopicID, req.XP, (err, result) => {
+            if (err) throw err;
+        });;
         res.end();
     } catch (err) {
         errorJSON.error = err.message;
@@ -276,7 +317,9 @@ eventRequest.on('savePoints', function (req, res) {
 
 eventRequest.on('deletePoints', function (req, res) {
     try {
-        pm.deleteAccumulatedPoints(req.UserID, req.TopicID);
+        pm.deleteAccumulatedPoints(req.UserID, req.TopicID, (err, result) => {
+            if (err) throw err;
+        });
         res.end();
     } catch (err) {
         errorJSON.error = err.message;
@@ -375,7 +418,9 @@ eventRequest.on('challengeSpecificUser', function (req, res) {
 
 eventRequest.on('challengeRejected', function (req, res) {
     try {
-        pm.deleteChallenge(req.challangeID);
+        pm.deleteChallenge(req.challangeID, (err, result) => {
+            if (err) throw err;
+        });
         users.get(req.SenderProposal_ID).send(JSON.stringify({
             request: "challengeRejected",
             ReceiverProposal_ID: req.ReceiverProposal_ID
@@ -388,11 +433,15 @@ eventRequest.on('challengeRejected', function (req, res) {
     }
 });
 
+/**
+ * This service will have to be changed in the future, 
+ * it's necessary a refactoring for design principles!
+ */
 eventRequest.on('challengeAccepted', function (req, res) {
     try {
-        pm.getRandomQuestions(req.TopicID, 'Definitions', numberQuestionTypeDefinitions,function (err, resultDefinitions) {
+        pm.getRandomQuestions(req.TopicID, 'Definitions', numberQuestionTypeDefinitions, function (err, resultDefinitions) {
             if (err == null) {
-                if (result == null) {
+                if (resultDefinitions == null) {
                     errorJSON.error = "There aren't questions in DB";
                     response = JSON.stringify(errorJSON);
                     res.end(response);
@@ -402,37 +451,27 @@ eventRequest.on('challengeAccepted', function (req, res) {
                         request: req.request,
                         Questions: resultDefinitions
                     }
-                    users.get(req.SenderProposal_ID).send(JSON.stringify(challange));
-                    users.get(req.ReceiverProposal_ID).send(JSON.stringify(challange));
-                    pm.getRandomQuestions(req.TopicID, 'HandsOn', numberQuestionTypeHandson,function (err, resultHandsOn) {
+                    pm.getRandomQuestions(req.TopicID, 'HandsOn', numberQuestionTypeHandson, function (err, resultHandsOn) {
                         if (err == null) {
-                            if (result == null) {
+                            if (resultHandsOn == null) {
                                 errorJSON.error = "There aren't questions in DB";
                                 response = JSON.stringify(errorJSON);
                                 res.end(response);
                             }
                             else {
-                                var challange = {
-                                    request: req.request,
-                                    Questions: resultHandsOn
-                                }
-                                users.get(req.SenderProposal_ID).send(JSON.stringify(challange));
-                                users.get(req.ReceiverProposal_ID).send(JSON.stringify(challange));
-                                pm.getRandomQuestions(req.TopicID, 'Cases', numberQuestionTypeCases,function (err, resultCases) {
+                                challange.Questions = challange.Questions.concat(resultHandsOn);
+                                pm.getRandomQuestions(req.TopicID, 'Cases', numberQuestionTypeCases, function (err, resultCases) {
                                     if (err == null) {
-                                        if (result == null) {
+                                        if (resultCases == null) {
                                             errorJSON.error = "There aren't questions in DB";
                                             response = JSON.stringify(errorJSON);
                                             res.end(response);
                                         }
                                         else {
-                                            res.end();
-                                            var challange = {
-                                                request: req.request,
-                                                Questions: result
-                                            }
+                                            challange.Questions = challange.Questions.concat(resultCases);
                                             users.get(req.SenderProposal_ID).send(JSON.stringify(challange));
                                             users.get(req.ReceiverProposal_ID).send(JSON.stringify(challange));
+                                            res.end();
                                         }
                                     }
                                     else {
@@ -473,8 +512,8 @@ eventRequest.on('getUserByID', function (req, res) {
                     errorJSON.error = "Incorrect parameter";
                     response = JSON.stringify(errorJSON);
                 }
-                else 
-                    response = JSON.stringify(user);                
+                else
+                    response = JSON.stringify(user);
             }
             else {
                 errorJSON.error = "Error in DB interation: " + err;

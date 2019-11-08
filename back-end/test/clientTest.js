@@ -1,15 +1,17 @@
 var http = require('http');
 
 
- var postData = JSON.stringify({ 
-    request : "saveChallengeQuestion", 
-    Question : { QuestionText: "Vez?", Answer_A : "A", Answer_B : "B", Answer_C : "C", Answer_D : "D", XPValue : 50, Topics_ID : 1, Type : "Teory", Explanation : undefined}
+var postData = JSON.stringify({
+    request : "challengeRejected",
+    ReceiverProposal_ID : 2,
+    SenderProposal_ID : 1,
+    challangeID : 1
 });
 
 /* var postData = JSON.stringify({ 
-    request : "saveUser", 
-    User: {Firstname : 'Pol', Lastname : "Caligiana", University : "UniGianni"},
-    key : "chiave"
+    request : "chooseRandomOpponent", 
+    UserID: 1,
+    TopicID : 1
 }); */
 
 var options = {
@@ -56,7 +58,7 @@ var rl = readline.createInterface({
 
 // Qui dentro per problema callback (in questo caso prendo la richiesta da stdin)
 rl.on('line', function (line) {
-    
+
 });
 
 

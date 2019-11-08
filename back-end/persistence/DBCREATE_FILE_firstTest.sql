@@ -9,25 +9,25 @@ CREATE TABLE IF NOT EXISTS `1001db`.`Users` (
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`Messages` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
   `SenderUser_ID` INT NOT NULL,
   `ReceiverUser_ID` INT NOT NULL,
   `Text` LONGTEXT NOT NULL,
   `DateTime` DATETIME NOT NULL,
-  `IsRead` CHAR(1) NOT NULL,
-  PRIMARY KEY (`SenderUser_ID`, `ReceiverUser_ID`),
+  PRIMARY KEY (`ID`, `SenderUser_ID`, `ReceiverUser_ID`),
   INDEX `fk_Users_has_Users_Users1_idx` (`ReceiverUser_ID` ASC) VISIBLE,
   INDEX `fk_Users_has_Users_Users_idx` (`SenderUser_ID` ASC) VISIBLE,
   UNIQUE INDEX `DateTime_UNIQUE` (`DateTime` ASC) VISIBLE,
   CONSTRAINT `fk_Users_has_Users_Users`
     FOREIGN KEY (`SenderUser_ID`)
     REFERENCES `1001db`.`Users` (`ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Users_has_Users_Users1`
     FOREIGN KEY (`ReceiverUser_ID`)
     REFERENCES `1001db`.`Users` (`ID`)
     ON DELETE CASCADE
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`Topics` (
@@ -127,4 +127,29 @@ CREATE TABLE IF NOT EXISTS `1001db`.`Challenge` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
+CREATE TABLE IF NOT EXISTS `1001db`.`PendingNotifications` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `UserID` INT NOT NULL,
+  `ChallengeID` INT NULL,
+  `MessageID` INT NULL,
+  PRIMARY KEY (`ID`),
+  INDEX `ID_idx` (`UserID` ASC) VISIBLE,
+  INDEX `ChallengeID_idx` (`ChallengeID` ASC) VISIBLE,
+  INDEX `MessageID_idx` (`MessageID` ASC) VISIBLE,
+  CONSTRAINT `UserID`
+    FOREIGN KEY (`UserID`)
+    REFERENCES `1001db`.`Users` (`ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `ChallengeID`
+    FOREIGN KEY (`ChallengeID`)
+    REFERENCES `1001db`.`Challenge` (`ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `MessageID`
+    FOREIGN KEY (`MessageID`)
+    REFERENCES `1001db`.`Messages` (`ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
 -- ALTER TABLE 1001db.users AUTO_INCREMENT=1

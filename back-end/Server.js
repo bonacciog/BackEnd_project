@@ -16,9 +16,14 @@ server.on('request', function (req, res) {
     });
 
     req.on('end', function () {
-        console.log("Arrived Data:\n" + body)
-        var req = JSON.parse(body);
-        c.eventRequest.emit(req.request, req, res);
+        try {
+            console.log("Arrived Data:\n" + body)
+            var req = JSON.parse(body);
+            c.eventRequest.emit(req.request, req, res);
+        }
+        catch (err) {
+            console.log("Error in trying to serve the request: \n"+err)
+        }
     });
 });
 

@@ -1,9 +1,8 @@
 class Message {
-    constructor(senderUserID, receiverUserID, text, isRead, dateTime){
+    constructor(senderUserID, receiverUserID, text, dateTime){
         this.senderUserID = senderUserID;
         this.receiverUserID = receiverUserID;
         this.text = text;
-        this.isRead = isRead;
         this.dateTime = dateTime;
     }
 

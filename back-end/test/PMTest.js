@@ -29,7 +29,24 @@ pm.saveTypeInformations('Cases', 60); */
 
 /* pm.addQuestionTypeInformations(1,1); */
 
-pm.getRandomQuestions(1, 'HandsOn', 1, function(err, result){
-    console.log(err);
+/* var question;
+for (i = 0; i < 30; i++) {
+    question = new questionClass.Question("?" + i, "A", "B", "C", "D", 10, 1, undefined);
+    pm.saveChallengeQuestion(question, (err,result) => {
+        pm.addQuestionTypeInformations(result, 1);
+    });
+    
+}
+for (i = 0; i < 30; i++) {
+    question = new questionClass.Question("?" + i, "A", "B", "C", "D", 10, 1, undefined);
+    pm.saveChallengeQuestion(question, (err,result) => {
+        pm.addQuestionTypeInformations(result, 2);
+    });}
+for (i = 0; i < 30; i++) {
+    question = new questionClass.Question("?" + i, "A", "B", "C", "D", 10, 1, undefined);
+    pm.saveChallengeQuestion(question, (err,result) => {
+        pm.addQuestionTypeInformations(result, 3);
+    });} */
+pm.getRandomQuestions(1,'HandsOn',10, function(err,result){
     console.log(result);
 })

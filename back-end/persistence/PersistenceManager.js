@@ -487,6 +487,42 @@ function getLeaderBoard(callback) {
 
 }
 
+function getRivals(ID, callback) {
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) callback(err,null);
+    console.log("Connected to DB!");
+  });
+  var sql = "select U.ID, Firstname, Lastname, University, sum(XP) AS SUMXPs\n" +
+    "from 1001db.topics T, 1001db.users U, 1001db.accumulatedpoints P\n" +
+    "where T.ID=P.Topics_ID\n" +
+    "and  U.ID=P.Users_ID\n" +
+    "and U.ID <> "+ ID + "\n"
+    "group by U.ID\n" +
+    "order by sum(XP) DESC";
+  connection.query(sql, function (err, result) {
+    if (err) callback(err, null);
+    else {
+      var resArrayDim = 0;
+      var res = new Array();
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        res[resArrayDim] = {
+          Firstname: row.Firstname,
+          Lastname: row.Lastname,
+          University: row.University,
+          UserID: row.ID,
+          XP: row.SUMXPs
+        }
+        resArrayDim++;
+      });
+      callback(null, res);
+    }
+  });
+  connection.end();
+
+}
+
 function getRandomPlayer(ID, callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
@@ -525,11 +561,13 @@ function saveChallenge(ID1, ID2, callback) {
     console.log("Connected to DB!");
   });
   var sql = "insert into 1001db.challenge(SenderProposal_ID, ReceiverProposal_ID) values(" + ID1 + "," + ID2 + ")";
+
   connection.query(sql, function (err, result) {
-    if (err) callback(err, null);
-    console.log("New challange with ID = " +result.insertId+" inserted");
+    if (err) callback(err, null);;
+    console.log("New Challenge with ID = " + result.insertId +" inserted.");
     var id = result.insertId;
-    callback(null, id);
+    callback(err, id);
+
   });
   connection.end();
 }
@@ -564,10 +602,13 @@ function getChallenge(ID, callback) {
   connection.query(sql, function (err, result) {
     if (err)  callback(err, null);
     else {
-      if (Object.keys(result).length == 0)
-        callback(err, null);
-      else
-        callback(err, result);
+      var resultID;
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        resultID = row.ID
+      });
+
+      callback(err, resultID);
     }
   });
   connection.end();
@@ -691,35 +732,18 @@ function getTypeInformationsID(type, callback){
   connection.end();
 }
 
-function saveChallengePendingNotification(UserID, ChallangeID, callback){
+function savePendingNotification(UserID, NotificationJSON, callback){
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
     console.log("Connected to DB!");
   });
 
-  var sql = "insert into 1001db.pendingnotifications(UserID, ChallengeID)\n"+
-            "values (" + UserID + "," + ChallangeID +")";
+  var sql = "insert into 1001db.pendingnotifications(UserID, NotificationJSON)\n"+
+            "values (" + UserID + ",'" + NotificationJSON +"')";
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
-    console.log("A Challange pending notification for User " + UserID + " inserted");
-  });
-
-  connection.end();
-}
-
-function saveMessagePendingNotification(UserID, MessageID, callback){
-  var connection = mysql.createConnection(dbParam);
-  connection.connect(function (err) {
-    if (err) callback(err,null);
-    console.log("Connected to DB!");
-  });
-
-  var sql = "insert into 1001db.pendingnotifications(UserID, MessageID)\n"+
-            "values (" + UserID + "," + MessageID +")";
-  connection.query(sql, function (err, result) {
-    if (err) callback(err,null);
-    console.log("A Message pending notification for User " + UserID + " inserted");
+    console.log("A pending notification for User " + UserID + " inserted");
   });
 
   connection.end();
@@ -731,7 +755,7 @@ function deletePendingNotification(ID, callback){
     if (err) callback(err,null);;
     console.log("Connected to DB!");
   });
-  var sql = "delete from 1001db.pendingnotifications where  ID = " + ID;
+  var sql = "delete from 1001db.pendingnotifications where  UserID = " + ID;
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
     console.log("A pending notification deleted");
@@ -740,47 +764,27 @@ function deletePendingNotification(ID, callback){
   connection.end();
 }
 
-function getMessagePendingNotification(UserID, callback){
-  var connection = mysql.createConnection(dbParam);
-  connection.connect(function (err) {
-    if (err) callback(err, null);
-    console.log("Connected to DB!");
-  });
-  var sql = "select MessageID\n" +
-    "from 1001db.pendingnotifications\n" +
-    "where UserID =" + UserID + "\n"
-  connection.query(sql, function (err, result) {
-    if (err) callback(err, null);
-    else {
-      var MessageID = "";
-      Object.keys(result).forEach(function (key) {
-        var row = result[key];
-        MessageID = row.MessageID;
-      });
-      callback(null, MessageID);
-    }
-  });
-  connection.end();
-}
 
-function getChallengePendingNotification(UserID, callback){
+function getPendingNotifications(UserID, callback){
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err, null);
     console.log("Connected to DB!");
   });
-  var sql = "select ChallengeID\n" +
+  var sql = "select *\n" +
     "from 1001db.pendingnotifications\n" +
     "where UserID =" + UserID + "\n"
   connection.query(sql, function (err, result) {
     if (err) callback(err, null);
     else {
-      var ChallengeID = "";
-      Object.keys(result).forEach(function (key) {
-        var row = result[key];
-        ChallengeID = row.ChallengeID;
-      });
-      callback(null, ChallengeID);
+        var notificationArrayDim = 0;
+        var notifications = new Array();
+        Object.keys(result).forEach(function (key) {
+          var row = result[key];
+          notifications[notificationArrayDim] = row.NotificationJSON;
+          notificationArrayDim++;
+        });
+        callback(null, notifications);
     }
   });
   connection.end();
@@ -816,8 +820,7 @@ exports.saveTypeInformations = saveTypeInformations;
 exports.deleteTypeInformations = deleteTypeInformations;
 exports.getTypeInformationsID = getTypeInformationsID;
 exports.addQuestionTypeInformations = addQuestionTypeInformations;
-exports.saveChallengePendingNotification = saveChallengePendingNotification;
-exports.saveMessagePendingNotification = saveMessagePendingNotification;
+exports.savePendingNotification = savePendingNotification;
 exports.deletePendingNotification = deletePendingNotification;
-exports.getChallengePendingNotification = getChallengePendingNotification;
-exports.getMessagePendingNotification = getMessagePendingNotification;
+exports.getPendingNotifications = getPendingNotifications;
+exports.getRivals = getRivals;

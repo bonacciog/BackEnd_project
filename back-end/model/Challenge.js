@@ -1,4 +1,0 @@
-class Challenge{
-    constructor(){
-    }
-}

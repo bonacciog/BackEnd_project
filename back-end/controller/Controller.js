@@ -21,12 +21,16 @@ var response;
 
 function notificationCheck(UserID, ws) {
     try {
-        pm.getChallengePendingNotification(UserID, function(err,challangeID){
-            if(err) throw err;
-            else{
-                if(challangeID != ""){
-
+        pm.getPendingNotifications(UserID, function (err, notifications) {
+            if (err) throw err;
+            else {
+                if (notifications != "") {
+                    notifications.forEach(element => {
+                        ws.send(element);
+                    });
                 }
+                else
+                    console.log("There aren't notifications for user " + UserID);
             }
         })
     } catch (err) {
@@ -95,8 +99,9 @@ eventRequest.on('login', function (req, ws) {
                                 users.set(req.UserID, ws);
                                 console.log("WebSocket for User " + req.UserID + " saved!");
                             }
-                            notificationCheck(req.UserID, ws);
                             ws.send(response);
+                            notificationCheck(req.UserID, ws);
+
 
                         }
                     }
@@ -348,21 +353,27 @@ eventRequest.on('getLeaderBoard', function (req, res) {
 
 eventRequest.on('chooseRandomOpponent', function (req, res) {
     try {
-        pm.getRandomPlayer(req.UserID, function (err, result) {
+        pm.getRandomPlayer(req.UserID, function (err, ReceiverProposal_ID) {
             if (err == null) {
-                if (result == null) {
+                if (ReceiverProposal_ID == null) {
                     errorJSON.error = "Incorrect parameter";
                     response = JSON.stringify(errorJSON);
                     res.end(response);
                 }
                 else {
-                    pm.saveChallenge(req.UserID, result, function (err, id) {
-                        users.get(result).send(JSON.stringify({
-                            request: "challengeProposal",
+                    pm.saveChallenge(req.UserID, ReceiverProposal_ID, function (err, id) {
+                        var notification = {
+                            notificationType: "challengeProposal",
                             TopicID: req.TopicID,
                             SenderProposal_ID: req.UserID,
                             challangeID: id
-                        }));
+                        };
+                        if (users.has(ReceiverProposal_ID))
+                            users.get(ReceiverProposal_ID).send(JSON.stringify(notification));
+                        else
+                            pm.savePendingNotification(ReceiverProposal_ID, JSON.stringify(notification), (err, result) => {
+                                if (err) throw err;
+                            });
                         res.end();
                     });
                 }
@@ -387,12 +398,18 @@ eventRequest.on('challengeSpecificUser', function (req, res) {
             if (err == null) {
                 if (result == null) {
                     pm.saveChallenge(req.SenderProposal_ID, req.ReceiverProposal_ID, function (err, id) {
-                        users.get(req.ReceiverProposal_ID).send(JSON.stringify({
-                            request: "challengeProposal",
+                        var notification = {
+                            notificationType: "challengeProposal",
                             TopicID: req.TopicID,
                             SenderProposal_ID: req.SenderProposal_ID,
                             challangeID: id
-                        }));
+                        };
+                        if (users.has(req.ReceiverProposal_ID))
+                            users.get(req.ReceiverProposal_ID).send(JSON.stringify(notification));
+                        else
+                            pm.savePendingNotification(req.ReceiverProposal_ID, JSON.stringify(notification), (err, result) => {
+                                if (err) throw err;
+                            });
                         res.end();
                     });
 
@@ -421,10 +438,16 @@ eventRequest.on('challengeRejected', function (req, res) {
         pm.deleteChallenge(req.challangeID, (err, result) => {
             if (err) throw err;
         });
-        users.get(req.SenderProposal_ID).send(JSON.stringify({
-            request: "challengeRejected",
+        var notification = {
+            notificationType: "challengeRejected",
             ReceiverProposal_ID: req.ReceiverProposal_ID
-        }));
+        };
+        if (users.has(req.SenderProposal_ID))
+            users.get(req.SenderProposal_ID).send(JSON.stringify(notification));
+        else
+            pm.savePendingNotification(req.SenderProposal_ID, JSON.stringify(notification), (err, result) => {
+                if (err) throw err;
+            });
         res.end();
     } catch (err) {
         errorJSON.error = err.message;
@@ -534,6 +557,24 @@ eventRequest.on('closeConnection', function (req, res) {
         users.delete(req.UserID);
     res.end();
     console.log("A connection closed!");
+});
+
+eventRequest.on('getAllRivals', function (req, res) {
+    try {
+        pm.getRivals(req.UserID,function (err, rivals) {
+            if (rivals != "")
+                response = JSON.stringify(rivals);
+            else {
+                errorJSON.error = "There aren't users, topics or accumulated points";
+                response = JSON.stringify(errorJSON);
+            }
+            res.end(response);
+        });
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
 });
 
 exports.eventRequest = eventRequest;

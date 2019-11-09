@@ -73,6 +73,11 @@
     request : "closeConnection", 
     UserID: 1
 }
+
+{
+    request: 'getAllRivals'
+    UserID: 1
+}
 -----------------------
     Entrata Front-End
 -----------------------

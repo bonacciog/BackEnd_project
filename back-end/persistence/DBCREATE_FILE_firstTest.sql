@@ -130,25 +130,12 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `1001db`.`PendingNotifications` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `UserID` INT NOT NULL,
-  `ChallengeID` INT NULL,
-  `MessageID` INT NULL,
+  `NotificationJSON` LONGTEXT NOT NULL,
   PRIMARY KEY (`ID`),
   INDEX `ID_idx` (`UserID` ASC) VISIBLE,
-  INDEX `ChallengeID_idx` (`ChallengeID` ASC) VISIBLE,
-  INDEX `MessageID_idx` (`MessageID` ASC) VISIBLE,
   CONSTRAINT `UserID`
     FOREIGN KEY (`UserID`)
     REFERENCES `1001db`.`Users` (`ID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `ChallengeID`
-    FOREIGN KEY (`ChallengeID`)
-    REFERENCES `1001db`.`Challenge` (`ID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `MessageID`
-    FOREIGN KEY (`MessageID`)
-    REFERENCES `1001db`.`Messages` (`ID`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;

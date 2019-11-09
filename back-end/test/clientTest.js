@@ -2,10 +2,8 @@ var http = require('http');
 
 
 var postData = JSON.stringify({
-    request : "challengeRejected",
-    ReceiverProposal_ID : 2,
-    SenderProposal_ID : 1,
-    challangeID : 1
+    request: 'getAllRivals',
+    UserID: 1
 });
 
 /* var postData = JSON.stringify({ 

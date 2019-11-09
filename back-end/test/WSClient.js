@@ -10,7 +10,7 @@ const ws = new WebSocket('ws://localhost:3000');
 
 const message = JSON.stringify({ 
   request : "login", 
-  UserID: 1,
+  UserID: 2,
   key : 'chiave'
 });
 

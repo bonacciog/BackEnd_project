@@ -108,6 +108,17 @@ class Question {
     set setTimeInSec(timeInSec){
         this.timeInSec=timeInSec;
     }
+
+    get getID(){
+        return this.ID;
+    }
+
+    /**
+     * @param {any} ID
+     */
+    set setID(ID){
+        this.ID = ID;
+    }
 }
 
 exports.Question = Question;

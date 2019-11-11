@@ -5,7 +5,6 @@ const topicClass = require('../model/Topic');
 const questionClass = require('../model/Question');
 const EventEmitter = require('events').EventEmitter;
 
-const limitQuestions = 10;
 const numberQuestionTypeDefinitions = 3;
 const numberQuestionTypeHandson = 5;
 const numberQuestionTypeCases = 2;
@@ -18,6 +17,14 @@ var errorJSON = {
 };
 var response;
 
+function sendIfPossibleOrSaveNotification(UserID, notification) {
+    if (users.has(UserID))
+        users.get(UserID).send(notification);
+    else
+        pm.savePendingNotification(UserID, notification, (err, result) => {
+            if (err) throw err;
+        });
+}
 
 function notificationCheck(UserID, ws) {
     try {
@@ -30,9 +37,12 @@ function notificationCheck(UserID, ws) {
                     });
                 }
                 else
-                    console.log("There aren't notifications for user " + UserID);
+                    console.log("[Controller]: There aren't notifications for user " + UserID);
             }
-        })
+        });
+        pm.deletePendingNotification(UserID, (err, result) => {
+            if (err) throw err;
+        });
     } catch (err) {
         errorJSON.error = err.message;
         response = JSON.stringify(errorJSON);
@@ -57,14 +67,17 @@ eventRequest.on('saveUser', function (req, ws) {
                             });
                         }
                         else
-                            console.log("There aren't topics for user initialization");
+                            console.log("[Controller]: There aren't topics for user initialization");
 
                     });
 
                     if (!users.has(id)) {
                         users.set(id, ws);
-                        console.log("WebSocket for User " + id + " saved!");
+                        console.log("[Controller]: WebSocket for User " + id + " saved!");
                     }
+                    pm.saveUserActivity(id, 'Access', new Date().toLocaleString(), (err, result) => {
+                        if (err) throw err;
+                    });
                     ws.send(response);
                 });
             }
@@ -97,8 +110,11 @@ eventRequest.on('login', function (req, ws) {
                             response = JSON.stringify(user);
                             if (!users.has(req.UserID)) {
                                 users.set(req.UserID, ws);
-                                console.log("WebSocket for User " + req.UserID + " saved!");
+                                console.log("[Controller]: WebSocket for User " + req.UserID + " saved!");
                             }
+                            pm.saveUserActivity(req.UserID, 'Access', new Date().toLocaleString(), (err, result) => {
+                                if (err) throw err;
+                            });
                             ws.send(response);
                             notificationCheck(req.UserID, ws);
 
@@ -142,11 +158,13 @@ eventRequest.on('deleteUser', function (req, res) {
     }
 });
 
-eventRequest.on('saveMessage', function (req, res) {
+eventRequest.on('sendMessage', function (req, res) {
     try {
-        pm.saveMessage(new messageClass.Message(req.Message.SenderUser_ID, req.Message.ReceiverUser_ID, req.Message.Text, req.Message.IsRead, req.Message.DateTime), (err, result) => {
+        var message = new messageClass.Message(req.Message.SenderUser_ID, req.Message.ReceiverUser_ID, req.Message.Text, req.Message.DateTime);
+        pm.saveMessage(message, (err, result) => {
             if (err) throw err;
         });
+        sendIfPossibleOrSaveNotification(req.Message.ReceiverUser_ID, JSON.stringify(message));
         res.end();
     } catch (err) {
         errorJSON.error = err.message;
@@ -157,7 +175,7 @@ eventRequest.on('saveMessage', function (req, res) {
 
 eventRequest.on('deleteMessage', function (req, res) {
     try {
-        pm.deleteMessage(new messageClass.Message(req.Message.SenderUser_ID, req.Message.ReceiverUser_ID, req.Message.Text, req.Message.IsRead, req.Message.DateTime), (err, result) => {
+        pm.deleteMessage(new messageClass.Message(req.Message.SenderUser_ID, req.Message.ReceiverUser_ID, req.Message.Text, req.Message.DateTime), (err, result) => {
             if (err) throw err;
         });
         res.end();
@@ -294,7 +312,7 @@ eventRequest.on('saveChallengeQuestion', function (req, res) {
     }
 });
 
-eventRequest.on('deleteChallengeQuestion', function (req, res) {
+/* eventRequest.on('deleteChallengeQuestion', function (req, res) {
     try {
         pm.deleteChallengeQuestion(req.QuestionID, (err, result) => {
             if (err) throw err;
@@ -305,9 +323,9 @@ eventRequest.on('deleteChallengeQuestion', function (req, res) {
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
-});
+}); */
 
-eventRequest.on('savePoints', function (req, res) {
+/* eventRequest.on('savePoints', function (req, res) {
     try {
         pm.saveAccumulatedPoints(req.UserID, req.TopicID, req.XP, (err, result) => {
             if (err) throw err;
@@ -318,9 +336,9 @@ eventRequest.on('savePoints', function (req, res) {
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
-});
+}); */
 
-eventRequest.on('deletePoints', function (req, res) {
+/* eventRequest.on('deletePoints', function (req, res) {
     try {
         pm.deleteAccumulatedPoints(req.UserID, req.TopicID, (err, result) => {
             if (err) throw err;
@@ -331,7 +349,7 @@ eventRequest.on('deletePoints', function (req, res) {
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
-});
+}); */
 
 eventRequest.on('getLeaderBoard', function (req, res) {
     try {
@@ -366,14 +384,9 @@ eventRequest.on('chooseRandomOpponent', function (req, res) {
                             notificationType: "challengeProposal",
                             TopicID: req.TopicID,
                             SenderProposal_ID: req.UserID,
-                            challangeID: id
+                            challengeID: id
                         };
-                        if (users.has(ReceiverProposal_ID))
-                            users.get(ReceiverProposal_ID).send(JSON.stringify(notification));
-                        else
-                            pm.savePendingNotification(ReceiverProposal_ID, JSON.stringify(notification), (err, result) => {
-                                if (err) throw err;
-                            });
+                        sendIfPossibleOrSaveNotification(ReceiverProposal_ID, JSON.stringify(notification));
                         res.end();
                     });
                 }
@@ -402,20 +415,15 @@ eventRequest.on('challengeSpecificUser', function (req, res) {
                             notificationType: "challengeProposal",
                             TopicID: req.TopicID,
                             SenderProposal_ID: req.SenderProposal_ID,
-                            challangeID: id
+                            challengeID: id
                         };
-                        if (users.has(req.ReceiverProposal_ID))
-                            users.get(req.ReceiverProposal_ID).send(JSON.stringify(notification));
-                        else
-                            pm.savePendingNotification(req.ReceiverProposal_ID, JSON.stringify(notification), (err, result) => {
-                                if (err) throw err;
-                            });
+                        sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(notification));
                         res.end();
                     });
 
                 }
                 else {
-                    errorJSON.error = "Opponent is playing another challenge";
+                    errorJSON.error = "Your rival is currently busy on another challenge. You have been lined up for the fight.";
                     response = JSON.stringify(errorJSON);
                     res.end(response);
                 }
@@ -435,19 +443,14 @@ eventRequest.on('challengeSpecificUser', function (req, res) {
 
 eventRequest.on('challengeRejected', function (req, res) {
     try {
-        pm.deleteChallenge(req.challangeID, (err, result) => {
+        pm.deleteChallenge(req.challengeID, (err, result) => {
             if (err) throw err;
         });
         var notification = {
             notificationType: "challengeRejected",
             ReceiverProposal_ID: req.ReceiverProposal_ID
         };
-        if (users.has(req.SenderProposal_ID))
-            users.get(req.SenderProposal_ID).send(JSON.stringify(notification));
-        else
-            pm.savePendingNotification(req.SenderProposal_ID, JSON.stringify(notification), (err, result) => {
-                if (err) throw err;
-            });
+        sendIfPossibleOrSaveNotification(req.SenderProposal_ID, JSON.stringify(notification));
         res.end();
     } catch (err) {
         errorJSON.error = err.message;
@@ -458,7 +461,7 @@ eventRequest.on('challengeRejected', function (req, res) {
 
 /**
  * This service will have to be changed in the future, 
- * it's necessary a refactoring for design principles!
+ * it's necessary a refactoring applying design principles!
  */
 eventRequest.on('challengeAccepted', function (req, res) {
     try {
@@ -470,7 +473,7 @@ eventRequest.on('challengeAccepted', function (req, res) {
                     res.end(response);
                 }
                 else {
-                    var challange = {
+                    var challenge = {
                         request: req.request,
                         Questions: resultDefinitions
                     }
@@ -482,7 +485,7 @@ eventRequest.on('challengeAccepted', function (req, res) {
                                 res.end(response);
                             }
                             else {
-                                challange.Questions = challange.Questions.concat(resultHandsOn);
+                                challenge.Questions = challenge.Questions.concat(resultHandsOn);
                                 pm.getRandomQuestions(req.TopicID, 'Cases', numberQuestionTypeCases, function (err, resultCases) {
                                     if (err == null) {
                                         if (resultCases == null) {
@@ -491,9 +494,9 @@ eventRequest.on('challengeAccepted', function (req, res) {
                                             res.end(response);
                                         }
                                         else {
-                                            challange.Questions = challange.Questions.concat(resultCases);
-                                            users.get(req.SenderProposal_ID).send(JSON.stringify(challange));
-                                            users.get(req.ReceiverProposal_ID).send(JSON.stringify(challange));
+                                            challenge.Questions = challenge.Questions.concat(resultCases);
+                                            sendIfPossibleOrSaveNotification(req.SenderProposal_ID, JSON.stringify(challenge));
+                                            sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(challenge));
                                             res.end();
                                         }
                                     }
@@ -556,12 +559,15 @@ eventRequest.on('closeConnection', function (req, res) {
     if (users.has(req.UserID))
         users.delete(req.UserID);
     res.end();
-    console.log("A connection closed!");
+    pm.saveUserActivity(req.UserID, 'Exit', new Date().toLocaleString(), (err, result) => {
+        if (err) throw err;
+    });
+    console.log("[Controller]: A connection closed!");
 });
 
 eventRequest.on('getAllRivals', function (req, res) {
     try {
-        pm.getRivals(req.UserID,function (err, rivals) {
+        pm.getRivals(req.UserID, function (err, rivals) {
             if (rivals != "")
                 response = JSON.stringify(rivals);
             else {
@@ -570,6 +576,59 @@ eventRequest.on('getAllRivals', function (req, res) {
             }
             res.end(response);
         });
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
+eventRequest.on('endChallenge', function (req, res) {
+
+    try {
+        pm.deleteChallenge(req.ChallengeID, (err, result) => {
+            if (err) throw err;
+        });
+        res.end();
+    } catch (err) {
+        errorJSON.error = err.message;
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
+eventRequest.on('answerToChallengeQuestion', function (req, res) {
+    try {
+        pm.saveChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, (err, result) => {
+            if (err) throw err;
+        });
+        pm.getUserTopicPoints(req.UserID, req.TopicID, function(err,result){
+            if (err == null) {
+                var newXP = result + req.XP;
+                pm.updateAccumulatedPoints(req.UserID, req.TopicID, newXP, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                    else{
+                        var notification = {
+                            notificationType : 'questionResponse',
+                            UserID : req.UserID,
+                            QuestionID : req.QuestionID,
+                            ChallengeID : req.ChallengeID,
+                            Correct : req.Correct
+                        };
+                        sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
+                        res.end();
+                    }
+                });
+            }
+            else {
+                errorJSON.error = "Error in DB interation: " + err;
+                response = JSON.stringify(errorJSON);
+                res.end(response);
+            }            
+        });      
+        
     } catch (err) {
         errorJSON.error = err.message;
         response = JSON.stringify(errorJSON);

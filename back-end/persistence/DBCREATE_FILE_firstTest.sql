@@ -83,19 +83,19 @@ CREATE TABLE IF NOT EXISTS `1001db`.`QuestionTypeInformation` (
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`AccumulatedPoints` (
-  `Users_ID` INT NOT NULL,
-  `Topics_ID` INT NOT NULL,
+  `User_ID` INT NOT NULL,
+  `Topic_ID` INT NOT NULL,
   `XP` INT NOT NULL,
-  PRIMARY KEY (`Users_ID`, `Topics_ID`),
-  INDEX `fk_Users_has_Topics_Topics1_idx` (`Topics_ID` ASC) VISIBLE,
-  INDEX `fk_Users_has_Topics_Users1_idx` (`Users_ID` ASC) VISIBLE,
+  PRIMARY KEY (`User_ID`, `Topic_ID`),
+  INDEX `fk_Users_has_Topics_Topics1_idx` (`Topic_ID` ASC) VISIBLE,
+  INDEX `fk_Users_has_Topics_Users1_idx` (`User_ID` ASC) VISIBLE,
   CONSTRAINT `fk_Users_has_Topics_Users1`
-    FOREIGN KEY (`Users_ID`)
+    FOREIGN KEY (`User_ID`)
     REFERENCES `1001db`.`Users` (`ID`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_Users_has_Topics_Topics1`
-    FOREIGN KEY (`Topics_ID`)
+    FOREIGN KEY (`Topic_ID`)
     REFERENCES `1001db`.`Topics` (`ID`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
@@ -136,6 +136,46 @@ CREATE TABLE IF NOT EXISTS `1001db`.`PendingNotifications` (
   CONSTRAINT `UserID`
     FOREIGN KEY (`UserID`)
     REFERENCES `1001db`.`Users` (`ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `1001db`.`UsersActivities` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `UserID` INT NOT NULL,
+  `Type` VARCHAR(45) NOT NULL,
+  `DateTime` DATETIME NOT NULL,
+  PRIMARY KEY (`ID`),
+  INDEX `ID_Users_idx` (`UserID` ASC) VISIBLE,
+  CONSTRAINT `ID_Users`
+    FOREIGN KEY (`UserID`)
+    REFERENCES `1001db`.`Users` (`ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeResults` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `PlayerID` INT NOT NULL,
+  `QuestionID` INT NOT NULL,
+  `ChallengeID` INT NOT NULL,
+  PRIMARY KEY (`ID`),
+  INDEX `ID_User_idx` (`PlayerID` ASC) VISIBLE,
+  INDEX `ID_Question_idx` (`QuestionID` ASC) VISIBLE,
+  INDEX `ID_Challenge_idx` (`ChallengeID` ASC) VISIBLE,
+  CONSTRAINT `ID_User`
+    FOREIGN KEY (`PlayerID`)
+    REFERENCES `1001db`.`Users` (`ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `ID_Question`
+    FOREIGN KEY (`QuestionID`)
+    REFERENCES `1001db`.`ChallengeQuestions` (`ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `ID_Challenge`
+    FOREIGN KEY (`ChallengeID`)
+    REFERENCES `1001db`.`Challenge` (`ID`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;

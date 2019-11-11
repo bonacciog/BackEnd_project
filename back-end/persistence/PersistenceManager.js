@@ -26,14 +26,14 @@ function saveUser(user, callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err)  callback(err, null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "insert into 1001db.users(Firstname, Lastname, University) values	('" +
     user.getFirstname + "','" + user.getLastname + "','" + user.getUniversity + "')";
 
   connection.query(sql, function (err, result) {
     if (err) callback(err, null);;
-    console.log("New User with ID = " + result.insertId +" inserted.");
+    console.log("[PersistenceManager]: New User with ID = " + result.insertId +" inserted.");
     var id = result.insertId;
     callback(err, id);
 
@@ -45,30 +45,32 @@ function saveUser(user, callback) {
 }
 
 function deleteUser(ID, callback) {
-
+  if(ID === undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err)  callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
 
   var sql = "delete from 1001db.users where ID = '" + ID + "'";
   connection.query(sql, function (err, result) {
     if (err)  callback(err,null);
-    console.log("A User with ID = " +ID +" deleted.");
+    console.log("[PersistenceManager]: A User with ID = " +ID +" deleted.");
 
   });
   connection.end();
 }
 
 function getUser(ID, callback) {
-
+  if(ID === undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var user = null;
 
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err, null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "select * from 1001db.users where  ID = " + ID;
 
@@ -94,7 +96,7 @@ function updateUser(user, callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
 
   var sql = "UPDATE 1001DB.USERS SET Firstname = '" + user.getFirstname + "'," +
@@ -103,7 +105,7 @@ function updateUser(user, callback) {
     " WHERE ID = " + user.getID;
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
-    console.log("1 record updated");
+    console.log("[PersistenceManager]: 1 record updated");
   });
   connection.end();
 }
@@ -115,7 +117,7 @@ function saveMessage(message, callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
 
   var sql = "insert into 1001db.messages(SenderUser_ID, ReceiverUser_ID, Text, DateTime)" +
@@ -123,7 +125,7 @@ function saveMessage(message, callback) {
 
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
-    console.log("New message with ID = " + result.insertId +" inserted");
+    console.log("[PersistenceManager]: New message with ID = " + result.insertId +" inserted");
   });
 
   connection.end();
@@ -136,13 +138,13 @@ function deleteMessage(message, callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
 
   var sql = "delete from 1001db.messages where SenderUser_ID = " + message.getSenderUserID + " and ReceiverUser_ID = " + message.getReceiverUserID + " and DateTime = '" + message.getDateTime + "'";
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
-    console.log("A message deleted");
+    console.log("[PersistenceManager]: A message deleted");
   });
 
 
@@ -158,10 +160,12 @@ function deleteMessage(message, callback) {
  * @returns returns only messages sended from sender to receiver
  */
 function getMessages(SenderUserID, ReceiverUserID, limit, callback) {
+  if(SenderUserID === undefined || ReceiverUserID === undefined || limit === undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);;
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "select * " +
     "from 1001db.messages" +
@@ -196,10 +200,12 @@ function getMessages(SenderUserID, ReceiverUserID, limit, callback) {
  */
 
 function getAllMessages(ID_1, ID_2, limit, callback) {
+  if(ID_1 === undefined || ID_2 === undefined || limit === undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "select * " +
     "from 1001db.messages" +
@@ -227,12 +233,12 @@ function saveKey(key, callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "insert into 1001db.ExecutionTable values ('" + key + "')";
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
-    console.log("Key inserted");
+    console.log("[PersistenceManager]: Key inserted");
   });
 
   connection.end();
@@ -242,12 +248,12 @@ function deleteKey(key, callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "delete from 1001db.ExecutionTable where 1001db.ExecutionTable.KEY = '" + key + "'";
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
-    console.log("Key deleted");
+    console.log("[PersistenceManager]: Key deleted");
   });
 
   connection.end();
@@ -257,7 +263,7 @@ function getKey(callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "select * " +
     "from 1001db.ExecutionTable"
@@ -283,7 +289,7 @@ function saveTopic(topic, callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err)  callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
 
   var sql = "insert into 1001db.Topics(TopicName)" +
@@ -291,23 +297,25 @@ function saveTopic(topic, callback) {
 
   connection.query(sql, function (err, result) {
     if (err)  callback(err,null);
-    console.log("New topic with ID = " + result.insertId + " inserted");
+    console.log("[PersistenceManager]: New topic with ID = " + result.insertId + " inserted");
   });
 
   connection.end();
 }
 
 function deleteTopic(topicName,callback) {
+  if(topicName === undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err)  callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "delete from 1001db.Topics " +
     "where ID in (select ID from (SELECT * FROM 1001db.Topics) as T2 where TopicName = '" + topicName + "')";
   connection.query(sql, function (err, result) {
     if (err)  callback(err,null);
-    console.log("1 record deleted");
+    console.log("[PersistenceManager]: 1 record deleted");
   });
 
   connection.end();
@@ -317,7 +325,7 @@ function getAllTopics(callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "select * " +
     "from 1001db.Topics";
@@ -345,7 +353,7 @@ function saveChallengeQuestion(question, callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   if (question.getExplanation === undefined)
     var sql = "insert into 1001db.ChallengeQuestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID)" +
@@ -356,7 +364,7 @@ function saveChallengeQuestion(question, callback) {
 
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
-    console.log("New question with ID = " + result.insertId + " inserted");
+    console.log("[PersistenceManager]: New question with ID = " + result.insertId + " inserted");
     var id = result.insertId;
     callback(null, id);
   });
@@ -365,56 +373,64 @@ function saveChallengeQuestion(question, callback) {
 }
 
 function deleteChallengeQuestion(questionID, callback) {
+  if(questionID === undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "delete from 1001db.ChallengeQuestions where ID = " + questionID;
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
-    console.log("A question deleted");
+    console.log("[PersistenceManager]: A question deleted");
   });
 
   connection.end();
 }
 
 function saveAccumulatedPoints(UserID, TopicID, XP, callback) {
+  if(UserID === undefined || TopicID === undefined || XP === undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
-  var sql = "insert into 1001db.AccumulatedPoints(Users_ID, Topics_ID, XP)" +
+  var sql = "insert into 1001db.AccumulatedPoints(User_ID, Topic_ID, XP)" +
     " values (" + UserID + "," + TopicID + "," + XP + ")";
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
-    console.log("Points of UserID " + UserID + " inserted");
+    console.log("[PersistenceManager]: Points of UserID " + UserID + " inserted");
   });
 
   connection.end();
 }
 
 function deleteAccumulatedPoints(UserID, TopicID, callback) {
+  if(UserID === undefined || TopicID === undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
-  var sql = "delete from 1001db.AccumulatedPoints where  Users_ID = " + UserID + " and Topics_ID = " + TopicID;
+  var sql = "delete from 1001db.AccumulatedPoints where  User_ID = " + UserID + " and Topic_ID = " + TopicID;
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
-    console.log("Points of UserID " + UserID + " deleted");
+    console.log("[PersistenceManager]: Points of UserID " + UserID + " deleted");
   });
 
   connection.end();
 }
 
 function getUserTopicPoints(UserID, TopicID, callback) {
+  if(UserID === undefined || TopicID === undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "select XP " +
     "from 1001db.AccumulatedPoints" +
@@ -435,10 +451,12 @@ function getUserTopicPoints(UserID, TopicID, callback) {
 }
 
 function updateAccumulatedPoints(UserID, TopicID, XP, callback) {
+  if(UserID === undefined || TopicID === undefined || XP === undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "update 1001db.AccumulatedPoints " +
     "set XP = " + XP + " " +
@@ -446,7 +464,8 @@ function updateAccumulatedPoints(UserID, TopicID, XP, callback) {
     " and Topic_ID = " + TopicID;
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
-    console.log("Points of UserID " + UserID + " updated");
+    console.log("[PersistenceManager]: Points of UserID " + UserID + " updated");
+    callback(null)
   });
 
   connection.end();
@@ -456,12 +475,12 @@ function getLeaderBoard(callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "select U.ID, Firstname, Lastname, University, sum(XP) AS SUMXPs\n" +
     "from 1001db.topics T, 1001db.users U, 1001db.accumulatedpoints P\n" +
-    "where T.ID=P.Topics_ID\n" +
-    "and  U.ID=P.Users_ID\n" +
+    "where T.ID=P.Topic_ID\n" +
+    "and  U.ID=P.User_ID\n" +
     "group by U.ID\n" +
     "order by sum(XP) DESC";
   connection.query(sql, function (err, result) {
@@ -488,18 +507,21 @@ function getLeaderBoard(callback) {
 }
 
 function getRivals(ID, callback) {
+  if(ID === undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "select U.ID, Firstname, Lastname, University, sum(XP) AS SUMXPs\n" +
     "from 1001db.topics T, 1001db.users U, 1001db.accumulatedpoints P\n" +
-    "where T.ID=P.Topics_ID\n" +
-    "and  U.ID=P.Users_ID\n" +
-    "and U.ID <> "+ ID + "\n"
+    "where T.ID=P.Topic_ID\n" +
+    "and  U.ID=P.User_ID\n" +
+    "and U.ID <> "+ ID + "\n"+
     "group by U.ID\n" +
     "order by sum(XP) DESC";
+    console.log(sql)
   connection.query(sql, function (err, result) {
     if (err) callback(err, null);
     else {
@@ -524,10 +546,12 @@ function getRivals(ID, callback) {
 }
 
 function getRandomPlayer(ID, callback) {
+  if(ID === undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err, null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "select ID\n" +
     "from 1001db.users\n" +
@@ -555,16 +579,18 @@ function getRandomPlayer(ID, callback) {
 }
 
 function saveChallenge(ID1, ID2, callback) {
+  if(ID1 === undefined || ID2 === undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "insert into 1001db.challenge(SenderProposal_ID, ReceiverProposal_ID) values(" + ID1 + "," + ID2 + ")";
 
   connection.query(sql, function (err, result) {
     if (err) callback(err, null);;
-    console.log("New Challenge with ID = " + result.insertId +" inserted.");
+    console.log("[PersistenceManager]: New Challenge with ID = " + result.insertId +" inserted.");
     var id = result.insertId;
     callback(err, id);
 
@@ -573,10 +599,12 @@ function saveChallenge(ID1, ID2, callback) {
 }
 
 function isPlaying(ID, callback) {
+  if(ID === undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err)  callback(err, null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "select * from 1001db.challenge where SenderProposal_ID = " + ID + " or ReceiverProposal_ID = " + ID
   connection.query(sql, function (err, result) {
@@ -593,10 +621,12 @@ function isPlaying(ID, callback) {
 }
 
 function getChallenge(ID, callback) {
+  if(ID === undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err)  callback(err, null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "select * from 1001db.challenge where ID = " + ID;
   connection.query(sql, function (err, result) {
@@ -616,27 +646,31 @@ function getChallenge(ID, callback) {
 }
 
 function deleteChallenge(ID, callback) {
+  if(ID === undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "delete from 1001db.challenge where  ID = " + ID;
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
-    console.log("A challange with ID = " + ID +" deleted");
+    console.log("[PersistenceManager]: A challenge with ID = " + ID +" deleted");
   });
 
   connection.end();
 }
 
 function getRandomQuestions(topicID, type, numberRows, callback) {
+  if(topicID === undefined || type == undefined || numberRows == undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err)  callback(err, null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
-  var sql = "select *\n" + 
+  var sql = "select C.ID, QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Explanation, Type, TimeInSec\n" + 
   "from 1001db.challengequestions C, 1001db.questiontypeinformation Q, 1001db.typeinformations T\n" + 
   "where C.ID = Q.ChallengeQuestions_ID\n"+
   "and T.Type = '" + type +"'\n"+
@@ -654,6 +688,7 @@ function getRandomQuestions(topicID, type, numberRows, callback) {
         questionArray[questionDim] = new questionClass.Question(row.QuestionText, row.Answer_A,
           row.Answer_B, row.Answer_C, row.Answer_D, row.XPValue, row.Topics_ID, row.Explanation);
         questionArray[questionDim].setType = row.Type;
+        questionArray[questionDim].setID = row.ID;
         questionArray[questionDim].setTimeInSec = row.TimeInSec;
         questionDim++;
       });
@@ -664,56 +699,65 @@ function getRandomQuestions(topicID, type, numberRows, callback) {
 }
 
 function addQuestionTypeInformations(questionID, typeID, callback){
+  if(questionID === undefined || typeID == undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "insert into 1001db.questiontypeinformation(ChallengeQuestions_ID, TypeInformations_ID)\n"+
            "values(" + questionID +","+ typeID+ ")";
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
-    console.log("A QuestionTypeInformation inserted");
+    console.log("[PersistenceManager]: A QuestionTypeInformation inserted");
   });
 
   connection.end();
 }
 
 function saveTypeInformations(type, timeInSec, callback) {
+  if(type === undefined || timeInSec == undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "insert into 1001db.typeinformations(Type, TimeInSec) values('" + type +"',"+ timeInSec+ ")";
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
-    console.log("A Type inserted");
+    console.log("[PersistenceManager]: A Type inserted");
   });
 
   connection.end();
 }
 
 function deleteTypeInformations(ID, callback){
+  if(ID === undefined)
+    callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);;
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "delete from 1001db.typeinformations where  ID = " + ID;
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
-    console.log("A Type deleted");
+    console.log("[PersistenceManager]: A Type deleted");
   });
 
   connection.end();
 }
 
 function getTypeInformationsID(type, callback){
+if(type === undefined)
+  callback(new ParamError('Incorrect Parameter!'), null);
+
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err, null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "select ID\n" +
     "from 1001db.typeinformations\n" +
@@ -733,32 +777,36 @@ function getTypeInformationsID(type, callback){
 }
 
 function savePendingNotification(UserID, NotificationJSON, callback){
+  if(UserID === undefined || NotificationJSON === undefined)
+    callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
 
   var sql = "insert into 1001db.pendingnotifications(UserID, NotificationJSON)\n"+
             "values (" + UserID + ",'" + NotificationJSON +"')";
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
-    console.log("A pending notification for User " + UserID + " inserted");
+    console.log("[PersistenceManager]: A pending notification for User " + UserID + " inserted");
   });
 
   connection.end();
 }
 
 function deletePendingNotification(ID, callback){
+  if(ID === undefined)
+    callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err,null);;
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "delete from 1001db.pendingnotifications where  UserID = " + ID;
   connection.query(sql, function (err, result) {
     if (err) callback(err,null);
-    console.log("A pending notification deleted");
+    console.log("[PersistenceManager]: A pending notification deleted");
   });
 
   connection.end();
@@ -766,10 +814,12 @@ function deletePendingNotification(ID, callback){
 
 
 function getPendingNotifications(UserID, callback){
+  if(UserID === undefined)
+    callback(new ParamError('Incorrect Parameter!'), null);
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err, null);
-    console.log("Connected to DB!");
+    console.log("[PersistenceManager]: Connected to DB!");
   });
   var sql = "select *\n" +
     "from 1001db.pendingnotifications\n" +
@@ -789,6 +839,45 @@ function getPendingNotifications(UserID, callback){
   });
   connection.end();
 }
+
+function saveUserActivity(UserID, Type, DateTime, callback){
+  if(UserID === undefined || Type === undefined || DateTime === undefined)
+    callback(new ParamError('Incorrect Parameter!'), null);
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) callback(err,null);
+    console.log("[PersistenceManager]: Connected to DB!");
+  });
+
+  var sql = "insert into 1001db.UsersActivities(UserID, Type, DateTime)\n"+
+            "values (" + UserID + ",'" + Type +"','" + DateTime + "')";
+  connection.query(sql, function (err, result) {
+    if (err) callback(err,null);
+    console.log("[PersistenceManager]: An activities for User " + UserID + " inserted");
+  });
+
+  connection.end();
+}
+
+function saveChallengeResult(UserID, QuestionID, ChallengeID, callback){
+  if(UserID === undefined || QuestionID === undefined || ChallengeID === undefined)
+    callback(new ParamError('Incorrect Parameter!'), null);
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) callback(err,null);
+    console.log("[PersistenceManager]: Connected to DB!");
+  });
+
+  var sql = "insert into 1001db.ChallengeResults(PlayerID, QuestionID, ChallengeID)\n"+
+            "values (" + UserID + "," + QuestionID +"," + ChallengeID + ")";
+  connection.query(sql, function (err, result) {
+    if (err) callback(err,null);
+    console.log("[PersistenceManager]: A result for User " + UserID + " inserted");
+  });
+
+  connection.end();
+}
+
 
 exports.getUser = getUser;
 exports.updateUser = updateUser;
@@ -824,3 +913,5 @@ exports.savePendingNotification = savePendingNotification;
 exports.deletePendingNotification = deletePendingNotification;
 exports.getPendingNotifications = getPendingNotifications;
 exports.getRivals = getRivals;
+exports.saveUserActivity = saveUserActivity;
+exports.saveChallengeResult = saveChallengeResult;

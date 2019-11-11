@@ -1,16 +1,19 @@
 var http = require('http');
 
 
-var postData = JSON.stringify({
-    request: 'getAllRivals',
-    UserID: 1
-});
 
-/* var postData = JSON.stringify({ 
-    request : "chooseRandomOpponent", 
-    UserID: 1,
-    TopicID : 1
-}); */
+
+var postData = JSON.stringify({
+    request: 'answerToChallengeQuestion',
+    UserID : 2,
+    QuestionID : 12,
+    ChallengeID : 1,
+    OpponentID : 1,
+    XP : 10,
+    TopicID : 1,
+    Correct : "yes"
+}
+); 
 
 var options = {
     hostname: 'localhost',

@@ -3,9 +3,17 @@
     User: {Firstname : 'Pol', Lastname : "Caligiana", University : "UniGianni"},
     key : "chiave"
 }
+{
+    request : 'closeConnection',
+    UserID : 2
+}
+{
+    request : 'sendMessage',
+    Message : {SenderUser_ID:1, ReceiverUser_ID:2, Text:"Terrone di merda", DateTime:'2019-11-11 09:47:00'}
+}
 { 
     request : "login", 
-    UserID: 1,
+    UserID: 6,
     key : 'chiave'
 }
 {"request" : "login","UserID": 1,"key" : "chiave"}
@@ -47,20 +55,20 @@
     request : "challengeRejected",
     ReceiverProposal_ID : 2,
     SenderProposal_ID : 1,
-    challangeID : 1
+    challengeID : 1
 }
 
 {
     request : "challengeAccepted",
-    ReceiverProposal_ID : 1,
-    SenderProposal_ID : 2,
+    ReceiverProposal_ID : 2,
+    SenderProposal_ID : 1,
     TopicID : 1
 }
 
 { 
     request : "challengeSpecificUser", 
-    ReceiverProposal_ID : 12,
-    SenderProposal_ID : 11,
+    ReceiverProposal_ID :2,
+    SenderProposal_ID : 1,
     TopicID : 1
 }
 
@@ -78,6 +86,17 @@
     request: 'getAllRivals'
     UserID: 1
 }
+
+{
+    request: 'answerToChallengeQuestion',
+    UserID : 1,
+    QuestionID : 12,
+    ChallengeID : 1,
+    OpponentID : 2,
+    XP : 10,
+    TopicID : 1,
+    Correct : "yes"
+}
 -----------------------
     Entrata Front-End
 -----------------------
@@ -85,6 +104,6 @@
     request: "challengeProposal",                        
     TopicID: req.TopicID,
     SenderProposal_ID: req.UserID,
-    challangeID : id
+    challengeID : id
 }
 

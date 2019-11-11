@@ -16,18 +16,24 @@ server.on('request', function (req, res) {
     });
 
     req.on('end', function () {
-        console.log("Arrived Data:\n" + body)
-        var req = JSON.parse(body);
-        c.eventRequest.emit(req.request, req, res);
+        try {
+            console.log("[Server]: Arrived request:\n" + body)
+            var req = JSON.parse(body);
+            c.eventRequest.emit(req.request, req, res);
+        }
+        catch (err) {
+            console.log("[Server]: Error in trying to serve the request: \n"+err)
+        }
     });
 });
 
 wss.on('connection', function (ws) {
 
     ws.on('message', function (req) {
+        console.log("[Server]: Arrived request:\n" + req)
         var request = JSON.parse(req);
         c.eventRequest.emit(request.request, request, this);
     });
 });
 
-console.log('Listening on http://localhost:3000');
+console.log('[Server]: Listening on http://localhost:3000');

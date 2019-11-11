@@ -1,14 +1,17 @@
 class Question {
-    constructor(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topic_ID, Type, TimeInSec){
+    constructor(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topic_ID, Explanation){
         this.questionText = QuestionText;
         this.answer_A = Answer_A;
         this.answer_B = Answer_B;
         this.answer_C = Answer_C;
         this.answer_D = Answer_D;
         this.XPValue = XPValue;
-        this.topic_ID = Topic_ID; 
-        this.type=Type;
-        this.timeInSec=TimeInSec;
+        this.topic_ID = Topic_ID;
+        this.explanation=Explanation;
+    }
+
+    get getExplanation(){
+        return this.explanation;
     }
 
     get getType(){
@@ -40,6 +43,13 @@ class Question {
     }
     get getTopic_ID(){
         return this.topic_ID;
+    }
+
+    /**
+     * @param {any} explanation
+     */
+    set setExplanation(explanation){
+        this.explanation=explanation;
     }
 
     /**
@@ -97,6 +107,17 @@ class Question {
      */
     set setTimeInSec(timeInSec){
         this.timeInSec=timeInSec;
+    }
+
+    get getID(){
+        return this.ID;
+    }
+
+    /**
+     * @param {any} ID
+     */
+    set setID(ID){
+        this.ID = ID;
     }
 }
 

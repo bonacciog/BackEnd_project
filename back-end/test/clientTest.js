@@ -1,18 +1,19 @@
 var http = require('http');
 
 
-var postData = JSON.stringify({ 
-    request : "chooseRandomOpponent", 
-    UserID: 3,
-    TopicID : 1
-})
-/*
-var postData = JSON.stringify({ 
-    request : "challengeSpecificUser", 
-    ReceiverProposal_ID : 12,
-    SenderProposal_ID : 11,
-    TopicID : 1
-});*/
+
+
+var postData = JSON.stringify({
+    request: 'answerToChallengeQuestion',
+    UserID : 2,
+    QuestionID : 12,
+    ChallengeID : 1,
+    OpponentID : 1,
+    XP : 10,
+    TopicID : 1,
+    Correct : "yes"
+}
+); 
 
 var options = {
     hostname: 'localhost',
@@ -58,7 +59,7 @@ var rl = readline.createInterface({
 
 // Qui dentro per problema callback (in questo caso prendo la richiesta da stdin)
 rl.on('line', function (line) {
-    
+
 });
 
 

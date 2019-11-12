@@ -10,7 +10,6 @@ const DATA = [
       title: 'Simone Bartoli',
       profession: 'UNIBO',
       exp: 250
-      
     },
     {
       id: '2',
@@ -43,12 +42,16 @@ class HomeTest extends Component{
             data: [],
             error: null
         }
+    }
+
+    componentDidMount(){
         this.loadLeaderboard()
     }
 
     loadLeaderboard(){
+        console.log("Waiting for leaderboard from Server")
         //const {firstname,lastname,university,key,isLoading} = this.state;
-        fetch(REACT_APP_API_URL,{
+        fetch('http://' + REACT_APP_API_URL,{
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -69,7 +72,6 @@ class HomeTest extends Component{
                         this.setState({data: responseJson})
                         console.log(this.state.data)
                     }else{
-                        
                         console.log(responseJson.error)
 
                     }
@@ -94,7 +96,10 @@ class HomeTest extends Component{
                 style = {styles.parent}
             >
                 <View style={styles.optionsBar}>
-                    <Text style={styles.heading}>START A CHALLENGE</Text>
+                    <Image
+                        style={styles.logo}
+                        source={require('../../assets/images/1001White.png')}
+                    />
                 </View>
                 <View style={styles.actions}>
                     <View style={styles.margin} />
@@ -113,27 +118,12 @@ class HomeTest extends Component{
                 <View style={styles.leaderBoard}>
                     <View style={styles.leaderBoardTitle}>
                         <Text style={styles.title}> LEADERBOARD </Text>
-                        <View style={{flex:1, flexDirection:'row'}}>
-                            <View style={{flex:2, flexDirection:'column',justifyContent:'center',paddingLeft:5}}>
-                                <Text style={{fontSize:20, fontWeight:'bold',color:'#006622'}}>Topic</Text>
-                            </View>
-                            <View style={{flex:7, flexDirection:'column',justifyContent:'center'}}>
-                                <Picker
-                                    selectedValue={"BUSINESS AND FINANCE"}
-                                    style={{height: 50, alignSelf: 'stretch'}}
-                                    >
-                                    <Picker.Item label="BUSINESS AND FINANCE" value="FINANCE" />
-                                    <Picker.Item label="JavaScript" value="js" />
-                                </Picker>
-                            </View>
-                        </View>
-                        
                     </View>
                     <View style={styles.leaderBoardList}>
                         <SafeAreaView style={styles.container}>
                             <FlatList
                                 data={this.state.data}
-                                renderItem={({ item }) => <CustomItem title={item.Lastname + item.Firstname} subtitle={""} id={item.id} info={item.XP} />}
+                                renderItem={({ item }) => <CustomItem title={item.Lastname + " " + item.Firstname} subtitle={item.University} id={item.id} info={item.XP} />}
                                 keyExtractor={item => item.id}
                             />
                         </SafeAreaView> 

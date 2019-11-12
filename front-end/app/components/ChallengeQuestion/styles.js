@@ -22,22 +22,27 @@ export default StyleSheet.create({
         alignItems:'center'
 
     },
-    recapBoard:{
-        flex:4,
-        margin:10
+    container:{
+        flex:1,
+        margin:10, 
+        borderRadius:10,
+        backgroundColor:'#f5f5f5', 
+        
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        alignItems:'center',
+        justifyContent:'center',
+        shadowOpacity: 0.23,
+        shadowRadius: 2.62,
+        elevation: 4,
     },
-    heading:{
-        fontSize:25,
-        textAlign:'center',
-        color:'#f5f5f5',
-        fontWeight:'bold'
+    questionText:{
+        fontSize:20,
     },
-    scoreValue:{
-        fontSize:40,
-        textAlign:'center',
-        color:'#f5f5f5',
-        fontWeight:'bold'
-    },
+    
     title:{
         fontSize:30,
         textAlign:'center',
@@ -77,50 +82,5 @@ export default StyleSheet.create({
         shadowRadius: 2.62,
         elevation: 4,
         flex:1
-    },
-
-    logo:{
-        height:150,
-        width:150
-    },
-    container: {
-        flex: 1,
-        //marginTop: Constants.statusBarHeight,
-    },
-    listItem:{
-        flexDirection:'row',
-        flex:3,
-        margin:5,
-        borderRadius:10,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.23,
-        shadowRadius: 2.62,
-        elevation: 4,
-        height:60
-    },
-    textAnswered:{
-        color:'white', 
-        fontSize:20,
-        fontWeight:'bold'
-    }, 
-    textNotAnswered:{
-        color:'gray', 
-        fontSize:20,
-        fontWeight:'bold'
-    }, 
-    questionNumber:{
-        flex:1, 
-        alignItems:'center',
-        justifyContent:'center',
-        backgroundColor:'#f5f5f5',
-        borderTopLeftRadius:20,
-        borderTopRightRadius:20
-    },
-    scrollView: {
-       // marginHorizontal: 20,
     }
 })

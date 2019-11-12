@@ -1,6 +1,6 @@
 
 import React, {Component} from 'react';
-import { gestureHandlerRootHOC } from 'react-native-gesture-handler'
+//import { gestureHandlerRootHOC } from 'react-native-gesture-handler'
 //import { Navigation } from 'react-native-navigation';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
@@ -14,26 +14,43 @@ import UserSelection from './app/components/UserSelection';
 import FirstPageTest from './app/components/FirstPageTest';
 import LoginTest from './app/components/LoginTest';
 import HomeTest from './app/components/HomeTest';
-import WaitingReval from './app/components/WaitingReval';
+import WaitingRival from './app/components/WaitingRival';
 import Cover from './app/components/Cover';
 import ChallengeRecap from './app/components/ChallengeRecap';
 
-//import { enableScreens } from 'react-native-screens';
-//enableScreens();
+//import {socketReducer} from './app/src/reducers'
 
-const FadeTransition = (index,position) => {
-  const sceneRange = [index-1, index];
-  const outputOpacity = [0,1];
-  const transition = position.interpolate({
-    inputRange: sceneRange,
-    outputRange: outputOpacity
-  });
+import {createStore} from 'redux';
+import reduxWebsocket from 'react-redux-websocket';
 
-  return {
-    opacity: transition
+import {Provider} from 'react-redux';
+import ChallengeQuestion from './app/components/ChallengeQuestion';
+import ChallengeRequest from './app/components/ChallengeRequest';
+
+
+/*  *********** Redux initialization *************** */
+const initialState = {
+  receivedMessage : 'none',
+  Key: '',
+  UserID: ''
+}
+const reducer = (state = initialState, action) => {
+  switch(action.type){
+      case 'SAVE_KEY':
+        return {UserID : state.UserID,Key : action.payload.Key}
+      case 'SAVE_USER_ID':
+        return {Key : state.Key,UserID : action.payload.UserID}
+      case 'WS_SEND_MESSAGE':
+          return {receivedMessage: action.payload}
+      case 'WS_RECEIVE_MESSAGE':
+          return {receivedMessage: action.payload}
+      default:
+          return state
   }
 }
+const store = createStore(reducer,);
 
+/* *************************************************** */
 const BottomTransition = (index,position,height) => {
   const sceneRange = [index-1, index];
   const outputHeight = [height,0];
@@ -71,8 +88,11 @@ const RootStack = {
   userSelection: { screen: UserSelection },
   loginTest: {screen: LoginTest},
   homeTest:{screen: HomeTest},
-  waitingReval:{screen: WaitingReval},
-  cover:{screen: Cover}
+  waitingRival:{screen: WaitingRival},
+  cover:{screen: Cover},
+  webSocket:{screen: WebSocket},
+  challengeQuestion:{screen: ChallengeQuestion},
+  challengeRequest:{screen: ChallengeRequest}
 
 }
 
@@ -96,7 +116,9 @@ export default class App extends Component {
   
   render(){
       return(
-          <AppContainerNormal />
+          <Provider store = {store}>
+             <AppContainerNormal />
+          </Provider>
         )      
     
   }

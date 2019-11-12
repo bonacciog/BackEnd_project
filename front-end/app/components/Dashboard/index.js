@@ -28,8 +28,8 @@ class Dashboard extends Component{
         } 
     }
 
-    goToChallenge(){
-        this.props.navigation.navigate('challenge')
+    goToUserSelection(){
+        this.props.navigation.navigate('userSelection',{IDTopic: this.props.navigation.getParam('IDTopic', 'none')})
     }
 
     render() {
@@ -46,12 +46,12 @@ class Dashboard extends Component{
                 </View>
                 <View style={styles.line}>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity style ={styles.button} onPress={_ => this.goToChallenge()} >
+                        <TouchableOpacity style ={styles.button} onPress={_ => this.goToUserSelection()} >
                                 <View style={styles.buttonContent}>
-                                    <Icon reverse name="play" size={30} color="#006622"/>
+                                    <Icon reverse name="database" size={30} color="#006622"/>
                                 </View>
                                 <View style={styles.buttonHeader}>
-                                    <Text style={styles.heading}>CHALLENGE</Text>
+                                    <Text style={styles.heading}>SQL</Text>
                                 </View>
                         </TouchableOpacity>
                     </View>

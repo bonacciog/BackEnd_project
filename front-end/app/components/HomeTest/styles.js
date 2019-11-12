@@ -11,7 +11,7 @@ export default StyleSheet.create({
         justifyContent:'center'
     },
     optionsBar:{
-        flex:2,
+        flex:3,
         justifyContent:'center',
         flexDirection:'row',
         alignItems:'center',
@@ -69,16 +69,20 @@ export default StyleSheet.create({
         borderTopRightRadius:10,
         alignItems:'center',
         borderBottomWidth:1,
-        borderBottomColor:"#006622"
+        borderBottomColor:"#006622",
+        justifyContent:'center'
+    },
+    logo:{
+        height:200,
+        width:200
     },
     title:{
         fontSize:25,
         color:'#006622',
-        flex:1
-        
+        fontWeight:'bold'  
     },
     leaderBoardList:{
-        padding:10,
+        padding:1,
         borderRadius:5,
         flex:3,
         shadowColor: "#000",

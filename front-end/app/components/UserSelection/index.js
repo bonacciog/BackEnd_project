@@ -1,39 +1,13 @@
 import React, { Component } from 'react'
-import { View, Text, ImageBackground, TouchableOpacity, SafeAreaView, FlatList, Image } from 'react-native';
+import { View, Text, ImageBackground, TouchableOpacity, SafeAreaView,Alert, FlatList, Image } from 'react-native';
 import CustomListItem from '../CustomListItem';
 import CustomItem from '../CustomItem';
-import SearchBar from 'react-native-search-bar';
+//import SearchBar from 'react-native-search-bar';
+import { REACT_APP_API_URL } from 'react-native-dotenv';
+import {connect} from 'react-redux';
+
+
 import styles from './styles'
-
-const DATA = [
-    {
-      id: '1',
-      title: 'Simone Bartoli',
-      profession: 'UNIBO',
-      exp:250
-    },
-    {
-      id: '2',
-      title: 'Giovanni Bonaccio',
-      profession: 'UNIBO',
-      exp:200
-    },
-    {
-      id: '3',
-      title: 'Emanuele Viglierchio',
-      profession: 'LUISS',
-      exp:150
-      
-    },
-    {
-        id: '4',
-        title: 'Francesco Scotta',
-        profession: 'LUISS',
-        exp:100
-        
-      }
-];
-
 
 class UserSelection extends Component{
 
@@ -46,18 +20,85 @@ class UserSelection extends Component{
         }
         this.arrayholder = []
 
-        //Code that have to be deleted once I'll connect with the DB
-        this.state.data = DATA
-        this.arrayholder = DATA
     }
 
-    startChallenge(){
-        this.props.navigation.navigate('challengeRecap')
+    componentDidMount(){
+        this.loadUserList()
+    }
+
+    loadUserList(){
+        console.log("Waiting for userlist from Server")
+        //const {firstname,lastname,university,key,isLoading} = this.state;
+        fetch('http://' + REACT_APP_API_URL,{
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                request: 'getLeaderBoard'
+              }),
+        })
+            .then((response) => response.json())
+                .then((responseJson) => {
+
+                    if(responseJson.error === undefined){
+                        responseJson.forEach(function(element,index) {
+                            element.id = "" + (index+1) + ""
+                        });
+                        this.setState({data: responseJson})
+                        this.arrayholder =  responseJson
+                        console.log(this.state.data)
+                    }else{   
+                        console.log(responseJson.error)
+                    }
+                })
+                .catch((error) =>{
+                    
+        });
+    }
+
+    startChallenge(id){
+        console.log(this.props.UserID + ' vs ' + id)
+
+        const idTopic = JSON.stringify(this.props.navigation.getParam('IDTopic', '1'))
+        
+        fetch('http://' + REACT_APP_API_URL,{
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                request: 'challengeSpecificUser',
+                ReceiverProposal_ID : ""+12+"",//JSON.stringify(id),
+                SenderProposal_ID : this.props.UserID,
+                TopicID : idTopic
+              }),
+        })
+            .then((response) => response.json())
+                .then((responseJson) => {
+                    
+                    if(responseJson.error === undefined){
+                        console.log(responseJson)
+                        this.props.navigation.navigate('waitingReval')
+                    }else{
+                        console.log(responseJson.error)
+                        Alert.alert('Wait',responseJson.error,[{
+                            text:'Okay'
+                        }])
+                        return
+                    }
+                })
+                .catch((error) =>{
+                    
+        });
+        this.props.navigation.navigate('waitingReval')
     }
 
     updateSearch = text => {
         const newData = this.arrayholder.filter(item => {
-            const itemData = item.title.toUpperCase() + item.profession.toUpperCase()
+            const itemData = item.Lastname.toUpperCase() + item.Firstname.toUpperCase() + item.University.toUpperCase()
             const textData = text.toUpperCase()
 
             return itemData.indexOf(textData) > -1
@@ -69,20 +110,19 @@ class UserSelection extends Component{
 
     randomReval = () =>{
         const i = Math.floor(Math.random()*this.state.data.length)
-        console.log(i)
+        this.startChallenge(this.state.data[i].UserID)
     }
 
-    renderHeader = () =>{
+/*    renderHeader = () =>{
         return (
                 <SearchBar
                     placeholder="Search"
                     onChangeText={ text => this.updateSearch(text)}
-                />            
+                />
         )
-    }
+    }*/
 
     render() {
-
         return(
             <ImageBackground 
                 source = {require('../../assets/images/backgroundImageDashboard.jpg')}
@@ -97,12 +137,9 @@ class UserSelection extends Component{
                     </View>
                     <View style={{flex:1,marginLeft:5,marginRight:5}}>
                         <TouchableOpacity style ={styles.button} onPress={_ => this.randomReval()} >
-                            <CustomListItem
-                                iconName="retweet"
-                                iconColor="#006622"
-                                title="RANDOM CHOICE"
-                                titleColor="#006622"
-                            />
+                            <View style={{flex:1, justifyContent:'center'}}>
+                                <Text style={styles.randomText}>RANDOM CHOICE</Text>
+                            </View>
 
                         </TouchableOpacity>
                     </View>
@@ -113,13 +150,13 @@ class UserSelection extends Component{
                             data={this.state.data}
                             renderItem={({ item }) =>   <TouchableOpacity
                                                             style={{flex:1}}
-                                                            onPress={_ => this.startChallenge()}    
+                                                            onPress={_ => this.startChallenge(item.UserID)}    
                                                         >
-                                                            <CustomItem title={item.title} subtitle={item.profession} id={item.id} info={item.exp} />
+                                                            <CustomItem title={item.Lastname + ' ' + item.Firstname} subtitle={item.University} id={item.id} info={item.XP} />
                                                         </TouchableOpacity>
                                         }
                             keyExtractor={item => item.id}
-                            ListHeaderComponent= {this.renderHeader}
+                           // ListHeaderComponent= {this.renderHeader}
                         />
                     </SafeAreaView>
                 </View>
@@ -128,4 +165,12 @@ class UserSelection extends Component{
     }
 }
 
-export default UserSelection
+function mapStateToProps(state){
+    return{
+        UserID : state.UserID,
+        Key : state.Key
+        
+    }
+}
+
+export default connect(mapStateToProps)(UserSelection)

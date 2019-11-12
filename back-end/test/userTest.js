@@ -11,8 +11,8 @@ var postData = JSON.stringify({
      */
   /* }); */
 
-
-console.log();
+  var options = { hour12: false }
+console.log(new Date().toLocaleString(options));
   //pm.saveUser(user)
 //pm.deleteUser(user);
 

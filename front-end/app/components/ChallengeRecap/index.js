@@ -26,10 +26,10 @@ class WaitForAnswer extends Component{
                     <View style={{flex:2}} />
                 </View>
                 <View style={[styles.listItem,{backgroundColor:'#f5f5f5',height:40,flexDirection:'row'}]}>
-                    <View style={{flex:2, justifyContent:'center',alignItems:'center', borderTopLeftRadius:10, borderBottomLeftRadius: 10,backgroundColor:'#006308', marginRight:1}}>
+                    <View style={{flex:2, justifyContent:'center',alignItems:'center', borderTopLeftRadius:10, borderBottomLeftRadius: 10,backgroundColor:'#02e619'}}>
                         <Text style={styles.textAnswered}>{this.props.xpPlayer1} XP</Text>
                     </View>
-                    <View style={{flex:2, justifyContent:'center',alignItems:'center', borderTopRightRadius:10,borderBottomRightRadius:10, flexDirection:'row',backgroundColor:'#999999', marginLeft:1}}>
+                    <View style={{flex:2, justifyContent:'center',alignItems:'center', borderTopRightRadius:10,borderBottomRightRadius:10, flexDirection:'row',backgroundColor:'#999999'}}>
                         <Text style={styles.textAnswered}>Wait ...</Text>
                     </View> 
                 </View>
@@ -88,10 +88,10 @@ class CustomItemAnswered extends Component{
                     <View style={{flex:2}} />
                 </View>
                 <View style={[styles.listItem,{backgroundColor:'#f5f5f5',height:40,flexDirection:'row'}]}>
-                    <View style={{flex:2, justifyContent:'center',alignItems:'center', borderTopLeftRadius:10, borderBottomLeftRadius: 10,backgroundColor:'#006308', marginRight:1}}>
+                    <View style={{flex:2, justifyContent:'center',alignItems:'center', borderTopLeftRadius:10, borderBottomLeftRadius: 10,backgroundColor:'#02e619'}}>
                         <Text style={styles.textAnswered}>{this.props.xpPlayer1} XP</Text>
                     </View>
-                    <View style={{flex:2, justifyContent:'center',alignItems:'center', borderTopRightRadius:10,borderBottomRightRadius:10, flexDirection:'row',backgroundColor:'#a30202', marginLeft:1}}>
+                    <View style={{flex:2, justifyContent:'center',alignItems:'center', borderTopRightRadius:10,borderBottomRightRadius:10, flexDirection:'row',backgroundColor:'red'}}>
                         <Text style={styles.textAnswered}>{this.props.xpPlayer2} XP</Text>
                     </View> 
                 </View>
@@ -153,6 +153,16 @@ class ChallengeRecap extends Component{
         this.setState({questions: questionsLoaded})
     }
 
+    sumXP = (name) => {
+        
+        let sum = 0
+        this.state.questions.forEach(function(element) {
+            sum = sum + element[name]
+        });
+
+        return sum
+    }
+
     surrenderChallange = () => {
         this.props.navigation.navigate('homeTest')
     }
@@ -174,13 +184,13 @@ class ChallengeRecap extends Component{
                         </View>
                         <View style={styles.score}>
                             <View style={{flex:1}}> 
-                                <Text style={styles.scoreValue}>0</Text>
+                                <Text style={styles.scoreValue}>{this.sumXP('xpPlayer1')}</Text>
                             </View>
                             <View style={{flex:1}}> 
                                 <Text style={styles.scoreValue}>-</Text>
                             </View>
                             <View style={{flex:1}}> 
-                                <Text style={styles.scoreValue}>0</Text>
+                                <Text style={styles.scoreValue}>{this.sumXP('xpPlayer2')}</Text>
                             </View>
                         </View>
                         <View style={styles.avatarContainer}>

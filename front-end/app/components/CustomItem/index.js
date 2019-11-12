@@ -16,7 +16,7 @@ class CustomItem extends Component{
                 </View>
                 <View style={{flex:3}}>
                     <Image 
-                        source = {require('../../assets/images/simoProfilePicture.jpeg')}
+                        source = {require('../../assets/images/avatarIcon.png')}
                         style = {{height:60,width:60,borderRadius:60}}
                     />
                 </View>

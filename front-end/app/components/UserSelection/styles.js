@@ -41,6 +41,12 @@ export default StyleSheet.create({
         textAlign:'center',
         color:'#006622'
     },
+    randomText:{
+        fontSize:20,
+        textAlign:'center',
+        color:'#006622',
+        fontWeight:'bold'
+    },
     titleListItem:{
         fontSize:20,
         textAlign:'center',
@@ -53,10 +59,10 @@ export default StyleSheet.create({
         color:'#006622'
     },
     button:{
-        borderRadius: 5,
-        padding:5,
+        borderRadius: 30,
+
         justifyContent:'center',
-        backgroundColor:'white',
+        backgroundColor:'#f5f5f5',
         flexDirection:'row',
         shadowColor: "#000",
         shadowOffset: {

@@ -33,7 +33,7 @@ class Home extends Component{
                             <View style={styles.cardAvatar}>
                                 <TouchableOpacity >
                                     <Image 
-                                        source = {require('../../assets/images/simoProfilePicture.jpeg')}
+                                        source = {require('../../assets/images/avatarIcon.png')}
                                         style = {styles.avatar}
                                     />
                                 </TouchableOpacity>

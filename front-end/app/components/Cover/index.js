@@ -1,59 +1,67 @@
 import React, { Component } from 'react'
-import { View, ImageBackground, Alert } from 'react-native';
+import { View, ImageBackground, Alert, Text, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import { REACT_APP_API_URL } from 'react-native-dotenv';
+
+import ws from '../../src/socket'
+
+import {connect} from 'react-redux'
 //import styles from './styles'
 
 class Cover extends Component{
-
     static navigationOptions = {
         //title: 'Zack',
         header: null,
     }
-
-    getMyValue = async (key) => {
-        try {
-            const value = await AsyncStorage.getItem(key)
-            console.log(value)
-            
-            fetch(REACT_APP_API_URL,{
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    request: 'login',
-                    UserID: JSON.parse(value),
-                  }),
-            })
-                .then((response) => response.json())
-                    .then((responseJson) => {
-                        if(responseJson.error === undefined){
-                            console.log('Found')
-                            this.props.navigation.navigate("homeTest")
-                        }else{
-                            console.log('Not found')
-                            this.props.navigation.navigate("firstPageTest")
-                        }
-                    })
-                    .catch((error) =>{
-                        Alert.alert('Error',"Connection lost",[{
-                            text:'Okay'
-                        }])
-                        console.log(error.message)
-            });
-
-        } catch(e) {
-            // read error
-            console.log('Not found')
-        }
-    }
-
     constructor(props){
         super(props)
-        this.getMyValue('userID')
-    }    
+        
+    }
+    
+    getMyValues = async () => {
+        const Key = await AsyncStorage.getItem('key')
+        const UserID = await AsyncStorage.getItem('UserID')
+        console.log('Key = ' + Key + ' UserID = ' + UserID)
+        this.props.saveUserID(UserID)
+        this.props.saveKey(Key)
+
+        const request = {
+            request : 'login', 
+            UserID: UserID,
+            key : JSON.parse(Key)
+        }
+        ws.send(JSON.stringify(request))
+    }
+    componentDidMount(){
+
+        ws.onopen = () => {
+            console.log('CIAO')
+            console.log('[Web Socket] opened')
+            this.getMyValues()
+
+       }
+
+       ws.onmessage = (evt) => {
+        console.log('[Web Socket] message - ' + evt.data)
+        const message = JSON.parse(evt.data)
+        if(message.error === undefined){
+            switch (message.request){
+                case 'challengeProposal':
+                    console.log('Challenge request found')
+                    this.props.navigation.navigate("challengeRequest")
+                    break
+                default:
+                    console.log('Login validate')
+                    this.props.navigation.navigate("homeTest")
+                    break
+            }
+            
+        }else{
+            console.log('Not found')
+            this.props.navigation.navigate("firstPageTest")
+        }
+        
+       }
+    }
 
     render() {
         return(
@@ -66,4 +74,20 @@ class Cover extends Component{
     }
 }
 
-export default Cover
+function mapStateToProps(state){
+    return{
+        receivedMessage : state.receivedMessage,
+        Key : state.key,
+        UserID : state.UserID
+
+    }
+}
+
+function mapDispatchToProps(dispatch){
+    return{
+        saveKey : (key) => dispatch({type:'SAVE_KEY', payload:{Key: key}}),
+        saveUserID : (userID) => dispatch({type:'SAVE_USER_ID',payload:{UserID: userID}}) 
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cover)

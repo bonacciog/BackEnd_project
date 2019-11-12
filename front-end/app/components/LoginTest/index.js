@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+
+import ws from '../../src/socket'
 import { REACT_APP_API_URL } from 'react-native-dotenv';
 
 import styles from './styles'
@@ -14,9 +16,9 @@ class LoginTest extends Component{
 
     state = {firstname: "", lastname: "", university:"", key: "", isLoading: false}
 
-    setValue = async id => {
+    setValue = async (key,value) => {
         try {
-            AsyncStorage.setItem('userID', JSON.stringify(id))
+            AsyncStorage.setItem(key, JSON.stringify(value))
         } catch(e) {
           // save error
         }
@@ -27,38 +29,34 @@ class LoginTest extends Component{
     checkLogin(){
         this.state.isLoading = true;
         const {firstname,lastname,university,key,isLoading} = this.state;
-        process.env.
-        fetch(REACT_APP_API_URL,{
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                request: 'saveUser',
-                User: {Firstname: firstname, Lastname: lastname, University: university, Key: key},
-              }),
-        })
-            .then((response) => response.json())
-                .then((responseJson) => {
-                    this.state.isLoading= false;
-                    if(responseJson.error === undefined){
-                        this.setValue(responseJson.UserID)
-                        this.props.navigation.navigate('homeTest')
-                    }else{
-                        Alert.alert('Error',responseJson.error,[{
-                            text:'Okay'
-                        }])
-                    }
-                })
-                .catch((error) =>{
-                    Alert.alert('Error','Connection lost',[{
-                        text:'Okay'
-                    }])
-        });
 
+        const request = JSON.stringify({
+            request: 'saveUser',
+            User: {Firstname: firstname, Lastname: lastname, University: university},
+            key: key
+        })
         
+        console.log(request)
+        ws.send(request)
+
         //this.props.navigation.navigate('homeTest')
+    }
+
+    componentDidMount(){
+        ws.onmessage = (evt) => {
+            console.log('[Web Socket] Message received - ' + evt.data)
+            const message = JSON.parse(evt.data)
+            this.state.isLoading= false;
+            if(message.error === undefined){
+                this.setValue('UserID',message.UserID)
+                this.setValue('key',this.state.key)
+                this.props.navigation.navigate('homeTest')
+            }else{
+                Alert.alert('Error',message.error,[{
+                    text:'Okay'
+                }])
+            }
+        }
     }
 
     render() {

@@ -13,13 +13,13 @@ export default StyleSheet.create({
         fontWeight: 'bold'
     } ,
     title:{
-        fontSize:45,
+        fontSize:35,
         textAlign:'center',
         color:'#006622',
         fontWeight:'bold'
     },
     subtitle:{
-        fontSize:25,
+        fontSize:30,
         textAlign:'center',
         color:'#006622'
     },

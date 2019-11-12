@@ -32,9 +32,7 @@ class Cover extends Component{
         ws.send(JSON.stringify(request))
     }
     componentDidMount(){
-
         ws.onopen = () => {
-            console.log('CIAO')
             console.log('[Web Socket] opened')
             this.getMyValues()
 

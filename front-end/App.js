@@ -99,7 +99,7 @@ const RootStack = {
 const NormalNavigator = createStackNavigator(
   RootStack,
   {
-    initialRouteName: 'cover',
+    initialRouteName: 'challengeRecap',
   },
   {
     transitionConfig: NavigationConfig

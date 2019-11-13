@@ -24,6 +24,9 @@ import Cover from './app/components/Cover';
 import FirstPage from './app/components/FirstPage';
 import Login from './app/components/Login';
 import Home from './app/components/Home';
+import ChallengeTopic from './app/components/ChallengeTopic';
+import ChallengeTopicProgrammingTools from './app/components/ChallengeTopicProgrammingTools';
+import ChallengeUserSelection from './app/components/ChallengeUserSelection';
 
 
 const RootStack = {
@@ -31,7 +34,10 @@ const RootStack = {
   cover:{screen: Cover},
   firstPage:{screen: FirstPage},
   login:{screen: Login},
-  home:{screen: Home}
+  home:{screen: Home},
+  challengeTopic:{screen: ChallengeTopic},
+  challengeTopicProgrammingTools:{screen: ChallengeTopicProgrammingTools},
+  challengeUserSelection:{screen: ChallengeUserSelection}
 
 }
 

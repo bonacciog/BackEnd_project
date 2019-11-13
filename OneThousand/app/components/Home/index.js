@@ -86,7 +86,7 @@ class Home extends Component{
     }
 
     goToChallenge(){
-        this.props.navigation.navigate('challenge')
+        this.props.navigation.navigate('challengeTopic')
     }
 
     render() {

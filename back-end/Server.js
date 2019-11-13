@@ -22,7 +22,7 @@ server.on('request', function (req, res) {
             c.eventRequest.emit(req.request, req, res);
         }
         catch (err) {
-            console.log("[Server]: Error in trying to serve the request: \n"+err)
+            console.log("[Server]: Error in trying to serve the request: \n" + err)
         }
     });
 });
@@ -30,9 +30,14 @@ server.on('request', function (req, res) {
 wss.on('connection', function (ws) {
 
     ws.on('message', function (req) {
-        console.log("[Server]: Arrived request:\n" + req)
-        var request = JSON.parse(req);
-        c.eventRequest.emit(request.request, request, this);
+        try {
+            console.log("[Server]: Arrived request:\n" + req)
+            var request = JSON.parse(req);
+            c.eventRequest.emit(request.request, request, this);
+        }
+        catch (err) {
+            console.log("[Server]: Error in trying to serve the request: \n" + err)
+        }
     });
 });
 

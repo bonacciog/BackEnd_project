@@ -3,17 +3,11 @@ var http = require('http');
 
 
 
-var postData = JSON.stringify({
-    request: 'answerToChallengeQuestion',
-    UserID : 2,
-    QuestionID : 12,
-    ChallengeID : 1,
-    OpponentID : 1,
-    XP : 10,
-    TopicID : 1,
-    Correct : "yes"
-}
-); 
+var postData = JSON.stringify({ 
+    request : "saveUser", 
+    User: {Firstname : 'Pol', Lastname : "Caligiana", University : "UniGianni"},
+    key : "chiave"
+} );
 
 var options = {
     hostname: 'localhost',

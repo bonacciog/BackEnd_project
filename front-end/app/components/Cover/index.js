@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { View, ImageBackground, Alert, Text, TouchableOpacity } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+//import AsyncStorage from '@react-native-community/async-storage';
 
-import ws from '../../src/socket'
+const ws = require('../../src/socket')
 
 import {connect} from 'react-redux'
 //import styles from './styles'
@@ -18,8 +18,8 @@ class Cover extends Component{
     }
     
     getMyValues = async () => {
-        const Key = await AsyncStorage.getItem('key')
-        const UserID = await AsyncStorage.getItem('UserID')
+        const Key = 'a'//await AsyncStorage.getItem('key')
+        const UserID = 'a' //await AsyncStorage.getItem('UserID')
         console.log('Key = ' + Key + ' UserID = ' + UserID)
         this.props.saveUserID(UserID)
         this.props.saveKey(Key)

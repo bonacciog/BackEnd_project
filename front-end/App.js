@@ -21,7 +21,6 @@ import ChallengeRecap from './app/components/ChallengeRecap';
 //import {socketReducer} from './app/src/reducers'
 
 import {createStore} from 'redux';
-import reduxWebsocket from 'react-redux-websocket';
 
 import {Provider} from 'react-redux';
 import ChallengeQuestion from './app/components/ChallengeQuestion';
@@ -99,7 +98,7 @@ const RootStack = {
 const NormalNavigator = createStackNavigator(
   RootStack,
   {
-    initialRouteName: 'challengeRecap',
+    initialRouteName: 'cover',
   },
   {
     transitionConfig: NavigationConfig

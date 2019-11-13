@@ -44,7 +44,7 @@ function notificationCheck(UserID, ws) {
             if (err) throw err;
         });
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         ws.send(response);
     }
@@ -89,7 +89,7 @@ eventRequest.on('saveUser', function (req, ws) {
 
         });
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         ws.send(response);
     }
@@ -122,7 +122,7 @@ eventRequest.on('login', function (req, ws) {
                         }
                     }
                     else {
-                        errorJSON.error = "Error in DB interation: " + err;
+                        errorJSON.error = 'Input error or interaction with the database';
                         response = JSON.stringify(errorJSON);
                         ws.send(response);
                     }
@@ -130,7 +130,7 @@ eventRequest.on('login', function (req, ws) {
                 });
             }
             else {
-                errorJSON.error = "key does not coincide";
+                errorJSON.error = 'Input error or interaction with the database';
                 response = JSON.stringify(errorJSON);
                 ws.send(response);
             }
@@ -138,7 +138,7 @@ eventRequest.on('login', function (req, ws) {
         });
 
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         ws.send(response);
     }
@@ -167,7 +167,7 @@ eventRequest.on('sendMessage', function (req, res) {
         sendIfPossibleOrSaveNotification(req.Message.ReceiverUser_ID, JSON.stringify(message));
         res.end();
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
@@ -180,7 +180,7 @@ eventRequest.on('deleteMessage', function (req, res) {
         });
         res.end();
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
@@ -198,13 +198,13 @@ eventRequest.on('getMessages', function (req, res) {
                     response = JSON.stringify(messages);
             }
             else {
-                errorJSON.error = "Error in DB interation: " + err;
+                errorJSON.error = 'Input error or interaction with the database';
                 response = JSON.stringify(errorJSON);
             }
             res.end(response);
         });
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
@@ -222,13 +222,13 @@ eventRequest.on('getChat', function (req, res) {
                     response = JSON.stringify(messages);
             }
             else {
-                errorJSON.error = "Error in DB interation: " + err;
+                errorJSON.error = 'Input error or interaction with the database';
                 response = JSON.stringify(errorJSON);
             }
             res.end(response);
         });
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
@@ -241,7 +241,7 @@ eventRequest.on('saveTopic', function (req, res) {
         });
         res.end();
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
@@ -254,7 +254,7 @@ eventRequest.on('deleteTopic', function (req, res) {
         });
         res.end();
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
@@ -272,7 +272,7 @@ eventRequest.on('getAllTopics', function (req, res) {
             res.end(response);
         });
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
@@ -292,7 +292,7 @@ eventRequest.on('saveChallengeQuestion', function (req, res) {
                             res.end();
                         }
                         else {
-                            errorJSON.error = "Error in DB interation: " + err;
+                            errorJSON.error = 'Input error or interaction with the database';
                             response = JSON.stringify(errorJSON);
                             res.end(response);
                         }
@@ -300,13 +300,13 @@ eventRequest.on('saveChallengeQuestion', function (req, res) {
                     });
                 }
                 else {
-                    errorJSON.error = "Error in DB interation: " + err;
+                    errorJSON.error = 'Input error or interaction with the database';
                     response = JSON.stringify(errorJSON);
                     res.end(response);
                 }
             });
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
@@ -363,7 +363,7 @@ eventRequest.on('getLeaderBoard', function (req, res) {
             res.end(response);
         });
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
@@ -392,13 +392,13 @@ eventRequest.on('chooseRandomOpponent', function (req, res) {
                 }
             }
             else {
-                errorJSON.error = "Error in DB interation: " + err;
+                errorJSON.error = 'Input error or interaction with the database';
                 response = JSON.stringify(errorJSON);
                 res.end(response);
             }
         });
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
@@ -429,13 +429,13 @@ eventRequest.on('challengeSpecificUser', function (req, res) {
                 }
             }
             else {
-                errorJSON.error = "Error in DB interation: " + err;
+                errorJSON.error = 'Input error or interaction with the database';
                 response = JSON.stringify(errorJSON);
                 res.end(response);
             }
         });
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
@@ -453,7 +453,7 @@ eventRequest.on('challengeRejected', function (req, res) {
         sendIfPossibleOrSaveNotification(req.SenderProposal_ID, JSON.stringify(notification));
         res.end();
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
@@ -501,7 +501,7 @@ eventRequest.on('challengeAccepted', function (req, res) {
                                         }
                                     }
                                     else {
-                                        errorJSON.error = "Error in DB interation: " + err;
+                                        errorJSON.error = 'Input error or interaction with the database';
                                         response = JSON.stringify(errorJSON);
                                         res.end(response);
                                     }
@@ -509,7 +509,7 @@ eventRequest.on('challengeAccepted', function (req, res) {
                             }
                         }
                         else {
-                            errorJSON.error = "Error in DB interation: " + err;
+                            errorJSON.error = 'Input error or interaction with the database';
                             response = JSON.stringify(errorJSON);
                             res.end(response);
                         }
@@ -517,14 +517,14 @@ eventRequest.on('challengeAccepted', function (req, res) {
                 }
             }
             else {
-                errorJSON.error = "Error in DB interation: " + err;
+                errorJSON.error = 'Input error or interaction with the database';
                 response = JSON.stringify(errorJSON);
                 res.end(response);
             }
         });
 
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
@@ -542,27 +542,33 @@ eventRequest.on('getUserByID', function (req, res) {
                     response = JSON.stringify(user);
             }
             else {
-                errorJSON.error = "Error in DB interation: " + err;
+                errorJSON.error = 'Input error or interaction with the database';
                 response = JSON.stringify(errorJSON);
             }
             res.end(response);
         });
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
 });
 
 eventRequest.on('closeConnection', function (req, res) {
-    users.get(req.UserID).close();
-    if (users.has(req.UserID))
-        users.delete(req.UserID);
-    res.end();
-    pm.saveUserActivity(req.UserID, 'Exit', new Date().toLocaleString(optionsDate), (err, result) => {
-        if (err) throw err;
-    });
-    console.log("[Controller]: A connection closed!");
+    try {
+        users.get(req.UserID).close();
+        if (users.has(req.UserID))
+            users.delete(req.UserID);
+        res.end();
+        pm.saveUserActivity(req.UserID, 'Exit', new Date().toLocaleString(optionsDate), (err, result) => {
+            if (err) throw err;
+        });
+        console.log("[Controller]: A connection closed!");
+    } catch (err) {
+        errorJSON.error = 'Input error or interaction with the database';
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
 });
 
 eventRequest.on('getAllRivals', function (req, res) {
@@ -577,7 +583,7 @@ eventRequest.on('getAllRivals', function (req, res) {
             res.end(response);
         });
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
@@ -591,7 +597,7 @@ eventRequest.on('endChallenge', function (req, res) {
         });
         res.end();
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
@@ -602,20 +608,20 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
         pm.saveChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, (err, result) => {
             if (err) throw err;
         });
-        pm.getUserTopicPoints(req.UserID, req.TopicID, function(err,result){
+        pm.getUserTopicPoints(req.UserID, req.TopicID, function (err, result) {
             if (err == null) {
                 var newXP = result + req.XP;
                 pm.updateAccumulatedPoints(req.UserID, req.TopicID, newXP, (err, result) => {
                     if (err) {
                         throw err;
                     }
-                    else{
+                    else {
                         var notification = {
-                            notificationType : 'questionResponse',
-                            UserID : req.UserID,
-                            QuestionID : req.QuestionID,
-                            ChallengeID : req.ChallengeID,
-                            Correct : req.Correct
+                            notificationType: 'questionResponse',
+                            UserID: req.UserID,
+                            QuestionID: req.QuestionID,
+                            ChallengeID: req.ChallengeID,
+                            Correct: req.Correct
                         };
                         sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
                         res.end();
@@ -623,14 +629,14 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
                 });
             }
             else {
-                errorJSON.error = "Error in DB interation: " + err;
+                errorJSON.error = 'Input error or interaction with the database';
                 response = JSON.stringify(errorJSON);
                 res.end(response);
-            }            
-        });      
-        
+            }
+        });
+
     } catch (err) {
-        errorJSON.error = err.message;
+        errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
     }

@@ -3,7 +3,7 @@ import { View, Text, ImageBackground, TouchableOpacity, SafeAreaView,Alert, Flat
 import CustomItem from '../CustomItem';
 import SearchBar from 'react-native-search-bar';
 import { REACT_APP_API_URL } from 'react-native-dotenv';
-//import {connect} from 'react-redux';
+import {connect} from 'react-redux';
 
 
 import styles from './styles'
@@ -59,7 +59,7 @@ class ChallengeUserSelection extends Component{
 
     startChallenge(id){
         console.log(this.props.UserID + ' vs ' + id)
-
+        
         const idTopic = JSON.stringify(this.props.navigation.getParam('IDTopic', '1'))
         
         fetch('http://' + REACT_APP_API_URL,{
@@ -70,7 +70,7 @@ class ChallengeUserSelection extends Component{
               },
               body: JSON.stringify({
                 request: 'challengeSpecificUser',
-                ReceiverProposal_ID : ""+12+"",//JSON.stringify(id),
+                ReceiverProposal_ID : JSON.stringify(id),
                 SenderProposal_ID : this.props.UserID,
                 TopicID : idTopic
               }),
@@ -80,7 +80,7 @@ class ChallengeUserSelection extends Component{
                     
                     if(responseJson.error === undefined){
                         console.log(responseJson)
-                        this.props.navigation.navigate('waitingReval')
+                        this.props.navigation.navigate('waitingRival')
                     }else{
                         console.log(responseJson.error)
                         Alert.alert('Wait',responseJson.error,[{
@@ -164,13 +164,13 @@ class ChallengeUserSelection extends Component{
     }
 }
 
-/*
+
 function mapStateToProps(state){
     return{
         UserID : state.UserID,
         Key : state.Key
         
     }
-}*/
+}
 
-export default ChallengeUserSelection
+export default connect(mapStateToProps)(ChallengeUserSelection)

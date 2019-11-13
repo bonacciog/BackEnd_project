@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import WS from '../WS';
+import {connect} from 'react-redux'
 
 class Cover extends Component{
 
@@ -18,8 +19,8 @@ class Cover extends Component{
         const Key = await AsyncStorage.getItem('Key')
         const UserID = await AsyncStorage.getItem('UserID')
         console.log('Key = ' + Key + ' UserID = ' + UserID)
-        //this.props.saveUserID(UserID)
-        //this.props.saveKey(Key)
+        this.props.saveUserID(UserID)
+        this.props.saveKey(Key)
 
         const request = {
             request : 'login', 
@@ -93,4 +94,21 @@ class Cover extends Component{
     }
 }
 
-export default Cover
+
+function mapStateToProps(state){
+    return{
+        receivedMessage : state.receivedMessage,
+        Key : state.key,
+        UserID : state.UserID
+
+    }
+}
+
+function mapDispatchToProps(dispatch){
+    return{
+        saveKey : (key) => dispatch({type:'SAVE_KEY', payload:{Key: key}}),
+        saveUserID : (userID) => dispatch({type:'SAVE_USER_ID',payload:{UserID: userID}}) 
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cover)

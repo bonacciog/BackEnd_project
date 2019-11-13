@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
-.
-const ws = new WebSocket('ws://192.168.43.25:3000');
+
+const ws = new WebSocket('ws://localhost:3000');
 
 const message = JSON.stringify({ 
   request : "saveUser", 

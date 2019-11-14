@@ -4,13 +4,18 @@ var http = require('http');
 
 
 var postData = JSON.stringify({ 
-    request : "saveUser", 
-    User: {Firstname : 'Pol', Lastname : "Caligiana", University : "UniGianni"},
-    key : "chiave"
-} );
+    request : "getLeaderBoard"
+});
+
+/* var postData = JSON.stringify({
+    request : "challengeRejected",
+    ReceiverProposal_ID : 2,
+    SenderProposal_ID : 1,
+    challengeID : 1
+}) */
 
 var options = {
-    hostname: 'localhost',
+    hostname: '10.201.13.110',
     port: 3000,
     method: 'POST',
     headers: {

@@ -3,6 +3,7 @@ import { View, Image, ImageBackground, Text, Picker, TouchableOpacity, SafeAreaV
 import styles from './styles'
 import CustomItem from '../CustomItem';
 import { REACT_APP_API_URL } from 'react-native-dotenv';
+import { connect } from 'react-redux'
 
 const DATA = [
     {
@@ -64,13 +65,15 @@ class Home extends Component{
         })
             .then((response) => response.json())
                 .then((responseJson) => {
-
                     if(responseJson.error === undefined){
+
                         responseJson.forEach(function(element,index) {
                             element.id = "" + (index+1) + ""
                         });
+                        
                         this.setState({data: responseJson})
-                        console.log(this.state.data)
+                        this.props.saveUserList(this.state.data)
+                        console.log('User list saved in local: ' + this.state.data)
                     }else{
                         console.log(responseJson.error)
 
@@ -135,4 +138,21 @@ class Home extends Component{
     }
 }
 
-export default Home
+function mapStateToProps(state) {
+    return {
+        Key: state.key,
+        UserID: state.UserID,
+        UserList: state.UserList,
+        Challenge: state.Challenge
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        saveKey: (key) => dispatch({ type: 'SAVE_KEY', payload: { Key: key } }),
+        saveUserID: (userID) => dispatch({ type: 'SAVE_USER_ID', payload: { UserID: userID } }),
+        saveUserList: (userList) => dispatch({type: 'SAVE_USER_LIST', payload: { UserList: userList }})
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

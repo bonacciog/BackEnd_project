@@ -2,7 +2,10 @@ const c = require('./controller/Controller');
 const http = require('http');
 const WebSocket = require('ws');
 
-const server = http.createServer().listen(3000, 'localhost');
+const ipAddress = '10.201.13.110';
+const port = 3000;
+
+const server = http.createServer().listen(port, ipAddress);
 const wss = new WebSocket.Server({ server });
 
 
@@ -41,4 +44,4 @@ wss.on('connection', function (ws) {
     });
 });
 
-console.log('[Server]: Listening on http://localhost:3000');
+console.log('[Server]: Listening on http://' + ipAddress +':'+port);

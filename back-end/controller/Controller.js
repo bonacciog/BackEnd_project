@@ -75,9 +75,9 @@ eventRequest.on('saveUser', function (req, ws) {
                         users.set(id, ws);
                         console.log("[Controller]: WebSocket for User " + id + " saved!");
                     }
-                    pm.saveUserActivity(id, 'Access', new Date().toLocaleString(optionsDate), (err, result) => {
+                    /*pm.saveUserActivity(id, 'Access', new Date().toLocaleString(optionsDate), (err, result) => {
                         if (err) throw err;
-                    });
+                    });*/
                     ws.send(response);
                 });
             }
@@ -112,9 +112,9 @@ eventRequest.on('login', function (req, ws) {
                                 users.set(req.UserID, ws);
                                 console.log("[Controller]: WebSocket for User " + req.UserID + " saved!");
                             }
-                            pm.saveUserActivity(req.UserID, 'Access', new Date().toLocaleString(optionsDate), (err, result) => {
+                            /*pm.saveUserActivity(req.UserID, 'Access', new Date().toLocaleString(optionsDate), (err, result) => {
                                 if (err) throw err;
-                            });
+                            });*/
                             ws.send(response);
                             notificationCheck(req.UserID, ws);
 
@@ -560,9 +560,9 @@ eventRequest.on('closeConnection', function (req, res) {
         if (users.has(req.UserID))
             users.delete(req.UserID);
         res.end();
-        pm.saveUserActivity(req.UserID, 'Exit', new Date().toLocaleString(optionsDate), (err, result) => {
+        /*pm.saveUserActivity(req.UserID, 'Exit', new Date().toLocaleString(optionsDate), (err, result) => {
             if (err) throw err;
-        });
+        });*/
         console.log("[Controller]: A connection closed!");
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';

@@ -2,7 +2,7 @@ const c = require('./controller/Controller');
 const http = require('http');
 const WebSocket = require('ws');
 
-const server = http.createServer().listen(3000, 'localhost');
+const server = http.createServer().listen(3000, '192.168.43.25');
 const wss = new WebSocket.Server({ server });
 
 

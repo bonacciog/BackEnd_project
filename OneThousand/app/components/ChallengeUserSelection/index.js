@@ -23,6 +23,11 @@ class ChallengeUserSelection extends Component{
 
     componentDidMount(){
         this.loadUserList()
+
+        console.log('[DEBUG]')
+        console.log(this.props.UserList)
+        console.log(this.props.TopicList)
+        console.log(this.props.Challenge)
     }
 
     loadUserList(){
@@ -75,7 +80,7 @@ class ChallengeUserSelection extends Component{
                 TopicID : idTopic
               }),
         })
-            .then((response) => response.json())
+         /*   .then((response) => response.json())
                 .then((responseJson) => {
                     
                     if(responseJson.error === undefined){
@@ -90,8 +95,9 @@ class ChallengeUserSelection extends Component{
                     }
                 })
                 .catch((error) =>{
-                    
-        });
+                    console.log('Catch')
+                    this.props.navigation.navigate('waitingRival')
+        });*/
         this.props.navigation.navigate('waitingReval')
     }
 
@@ -165,12 +171,22 @@ class ChallengeUserSelection extends Component{
 }
 
 
-function mapStateToProps(state){
-    return{
-        UserID : state.UserID,
-        Key : state.Key
-        
+function mapStateToProps(state) {
+    return {
+        Key: state.key,
+        UserID: state.UserID,
+        UserList: state.UserList,
+        TopicList: state.TopicList,
+        Challenge: state.Challenge,
     }
 }
 
-export default connect(mapStateToProps)(ChallengeUserSelection)
+function mapDispatchToProps(dispatch) {
+    return {
+        saveKey: (key) => dispatch({ type: 'SAVE_KEY', payload: { Key: key } }),
+        saveUserID: (userID) => dispatch({ type: 'SAVE_USER_ID', payload: { UserID: userID } }),
+        saveTopicList: (topicList) => dispatch({ type: 'SAVE_TOPIC_LIST', payload: { TopicList: topicList } })
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChallengeUserSelection)

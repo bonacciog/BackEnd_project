@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, ImageBackground, TouchableOpacity, SafeAreaView, FlatList} from 'react-native';
 import { REACT_APP_API_URL } from 'react-native-dotenv';
 import CustomListItem from '../CustomListItem';
+import { connect } from 'react-redux'
 
 import styles from './styles'
 
@@ -68,7 +69,8 @@ class ChallengeTopic extends Component{
                             }
                         });
                         this.setState({data: responseJson})
-                        console.log(this.state.data)
+                        this.props.saveTopicList(this.state.data)
+                        console.log('Topic list saved in local: ' + this.state.data)
                     }else{   
                         console.log(responseJson.error)
                     }
@@ -144,4 +146,22 @@ class ChallengeTopic extends Component{
 }
 
 
-export default ChallengeTopic
+function mapStateToProps(state) {
+    return {
+        Key: state.key,
+        UserID: state.UserID,
+        UserList: state.UserList,
+        TopicList: state.TopicList,
+        Challenge: state.Challenge
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        saveKey: (key) => dispatch({ type: 'SAVE_KEY', payload: { Key: key } }),
+        saveUserID: (userID) => dispatch({ type: 'SAVE_USER_ID', payload: { UserID: userID } }),
+        saveTopicList: (topicList) => dispatch({ type: 'SAVE_TOPIC_LIST', payload: { TopicList: topicList } })
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChallengeTopic)

@@ -2,7 +2,8 @@ const pm = require('../persistence/PersistenceManager');
 const userClass = require('../model/User');
 const messageClass = require('../model/Message');
 const topicClass = require('../model/Topic');
-const questionClass = require('../model/Question');
+const questionClass = require('../model/ChallengeQuestion');
+const challengeClass = require('../model/Challenge');
 const EventEmitter = require('events').EventEmitter;
 
 const numberQuestionTypeDefinitions = 3;
@@ -50,7 +51,7 @@ function notificationCheck(UserID, ws) {
     }
 }
 
-eventRequest.on('saveUser', function (req, ws) {
+eventRequest.on('saveUser', function (req, res) {
     try {
         pm.getKey(function (err, key) {
             if (key === req.key) {
@@ -70,28 +71,23 @@ eventRequest.on('saveUser', function (req, ws) {
                             console.log("[Controller]: There aren't topics for user initialization");
 
                     });
-
-                    if (!users.has(id)) {
-                        users.set(id, ws);
-                        console.log("[Controller]: WebSocket for User " + id + " saved!");
-                    }
                     pm.saveUserActivity(id, 'Access', new Date().toLocaleString(optionsDate), (err, result) => {
                         if (err) throw err;
                     });
-                    ws.send(response);
+                    res.end(response);
                 });
             }
             else {
                 errorJSON.error = "key does not coincide";
                 response = JSON.stringify(errorJSON);
-                ws.send(response);
+                res.end(response);
             }
 
         });
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
-        ws.send(response);
+        res.end(response);
     }
 });
 
@@ -117,8 +113,6 @@ eventRequest.on('login', function (req, ws) {
                             });
                             ws.send(response);
                             notificationCheck(req.UserID, ws);
-
-
                         }
                     }
                     else {
@@ -280,7 +274,7 @@ eventRequest.on('getAllTopics', function (req, res) {
 
 eventRequest.on('saveChallengeQuestion', function (req, res) {
     try {
-        pm.saveChallengeQuestion(new questionClass.Question(req.Question.QuestionText, req.Question.Answer_A,
+        pm.saveChallengeQuestion(new questionClass.ChallengeQuestion(req.Question.QuestionText, req.Question.Answer_A,
             req.Question.Answer_B, req.Question.Answer_C, req.Question.Answer_D, req.Question.XPValue,
             req.Question.Topics_ID, res.Question.Explanation), function (err, questionID) {
                 if (err == null) {
@@ -379,7 +373,7 @@ eventRequest.on('chooseRandomOpponent', function (req, res) {
                     res.end(response);
                 }
                 else {
-                    pm.saveChallenge(req.UserID, ReceiverProposal_ID, function (err, id) {
+                    pm.saveChallenge(new challengeClass.Challenge(req.UserID, ReceiverProposal_ID, challengeClass.ChallengeStatus.WaitingforAcceptance), function (err, id) {
                         var notification = {
                             notificationType: "challengeProposal",
                             TopicID: req.TopicID,
@@ -410,7 +404,7 @@ eventRequest.on('challengeSpecificUser', function (req, res) {
         pm.isPlaying(req.SenderProposal_ID, function (err, result) {
             if (err == null) {
                 if (result == null) {
-                    pm.saveChallenge(req.SenderProposal_ID, req.ReceiverProposal_ID, function (err, id) {
+                    pm.saveChallenge(new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.WaitingforAcceptance), function (err, id) {
                         var notification = {
                             notificationType: "challengeProposal",
                             TopicID: req.TopicID,
@@ -465,6 +459,11 @@ eventRequest.on('challengeRejected', function (req, res) {
  */
 eventRequest.on('challengeAccepted', function (req, res) {
     try {
+        var challenge = new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.Playing);
+        challenge.setID = req.challengeID;
+        pm.updateChallenge(challenge,(err, result) => {
+            if (err) throw err;
+        });
         pm.getRandomQuestions(req.TopicID, 'Definitions', numberQuestionTypeDefinitions, function (err, resultDefinitions) {
             if (err == null) {
                 if (resultDefinitions == null) {
@@ -592,7 +591,9 @@ eventRequest.on('getAllRivals', function (req, res) {
 eventRequest.on('endChallenge', function (req, res) {
 
     try {
-        pm.deleteChallenge(req.ChallengeID, (err, result) => {
+        var challenge = new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.Finished);
+        challenge.setID = req.challengeID;
+        pm.updateChallenge(challenge,(err, result) => {
             if (err) throw err;
         });
         res.end();

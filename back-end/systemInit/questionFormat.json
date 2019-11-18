@@ -1,0 +1,25 @@
+{
+	"Questions": [
+		{
+			"Text": "testo della domanda",
+			"CorrectAnswer": "risposta corretta",
+			"AnswerB": "altra risposta",
+			"AnswerC": "altra risposta",
+			"AnswerD": "altra risposta",
+			"Type": "tipo",
+			"XPValue": 10,
+			"Topic": "topic",
+			"Explanation": "explanation"
+		},
+		{
+			"Text": "testo della domanda",
+			"CorrectAnswer": "risposta corretta",
+			"AnswerB": "altra risposta",
+			"AnswerC": "altra risposta",
+			"AnswerD": "altra risposta",
+			"Type": "tipo",
+			"XPValue": 10,
+			"Topic": "topic"
+		}
+	]
+}

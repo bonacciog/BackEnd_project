@@ -7,7 +7,8 @@ const mysql = require('mysql');
 const userClass = require('../model/User');
 const messageClass = require('../model/Message');
 const topicClass = require('../model/Topic');
-const questionClass = require('../model/Question');
+const questionClass = require('../model/ChallengeQuestion');
+const challengeClass = require('../model/Challenge');
 
 var dbParam = {
   host: "localhost",
@@ -393,9 +394,35 @@ function getAllTopics(callback) {
   }
 }
 
+function getTopicID(topic, callback) {
+  try {
+    var connection = mysql.createConnection(dbParam);
+    connection.connect(function (err) {
+      if (err) callback(err, null);
+      console.log("[PersistenceManager]: Connected to DB!");
+    });
+    var sql = "select ID " +
+      "from 1001db.Topics where TopicName = " + topic;
+    connection.query(sql, function (err, result) {
+      if (err) callback(err, null);
+      else {
+        var topicID;
+        Object.keys(result).forEach(function (key) {
+          var row = result[key];
+          topicID = row.ID;
+        });
+        callback(null, topic);
+      }
+    });
+    connection.end();
+  } catch (err) {
+    callback(err, null);
+  }
+}
+
 function saveChallengeQuestion(question, callback) {
   try {
-    if (!question instanceof questionClass.Question) {
+    if (!question instanceof questionClass.ChallengeQuestion) {
       callback(new ParamError("Incorrect parameter!"), null);
     }
     var connection = mysql.createConnection(dbParam);
@@ -659,20 +686,46 @@ function getRandomPlayer(ID, callback) {
   }
 }
 
-function saveChallenge(ID1, ID2, callback) {
+function saveChallenge(challenge, callback) {
   try {
-    if (ID1 === undefined || ID2 === undefined)
+    if (!challenge instanceof challengeClass.Challenge)
       callback(new ParamError('Incorrect Parameter!'), null);
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
       console.log("[PersistenceManager]: Connected to DB!");
     });
-    var sql = "insert into 1001db.challenge(SenderProposal_ID, ReceiverProposal_ID) values(" + ID1 + "," + ID2 + ")";
+    var sql = "insert into 1001db.challenge(SenderProposal_ID, ReceiverProposal_ID, Status)"+ 
+    " values(" + challenge.getSender + "," + challenge.getReceiver + ",'" +  challenge.getStatus + "')";
+
+    connection.query(sql, function (err, result) {
+      if (err) callback(err, null);
+      console.log("[PersistenceManager]: New Challenge with ID = " + result.insertId + " inserted.");
+      var id = result.insertId;
+      callback(err, id);
+
+    });
+    connection.end();
+  } catch (err) {
+    callback(err, null);
+  }
+}
+
+function updateChallenge(challenge, callback){
+  try {
+    if (!challenge instanceof challengeClass.Challenge)
+      callback(new ParamError('Incorrect Parameter!'), null);
+    var connection = mysql.createConnection(dbParam);
+    connection.connect(function (err) {
+      if (err) callback(err, null);
+      console.log("[PersistenceManager]: Connected to DB!");
+    });
+    var sql = "update 1001db.challenge"+ 
+    " Set Status = '" + challenge.getStatus + "' where ID = " + challenge.getID;
 
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);;
-      console.log("[PersistenceManager]: New Challenge with ID = " + result.insertId + " inserted.");
+      console.log("[PersistenceManager]: New Challenge updated.");
       var id = result.insertId;
       callback(err, id);
 
@@ -692,7 +745,7 @@ function isPlaying(ID, callback) {
       if (err) callback(err, null);
       console.log("[PersistenceManager]: Connected to DB!");
     });
-    var sql = "select * from 1001db.challenge where SenderProposal_ID = " + ID + " or ReceiverProposal_ID = " + ID
+    var sql = "select * from 1001db.challenge where Status = 'Playing' and (SenderProposal_ID = " + ID + " or ReceiverProposal_ID = " + ID +")";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       else {
@@ -778,7 +831,7 @@ function getRandomQuestions(topicID, type, numberRows, callback) {
         var questionDim = 0;
         Object.keys(result).forEach(function (key) {
           var row = result[key];
-          questionArray[questionDim] = new questionClass.Question(row.QuestionText, row.Answer_A,
+          questionArray[questionDim] = new questionClass.ChallengeQuestion(row.QuestionText, row.Answer_A,
             row.Answer_B, row.Answer_C, row.Answer_D, row.XPValue, row.Topics_ID, row.Explanation);
           questionArray[questionDim].setType = row.Type;
           questionArray[questionDim].setID = row.ID;
@@ -836,6 +889,7 @@ function saveTypeInformations(type, timeInSec, callback) {
     callback(err, null);
   }
 }
+
 
 function deleteTypeInformations(ID, callback) {
   try {
@@ -1047,3 +1101,5 @@ exports.getPendingNotifications = getPendingNotifications;
 exports.getRivals = getRivals;
 exports.saveUserActivity = saveUserActivity;
 exports.saveChallengeResult = saveChallengeResult;
+exports.getTopicID = getTopicID;
+exports.updateChallenge = updateChallenge;

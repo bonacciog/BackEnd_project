@@ -2,7 +2,6 @@ const pm = require('../persistence/PersistenceManager');
 const userClass = require('../model/User');
 const messageClass = require('../model/Message');
 const topicClass = require('../model/Topic');
-const questionClass = require('../model/Question');
 /*
 var user = new userClass.User("Test", "Test", "Test");
 pm.saveUser(user, function (err, result){
@@ -28,7 +27,7 @@ pm.saveTypeInformations('HandsOn', 40);
 pm.saveTypeInformations('Cases', 60); */
 
 /* pm.addQuestionTypeInformations(1,1); */
-
+/* 
 var question;
 for (i = 0; i < 30; i++) {
     question = new questionClass.Question("?" + i, "A", "B", "C", "D", 10, 1, undefined);
@@ -50,3 +49,13 @@ for (i = 0; i < 30; i++) {
 /* pm.getRandomQuestions(1,'HandsOn',10, function(err,result){
     console.log(result);
 }) */
+ 
+
+
+const challengeClass = require('../model/Challenge');
+var ch=new challengeClass.Challenge(1, 2, challengeClass.ChallengeStatus.WaitingforAcceptance);
+console.log(ch)
+pm.saveChallenge(ch, function (err, id) {
+    console.log(err);
+    console.log(id);
+})

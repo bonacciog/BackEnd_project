@@ -110,6 +110,7 @@ CREATE TABLE IF NOT EXISTS `1001db`.`Challenge` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `SenderProposal_ID` INT NOT NULL,
   `ReceiverProposal_ID` INT NOT NULL,
+  `Status` ENUM('Waiting', 'Playing', 'Finished') NOT NULL,
   PRIMARY KEY (`ID`),
   INDEX `Player1_idx` (`SenderProposal_ID` ASC) VISIBLE,
   INDEX `Player2_idx` (`ReceiverProposal_ID` ASC) VISIBLE,

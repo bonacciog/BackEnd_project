@@ -1,4 +1,4 @@
-class Question {
+class ChallengeQuestion {
     constructor(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topic_ID, Explanation){
         this.questionText = QuestionText;
         this.answer_A = Answer_A;
@@ -121,4 +121,4 @@ class Question {
     }
 }
 
-exports.Question = Question;
+exports.ChallengeQuestion = ChallengeQuestion;

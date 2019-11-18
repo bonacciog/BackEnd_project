@@ -18,9 +18,6 @@ class Message {
         return this.text;
     }
 
-    get getIsRead(){
-        return this.isRead;
-    }
 
     get getDateTime(){
         return this.dateTime;
@@ -52,13 +49,6 @@ class Message {
      */
     set setText(text){
         this.text = text;
-    }
-
-    /**
-     * @param {any} isRead
-     */
-    set setIsRead(isRead){
-        this.isRead = isRead;
     }
 
 }

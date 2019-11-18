@@ -2,7 +2,7 @@ const c = require('./controller/Controller');
 const http = require('http');
 const WebSocket = require('ws');
 
-const ipAddress = '10.201.13.110';
+const ipAddress = '192.168.0.105';
 const port = 3000;
 
 const server = http.createServer().listen(port, ipAddress);

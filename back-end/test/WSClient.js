@@ -1,11 +1,11 @@
 const WebSocket = require('ws');
 
-const ws = new WebSocket('ws://localhost:3000');
+const ws = new WebSocket('ws://192.168.0.105:3000');
 
 const message = JSON.stringify({ 
-  request : "saveUser", 
-  User: {Firstname : 'Giovanni', Lastname : "Bonaccio", University : "Unibo"},
-  key : "chiave"
+  request : "login", 
+  UserID: 2,
+  key : 'chiave'
 });
 
 /* const message = JSON.stringify({

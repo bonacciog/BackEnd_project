@@ -62,7 +62,8 @@
     request : "challengeAccepted",
     ReceiverProposal_ID : 2,
     SenderProposal_ID : 1,
-    TopicID : 1
+    TopicID : 1,
+    challengeID : 1
 }
 
 { 
@@ -96,6 +97,10 @@
     XP : 10,
     TopicID : 1,
     Correct : "yes"
+}
+{
+    request:'endChallenge',
+    ChallengeID: 1
 }
 -----------------------
     Entrata Front-End

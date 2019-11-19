@@ -1,0 +1,84 @@
+[Server]: Listening on http://80.211.33.82:3000
+[Server]: Arrived request:
+{"request":"login","UserID":11,"key":"chiave"}
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: Connected to DB!
+[Controller]: WebSocket for User 11 saved!
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: An activities for User 11 inserted
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: Connected to DB!
+[Controller]: There aren't notifications for user 11
+[PersistenceManager]: A pending notification deleted
+[Server]: Arrived request:
+{"request":"getAllTopics"}
+[PersistenceManager]: Connected to DB!
+[Server]: Arrived request:
+{"request":"getLeaderBoard","FatherCategory":"Finance"}
+[PersistenceManager]: Connected to DB!
+[Server]: Arrived request:
+{"request":"login","UserID":"10","key":"chiave"}
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: Connected to DB!
+[Controller]: WebSocket for User 10 saved!
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: Connected to DB!
+[Controller]: There aren't notifications for user 10
+[PersistenceManager]: An activities for User 10 inserted
+[PersistenceManager]: A pending notification deleted
+[Server]: Arrived request:
+{"request":"getAllTopics"}
+[PersistenceManager]: Connected to DB!
+[Server]: Arrived request:
+{"request":"getLeaderBoard","FatherCategory":"Finance"}
+[PersistenceManager]: Connected to DB!
+[Server]: Arrived request:
+{"request":"login","UserID":null,"key":null}
+[PersistenceManager]: Connected to DB!
+[Server]: Arrived request:
+{"request":"saveUser","User":{"Firstname":"Simone","Lastname":"Bartoli","University":"Unibo"},"key":"chiave "}
+[PersistenceManager]: Connected to DB!
+[Server]: Arrived request:
+{"request":"saveUser","User":{"Firstname":"Simone","Lastname":"Bartoli","University":"Unibo"},"key":"chiave"}
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: New User with ID = 12 inserted.
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: Points of UserID 12 inserted
+[PersistenceManager]: Points of UserID 12 inserted
+[Server]: Arrived request:
+{"request":"login","UserID":"12","key":"chiave"}
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: Connected to DB!
+[Controller]: WebSocket for User 12 saved!
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: An activities for User 12 inserted
+[PersistenceManager]: A pending notification deleted
+[Controller]: There aren't notifications for user 12
+[Server]: Arrived request:
+{"request":"getAllTopics"}
+[PersistenceManager]: Connected to DB!
+[Server]: Arrived request:
+{"request":"getAllTopics"}
+[PersistenceManager]: Connected to DB!
+[Server]: Arrived request:
+{"request":"getLeaderBoard","FatherCategory":"Finance"}
+[PersistenceManager]: Connected to DB!
+[Server]: Arrived request:
+{"request":"login","UserID":"12","key":"chiave"}
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: Connected to DB!
+[PersistenceManager]: An activities for User 12 inserted
+[Controller]: There aren't notifications for user 12
+[PersistenceManager]: A pending notification deleted
+[Server]: Arrived request:
+{"request":"getAllTopics"}
+[PersistenceManager]: Connected to DB!

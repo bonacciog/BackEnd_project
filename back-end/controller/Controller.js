@@ -71,9 +71,7 @@ eventRequest.on('saveUser', function (req, res) {
                             console.log("[Controller]: There aren't topics for user initialization");
 
                     });
-                    pm.saveUserActivity(id, 'Access', new Date().toLocaleString(optionsDate), (err, result) => {
-                        if (err) throw err;
-                    });
+
                     res.end(response);
                 });
             }
@@ -108,7 +106,7 @@ eventRequest.on('login', function (req, ws) {
                                 users.set(req.UserID, ws);
                                 console.log("[Controller]: WebSocket for User " + req.UserID + " saved!");
                             }
-                            pm.saveUserActivity(req.UserID, 'Access', new Date().toLocaleString(optionsDate), (err, result) => {
+                            pm.saveUserActivity(req.UserID, 'Access', new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), (err, result) => {
                                 if (err) throw err;
                             });
                             ws.send(response);
@@ -559,7 +557,7 @@ eventRequest.on('closeConnection', function (req, res) {
         if (users.has(req.UserID))
             users.delete(req.UserID);
         res.end();
-        pm.saveUserActivity(req.UserID, 'Exit', new Date().toLocaleString(optionsDate), (err, result) => {
+        pm.saveUserActivity(req.UserID, 'Exit', new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), (err, result) => {
             if (err) throw err;
         });
         console.log("[Controller]: A connection closed!");

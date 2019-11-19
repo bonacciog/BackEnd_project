@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS `1001db`.`Users` (
   `Firstname` VARCHAR(45) NOT NULL,
   `Lastname` VARCHAR(45) NOT NULL,
   `University` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`ID`))
-ENGINE = InnoDB;
+  PRIMARY KEY (`ID`));
+-- ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`Messages` (
   `ID` INT NOT NULL AUTO_INCREMENT,
@@ -27,24 +27,24 @@ CREATE TABLE IF NOT EXISTS `1001db`.`Messages` (
     FOREIGN KEY (`ReceiverUser_ID`)
     REFERENCES `1001db`.`Users` (`ID`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+    ON UPDATE CASCADE);
+-- ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`Topics` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `FatherCategory` VARCHAR(45) NULL,
   `TopicName` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`ID`),
-  UNIQUE INDEX `TopicsName_UNIQUE` (`TopicName` ASC))
-ENGINE = InnoDB;
+  UNIQUE INDEX `TopicsName_UNIQUE` (`TopicName` ASC));
+-- ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`TypeInformations` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `Type` VARCHAR(45) NOT NULL,
   `TimeInSec` INT NULL,
   PRIMARY KEY (`ID`),
-  UNIQUE INDEX `Type_UNIQUE` (`Type` ASC))
-ENGINE = InnoDB;
+  UNIQUE INDEX `Type_UNIQUE` (`Type` ASC));
+-- ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeQuestions` (
   `ID` INT NOT NULL AUTO_INCREMENT,
@@ -62,8 +62,8 @@ CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeQuestions` (
     FOREIGN KEY (`Topics_ID`)
     REFERENCES `1001db`.`Topics` (`ID`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON UPDATE NO ACTION);
+-- ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`QuestionTypeInformation` (
   `ChallengeQuestions_ID` INT NOT NULL,
@@ -79,8 +79,8 @@ CREATE TABLE IF NOT EXISTS `1001db`.`QuestionTypeInformation` (
     FOREIGN KEY (`TypeInformations_ID`)
     REFERENCES `1001db`.`TypeInformations` (`ID`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+    ON UPDATE CASCADE);
+-- ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`AccumulatedPoints` (
   `User_ID` INT NOT NULL,
@@ -98,13 +98,13 @@ CREATE TABLE IF NOT EXISTS `1001db`.`AccumulatedPoints` (
     FOREIGN KEY (`Topic_ID`)
     REFERENCES `1001db`.`Topics` (`ID`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+    ON UPDATE CASCADE);
+-- ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`ExecutionTable` (
   `KEY` VARCHAR(10) NOT NULL,
-  PRIMARY KEY (`KEY`))
-ENGINE = InnoDB;
+  PRIMARY KEY (`KEY`));
+-- ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`Challenge` (
   `ID` INT NOT NULL AUTO_INCREMENT,
@@ -125,8 +125,8 @@ CREATE TABLE IF NOT EXISTS `1001db`.`Challenge` (
     FOREIGN KEY (`ReceiverProposal_ID`)
     REFERENCES `1001db`.`Users` (`ID`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+    ON UPDATE CASCADE);
+-- ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`PendingNotifications` (
   `ID` INT NOT NULL AUTO_INCREMENT,
@@ -138,8 +138,8 @@ CREATE TABLE IF NOT EXISTS `1001db`.`PendingNotifications` (
     FOREIGN KEY (`UserID`)
     REFERENCES `1001db`.`Users` (`ID`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+    ON UPDATE CASCADE);
+-- ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`UsersActivities` (
   `ID` INT NOT NULL AUTO_INCREMENT,
@@ -152,8 +152,8 @@ CREATE TABLE IF NOT EXISTS `1001db`.`UsersActivities` (
     FOREIGN KEY (`UserID`)
     REFERENCES `1001db`.`Users` (`ID`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+    ON UPDATE CASCADE);
+-- ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeResults` (
   `ID` INT NOT NULL AUTO_INCREMENT,
@@ -178,6 +178,6 @@ CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeResults` (
     FOREIGN KEY (`ChallengeID`)
     REFERENCES `1001db`.`Challenge` (`ID`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+    ON UPDATE CASCADE);
+-- ENGINE = InnoDB;
 -- ALTER TABLE 1001db.users AUTO_INCREMENT=1

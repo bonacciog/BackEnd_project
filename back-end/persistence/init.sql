@@ -1,14 +1,14 @@
-insert into 1001db.`typeinformations`(Type, TimeInSec)
+insert into 1001db.Typeinformations(Type, TimeInSec)
  values ('Definitions', 30),
  ('HandsOn', 40),
  ('Cases', 60);
  
- insert into 1001db.topics(TopicName)
+ insert into 1001db.Topics(TopicName)
  values('Finance'),
        ('Programming Tools');
  
- insert into 1001db.executiontable values('chiave');
-insert into 1001db.challengequestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Explanation)
+ insert into 1001db.Executiontable values('chiave');
+insert into 1001db.Challengequestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Explanation)
 values('Marianne Merill is a really cute girl, always wearing yellow canary dresses; she graduated cum laude in maths and she is now working in the Equity Capital Markets team. She amazed recruiters with her analytical skills, but sometimes seems to lack of business sense and basic definitions. You are good friends and she always asks you to sum up some basic concepts she would feel ashamed to ask others. This morning you found the following question on your internal chat coming from her: “What does Enterprise value really represent?” You have to be sure you’ll be helpful, thus you type back:',
 '“The value of a company’s core business operations to all the investors in the company.”',
 '“The value of a company’s whole business operations to all the investors in the company.”',
@@ -16,7 +16,7 @@ values('Marianne Merill is a really cute girl, always wearing yellow canary dres
 '“The value of a company’s equity to all the investors in the company.”',
 10,1,null);
 
-insert into 1001db.challengequestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Explanation)
+insert into 1001db.Challengequestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Explanation)
 values('What is Value of equity actually?
 
 You refrain from laughing in order not to offend her and say:
@@ -34,10 +34,10 @@ You refrain from laughing in order not to offend her and say:
 '“You leave out the current debt, the long term debt and the accumulated deficit”.',
 10,1,null);
 
-insert into 1001db.questiontypeinformation(ChallengeQuestions_ID, TypeInformations_ID)
+insert into 1001db.Questiontypeinformation(ChallengeQuestions_ID, TypeInformations_ID)
 values(1,1),(2,1),(3,1);
 
-insert into 1001db.challengequestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Explanation)
+insert into 1001db.Challengequestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Explanation)
 values('Ok, thanks a lot! I’ll use your precious advice. Ops, wait a moment… Coming back to the enterprise value, I have a few doubts: as it is -by definition - the value of a company’s core business operations to all the investors in the company, should I SUBTRACT from calculations cash, assets held for sale and assets of discontinued business?', 
 'Yes, definitely. Anyhow, be aware that the cash you are subtracting should be the excess cash to be precise.',
 'Yes, definitely',
@@ -69,10 +69,10 @@ values('Ok, thanks a lot! I’ll use your precious advice. Ops, wait a moment…
 'It depends on the kind of company acquiring the other company.',
 10,1,null);
 
-insert into 1001db.questiontypeinformation(ChallengeQuestions_ID, TypeInformations_ID)
+insert into 1001db.Questiontypeinformation(ChallengeQuestions_ID, TypeInformations_ID)
 values(4,2),(5,2),(6,2),(7,2),(8,2);
 
-insert into 1001db.challengequestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Explanation)
+insert into 1001db.Challengequestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Explanation)
 values('I see… Now I feel more confident about the report I have to handle my manager tomorrow. You know, I performed the DCF analysis to come up with the right multiples. There’s this start up which still faces net losses which wants to target another smaller company with a leverage buyout. He wants me to analyze the current value of the start up, but I’m afraid if I’m stressing the right multiple. I guess I should focus on P/E. What do you think?',
 'Why don’t you focus more on E.V/EBITDA?',
 'That’s a good idea. P/E is really useful to understand how much the investors are appreciating this company.',
@@ -85,6 +85,6 @@ values('I see… Now I feel more confident about the report I have to handle my 
 'The disinvestments that PSA has been forced to do in order to cash out its shareholders',
 'The pressure of the French government for the closure of several plants.',
 10,1,null);
-insert into 1001db.questiontypeinformation(ChallengeQuestions_ID, TypeInformations_ID)
+insert into 1001db.Questiontypeinformation(ChallengeQuestions_ID, TypeInformations_ID)
 values(9,3),(10,3);
 -- select * from 1001db.typeinformations

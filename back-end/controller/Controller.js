@@ -604,6 +604,32 @@ eventRequest.on('endChallenge', function (req, res) {
     }
 });
 
+eventRequest.on('getResultByChallengeID', function (req, res) {
+
+    try {
+        pm.getChallengeResult(req.challengeID, function(err, result){
+            if (err == null) {
+                if (result == null) {
+                    errorJSON.error = "Incorrect parameter";
+                    response = JSON.stringify(errorJSON);
+                }
+                else
+                    response = JSON.stringify(result);
+            }
+            else {
+                errorJSON.error = 'Input error or interaction with the database';
+                response = JSON.stringify(errorJSON);
+            }
+            res.end(response);
+        })
+        res.end();
+    } catch (err) {
+        errorJSON.error = 'Input error or interaction with the database';
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
 eventRequest.on('answerToChallengeQuestion', function (req, res) {
     try {
         pm.saveChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, (err, result) => {

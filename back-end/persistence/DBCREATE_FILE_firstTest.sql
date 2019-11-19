@@ -160,10 +160,11 @@ CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeResults` (
   `PlayerID` INT NOT NULL,
   `QuestionID` INT NOT NULL,
   `ChallengeID` INT NOT NULL,
+  `XP` INT NOT NULL,
   PRIMARY KEY (`ID`),
-  INDEX `ID_User_idx` (`PlayerID` ASC) ,
-  INDEX `ID_Question_idx` (`QuestionID` ASC) ,
-  INDEX `ID_Challenge_idx` (`ChallengeID` ASC) ,
+  INDEX `ID_User_idx` (`PlayerID` ASC),
+  INDEX `ID_Question_idx` (`QuestionID` ASC),
+  INDEX `ID_Challenge_idx` (`ChallengeID` ASC),
   CONSTRAINT `ID_User`
     FOREIGN KEY (`PlayerID`)
     REFERENCES `1001db`.`Users` (`ID`)
@@ -179,5 +180,4 @@ CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeResults` (
     REFERENCES `1001db`.`Challenge` (`ID`)
     ON DELETE CASCADE
     ON UPDATE CASCADE);
--- ENGINE = InnoDB;
 -- ALTER TABLE 1001db.users AUTO_INCREMENT=1

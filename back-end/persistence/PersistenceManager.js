@@ -1041,7 +1041,7 @@ function saveUserActivity(UserID, Type, DateTime, callback) {
   }
 }
 
-/* function getChallengeResult(ChallengeID,callback){
+function getChallengeResult(ChallengeID,callback){
   try {
     if (ChallengeID === undefined)
       callback(new ParamError('Incorrect Parameter!'), null);
@@ -1051,18 +1051,26 @@ function saveUserActivity(UserID, Type, DateTime, callback) {
       console.log("[PersistenceManager]: Connected to DB!");
     });
 
-    var sql = "select * from 1001db.ChallengeResults\n" +
-      "values (" + UserID + "," + QuestionID + "," + ChallengeID + ")";
+    var sql = "select * from 1001db.ChallengeResults";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("[PersistenceManager]: A result for User " + UserID + " inserted");
+      var challengeresult;
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        challengeresult = {
+          PlayerID : row.PlayerID, 
+          QuestionID : row.QuestionID, 
+          ChallengeID : row.ChallengeID
+        }
+      });
+      callback(null, challengeresult);
     });
 
     connection.end();
   } catch (err) {
     callback(err, null);
   }
-} */
+}
 
 function saveChallengeResult(UserID, QuestionID, ChallengeID, callback) {
   try {
@@ -1126,3 +1134,4 @@ exports.saveUserActivity = saveUserActivity;
 exports.saveChallengeResult = saveChallengeResult;
 exports.getTopicID = getTopicID;
 exports.updateChallenge = updateChallenge;
+exports.getChallengeResult = getChallengeResult;

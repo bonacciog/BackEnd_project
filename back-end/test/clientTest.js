@@ -1,9 +1,9 @@
 var http = require('http');
 
-var postData = JSON.stringify({
+/* var postData = JSON.stringify({
     request:'endChallenge',
     challengeID: 1
-})
+}) */
 /* var postData = JSON.stringify({
     request : "challengeAccepted",
     ReceiverProposal_ID : 2,
@@ -32,11 +32,11 @@ var postData = JSON.stringify({
     request : "getLeaderBoard"
 }); */
 
-/* var postData = JSON.stringify({
+var postData = JSON.stringify({
     request: "saveUser",
     User: { Firstname: 'Pol', Lastname: "Caligiana", University: "UniGianni" },
     key: "chiave"
-}); */
+});
 
 /* var postData = JSON.stringify({
     request : "challengeRejected",
@@ -46,7 +46,7 @@ var postData = JSON.stringify({
 }) */
 
 var options = {
-    hostname: '192.168.0.105',
+    hostname: '80.211.33.82',
     port: 3000,
     method: 'POST',
     headers: {

@@ -15,9 +15,9 @@ CREATE TABLE IF NOT EXISTS `1001db`.`Messages` (
   `Text` LONGTEXT NOT NULL,
   `DateTime` DATETIME NOT NULL,
   PRIMARY KEY (`ID`, `SenderUser_ID`, `ReceiverUser_ID`),
-  INDEX `fk_Users_has_Users_Users1_idx` (`ReceiverUser_ID` ASC) VISIBLE,
-  INDEX `fk_Users_has_Users_Users_idx` (`SenderUser_ID` ASC) VISIBLE,
-  UNIQUE INDEX `DateTime_UNIQUE` (`DateTime` ASC) VISIBLE,
+  INDEX `fk_Users_has_Users_Users1_idx` (`ReceiverUser_ID` ASC),
+  INDEX `fk_Users_has_Users_Users_idx` (`SenderUser_ID` ASC),
+  UNIQUE INDEX `DateTime_UNIQUE` (`DateTime` ASC),
   CONSTRAINT `fk_Users_has_Users_Users`
     FOREIGN KEY (`SenderUser_ID`)
     REFERENCES `1001db`.`Users` (`ID`)
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `1001db`.`Topics` (
   `FatherCategory` VARCHAR(45) NULL,
   `TopicName` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`ID`),
-  UNIQUE INDEX `TopicsName_UNIQUE` (`TopicName` ASC) VISIBLE)
+  UNIQUE INDEX `TopicsName_UNIQUE` (`TopicName` ASC))
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`TypeInformations` (
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `1001db`.`TypeInformations` (
   `Type` VARCHAR(45) NOT NULL,
   `TimeInSec` INT NULL,
   PRIMARY KEY (`ID`),
-  UNIQUE INDEX `Type_UNIQUE` (`Type` ASC) VISIBLE)
+  UNIQUE INDEX `Type_UNIQUE` (`Type` ASC))
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeQuestions` (
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeQuestions` (
   `Topics_ID` INT NOT NULL,
   `Explanation` LONGTEXT NULL,
   PRIMARY KEY (`ID`, `Topics_ID`),
-  INDEX `fk_ChallengeQuestions_Topics1_idx` (`Topics_ID` ASC) VISIBLE,
+  INDEX `fk_ChallengeQuestions_Topics1_idx` (`Topics_ID` ASC),
   CONSTRAINT `fk_ChallengeQuestions_Topics1`
     FOREIGN KEY (`Topics_ID`)
     REFERENCES `1001db`.`Topics` (`ID`)
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `1001db`.`QuestionTypeInformation` (
   `ChallengeQuestions_ID` INT NOT NULL,
   `TypeInformations_ID` INT NOT NULL,
   PRIMARY KEY (`ChallengeQuestions_ID`, `TypeInformations_ID`),
-  INDEX `fk_TypeInformations_idx` (`TypeInformations_ID` ASC) VISIBLE,
+  INDEX `fk_TypeInformations_idx` (`TypeInformations_ID` ASC),
   CONSTRAINT `fk_QuestionTypeInformation_ChallengeQuestions1`
     FOREIGN KEY (`ChallengeQuestions_ID`)
     REFERENCES `1001db`.`ChallengeQuestions` (`ID`)
@@ -87,8 +87,8 @@ CREATE TABLE IF NOT EXISTS `1001db`.`AccumulatedPoints` (
   `Topic_ID` INT NOT NULL,
   `XP` INT NOT NULL,
   PRIMARY KEY (`User_ID`, `Topic_ID`),
-  INDEX `fk_Users_has_Topics_Topics1_idx` (`Topic_ID` ASC) VISIBLE,
-  INDEX `fk_Users_has_Topics_Users1_idx` (`User_ID` ASC) VISIBLE,
+  INDEX `fk_Users_has_Topics_Topics1_idx` (`Topic_ID` ASC),
+  INDEX `fk_Users_has_Topics_Users1_idx` (`User_ID` ASC),
   CONSTRAINT `fk_Users_has_Topics_Users1`
     FOREIGN KEY (`User_ID`)
     REFERENCES `1001db`.`Users` (`ID`)
@@ -112,10 +112,10 @@ CREATE TABLE IF NOT EXISTS `1001db`.`Challenge` (
   `ReceiverProposal_ID` INT NOT NULL,
   `Status` ENUM('Waiting', 'Playing', 'Finished') NOT NULL,
   PRIMARY KEY (`ID`),
-  INDEX `Player1_idx` (`SenderProposal_ID` ASC) VISIBLE,
-  INDEX `Player2_idx` (`ReceiverProposal_ID` ASC) VISIBLE,
-  UNIQUE INDEX `ID_Player1_UNIQUE` (`SenderProposal_ID` ASC) VISIBLE,
-  UNIQUE INDEX `ID_Player2_UNIQUE` (`ReceiverProposal_ID` ASC) VISIBLE,
+  INDEX `Player1_idx` (`SenderProposal_ID` ASC) ,
+  INDEX `Player2_idx` (`ReceiverProposal_ID` ASC) ,
+  UNIQUE INDEX `ID_Player1_UNIQUE` (`SenderProposal_ID` ASC) ,
+  UNIQUE INDEX `ID_Player2_UNIQUE` (`ReceiverProposal_ID` ASC) ,
   CONSTRAINT `Player1`
     FOREIGN KEY (`SenderProposal_ID`)
     REFERENCES `1001db`.`Users` (`ID`)
@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `1001db`.`PendingNotifications` (
   `UserID` INT NOT NULL,
   `NotificationJSON` LONGTEXT NOT NULL,
   PRIMARY KEY (`ID`),
-  INDEX `ID_idx` (`UserID` ASC) VISIBLE,
+  INDEX `ID_idx` (`UserID` ASC) ,
   CONSTRAINT `UserID`
     FOREIGN KEY (`UserID`)
     REFERENCES `1001db`.`Users` (`ID`)
@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `1001db`.`UsersActivities` (
   `Type` VARCHAR(45) NOT NULL,
   `DateTime` DATETIME NOT NULL,
   PRIMARY KEY (`ID`),
-  INDEX `ID_Users_idx` (`UserID` ASC) VISIBLE,
+  INDEX `ID_Users_idx` (`UserID` ASC) ,
   CONSTRAINT `ID_Users`
     FOREIGN KEY (`UserID`)
     REFERENCES `1001db`.`Users` (`ID`)
@@ -161,9 +161,9 @@ CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeResults` (
   `QuestionID` INT NOT NULL,
   `ChallengeID` INT NOT NULL,
   PRIMARY KEY (`ID`),
-  INDEX `ID_User_idx` (`PlayerID` ASC) VISIBLE,
-  INDEX `ID_Question_idx` (`QuestionID` ASC) VISIBLE,
-  INDEX `ID_Challenge_idx` (`ChallengeID` ASC) VISIBLE,
+  INDEX `ID_User_idx` (`PlayerID` ASC) ,
+  INDEX `ID_Question_idx` (`QuestionID` ASC) ,
+  INDEX `ID_Challenge_idx` (`ChallengeID` ASC) ,
   CONSTRAINT `ID_User`
     FOREIGN KEY (`PlayerID`)
     REFERENCES `1001db`.`Users` (`ID`)

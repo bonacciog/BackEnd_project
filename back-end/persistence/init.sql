@@ -8,7 +8,7 @@ insert into 1001db.TypeInformations(Type, TimeInSec)
        ('Programming Tools');
  
  insert into 1001db.ExecutionTable values('chiave');
-insert into 1001db.Challengequestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Explanation)
+insert into 1001db.ChallengeQuestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Explanation)
 values('Marianne Merill is a really cute girl, always wearing yellow canary dresses; she graduated cum laude in maths and she is now working in the Equity Capital Markets team. She amazed recruiters with her analytical skills, but sometimes seems to lack of business sense and basic definitions. You are good friends and she always asks you to sum up some basic concepts she would feel ashamed to ask others. This morning you found the following question on your internal chat coming from her: “What does Enterprise value really represent?” You have to be sure you’ll be helpful, thus you type back:',
 '“The value of a company’s core business operations to all the investors in the company.”',
 '“The value of a company’s whole business operations to all the investors in the company.”',

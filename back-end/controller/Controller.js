@@ -61,7 +61,7 @@ eventRequest.on('saveUser', function (req, res) {
                     });
                     res.end(response);
                 });
-                
+
             }
             else {
                 errorJSON.error = "key does not coincide";
@@ -447,7 +447,7 @@ eventRequest.on('challengeAccepted', function (req, res) {
     try {
         var challenge = new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.Playing);
         challenge.setID = req.challengeID;
-        pm.updateChallenge(challenge,(err, result) => {
+        pm.updateChallenge(challenge, (err, result) => {
             if (err) throw err;
         });
         pm.getRandomQuestions(req.TopicID, 'Definitions', numberQuestionTypeDefinitions, function (err, resultDefinitions) {
@@ -459,7 +459,7 @@ eventRequest.on('challengeAccepted', function (req, res) {
                 }
                 else {
                     var challenge = {
-                        request: req.request,
+                        notificationType: 'startChallenge',
                         Questions: resultDefinitions
                     }
                     pm.getRandomQuestions(req.TopicID, 'HandsOn', numberQuestionTypeHandson, function (err, resultHandsOn) {
@@ -579,7 +579,7 @@ eventRequest.on('endChallenge', function (req, res) {
     try {
         var challenge = new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.Finished);
         challenge.setID = req.challengeID;
-        pm.updateChallenge(challenge,(err, result) => {
+        pm.updateChallenge(challenge, (err, result) => {
             if (err) throw err;
         });
         res.end();
@@ -593,13 +593,13 @@ eventRequest.on('endChallenge', function (req, res) {
 eventRequest.on('getResultByChallengeID', function (req, res) {
 
     try {
-        pm.getChallengeResult(req.challengeID, function(err, result){
+        pm.getChallengeResult(req.challengeID, function (err, result) {
             if (err == null) {
                 if (result == null) {
                     errorJSON.error = "Incorrect parameter";
                     response = JSON.stringify(errorJSON);
                 }
-                else{
+                else {
                     response = JSON.stringify(result);
                 }
             }
@@ -618,9 +618,18 @@ eventRequest.on('getResultByChallengeID', function (req, res) {
 
 eventRequest.on('answerToChallengeQuestion', function (req, res) {
     try {
-        pm.saveChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP,(err, result) => {
+        pm.saveChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, (err, result) => {
             if (err) throw err;
         });
+        var notification = {
+            notificationType: "questionResponse",
+            OpponentID : req.UserID,
+            QuestionID : req.QuestionID,
+            ChallengeID : req.ChallengeID,
+            XP : 10,
+            TopicID : 1
+        };
+        sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
         res.end();
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';

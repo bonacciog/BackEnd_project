@@ -98,8 +98,7 @@
     ChallengeID : 1,
     OpponentID : 2,
     XP : 10,
-    TopicID : 1,
-    Correct : "yes"
+    TopicID : 1
 }
 {
     request:'endChallenge',
@@ -114,4 +113,12 @@
     SenderProposal_ID: req.UserID,
     challengeID : id
 }
+var notification = {
+            notificationType: "questionResponse",
+            OpponentID : req.UserID,
+            QuestionID : req.QuestionID,
+            ChallengeID : req.ChallengeID,
+            XP : 10,
+            TopicID : 1
+        };
 

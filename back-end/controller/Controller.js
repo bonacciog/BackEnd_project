@@ -16,8 +16,8 @@ var eventRequest = new EventEmitter();
 var errorJSON = {
     error: ""
 };
-var allRightJSON ={
-    response : "It's all right!"
+var allRightJSON = {
+    response: "It's all right!"
 }
 var response;
 
@@ -363,14 +363,18 @@ eventRequest.on('chooseRandomOpponent', function (req, res) {
                 }
                 else {
                     pm.saveChallenge(new challengeClass.Challenge(req.UserID, ReceiverProposal_ID, challengeClass.ChallengeStatus.WaitingforAcceptance), function (err, id) {
-                        var notification = {
+                        pm.saveChallengeUserStatus(req.UserID, id, challengeClass.ChallengeStatus.WaitingforAcceptance, (err, result) => {
+                            if (err) throw err;
+                        });
+                       var notification = {
                             notificationType: "challengeProposal",
                             TopicID: req.TopicID,
                             SenderProposal_ID: req.UserID,
+                            ReceiverProposal_ID: ReceiverProposal_ID,
                             challengeID: id
                         };
                         sendIfPossibleOrSaveNotification(ReceiverProposal_ID, JSON.stringify(notification));
-                        res.end(JSON.stringify(allRightJSON));
+                        res.end(JSON.stringify(notification));
                     });
                 }
             }
@@ -394,14 +398,18 @@ eventRequest.on('challengeSpecificUser', function (req, res) {
             if (err == null) {
                 if (result == null) {
                     pm.saveChallenge(new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.WaitingforAcceptance), function (err, id) {
+                        pm.saveChallengeUserStatus(req.SenderProposal_ID, id, challengeClass.ChallengeStatus.WaitingforAcceptance, (err, result) => {
+                            if (err) throw err;
+                        });
                         var notification = {
                             notificationType: "challengeProposal",
                             TopicID: req.TopicID,
                             SenderProposal_ID: req.SenderProposal_ID,
+                            ReceiverProposal_ID: req.ReceiverProposal_ID,
                             challengeID: id
                         };
                         sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(notification));
-                        res.end(JSON.stringify(allRightJSON));
+                        res.end(JSON.stringify(notification));
                     });
 
                 }
@@ -429,6 +437,9 @@ eventRequest.on('challengeRejected', function (req, res) {
         pm.deleteChallenge(req.challengeID, (err, result) => {
             if (err) throw err;
         });
+        pm.deleteChallengeUserStatus(req.SenderProposal_ID, req.challengeID, (err, result) => {
+            if (err) throw err;
+        });
         var notification = {
             notificationType: "challengeRejected",
             ReceiverProposal_ID: req.ReceiverProposal_ID
@@ -450,7 +461,10 @@ eventRequest.on('challengeAccepted', function (req, res) {
     try {
         var challenge = new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.Playing);
         challenge.setID = req.challengeID;
-        pm.updateChallenge(challenge, (err, result) => {
+        pm.updateChallengeUserStatus(req.SenderProposal_ID, req.challengeID, challengeClass.ChallengeStatus.Playing, (err, result) => {
+            if (err) throw err;
+        });
+        pm.saveChallengeUserStatus(req.ReceiverProposal_ID, req.challengeID, challengeClass.ChallengeStatus.Playing, (err, result) => {
             if (err) throw err;
         });
         pm.getRandomQuestions(req.TopicID, 'Definitions', numberQuestionTypeDefinitions, function (err, resultDefinitions) {
@@ -582,9 +596,16 @@ eventRequest.on('endChallenge', function (req, res) {
     try {
         var challenge = new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.Finished);
         challenge.setID = req.challengeID;
-        pm.updateChallenge(challenge, (err, result) => {
+        pm.updateChallengeUserStatus(req.SenderProposal_ID, req.challengeID, challengeClass.ChallengeStatus.Finished, (err, result) => {
             if (err) throw err;
         });
+        pm.updateChallengeUserStatus(req.ReceiverProposal_ID, req.challengeID, challengeClass.ChallengeStatus.Finished, (err, result) => {
+            if (err) throw err;
+        });
+        pm.updateChallenge(challenge, challengeClass.ChallengeStatus.Finished, (err, result) => {
+            if (err) throw err;
+        });
+
         res.end(JSON.stringify(allRightJSON));
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
@@ -626,12 +647,17 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
         });
         var notification = {
             notificationType: "questionResponse",
-            OpponentID : req.UserID,
-            QuestionID : req.QuestionID,
-            ChallengeID : req.ChallengeID,
-            XP : 10,
-            TopicID : 1
+            OpponentID: req.UserID,
+            QuestionID: req.QuestionID,
+            ChallengeID: req.ChallengeID,
+            XP: 10,
+            TopicID: 1
         };
+        if (req.RoundNumber == 10){
+            pm.updateChallengeUserStatus(req.UserID, req.ChallengeID, challengeClass.ChallengeStatus.Finished, (err, result) => {
+                if (err) throw err;
+            });
+        }
         sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
         res.end(JSON.stringify(allRightJSON));
     } catch (err) {

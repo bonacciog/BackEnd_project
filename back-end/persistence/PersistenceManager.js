@@ -616,14 +616,15 @@ function saveChallenge(challenge, callback) {
       if (err) callback(err, null);
       console.log("[PersistenceManager]: Connected to DB!");
     });
+    console.log(challenge);
     var sql = "insert into 1001db.Challenge(SenderProposal_ID, ReceiverProposal_ID, Status)" +
       " values(" + challenge.getSender + "," + challenge.getReceiver + ",'" + challenge.getStatus + "')";
-
+    console.log(sql);
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       console.log("[PersistenceManager]: New Challenge with ID = " + result.insertId + " inserted.");
       var id = result.insertId;
-      callback(err, id);
+      callback(null, id);
 
     });
     connection.end();

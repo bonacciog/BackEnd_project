@@ -16,6 +16,9 @@ var eventRequest = new EventEmitter();
 var errorJSON = {
     error: ""
 };
+var allRightJSON ={
+    response : "It's all right!"
+}
 var response;
 
 function sendIfPossibleOrSaveNotification(UserID, notification) {
@@ -130,7 +133,7 @@ eventRequest.on('deleteUser', function (req, res) {
         pm.deleteUser(req.UserID, (err, result) => {
             if (err) throw err;
         });
-        res.end();
+        res.end(JSON.stringify(allRightJSON));
     } catch (err) {
         errorJSON.error = err.message;
         response = JSON.stringify(errorJSON);
@@ -145,7 +148,7 @@ eventRequest.on('sendMessage', function (req, res) {
             if (err) throw err;
         });
         sendIfPossibleOrSaveNotification(req.Message.ReceiverUser_ID, JSON.stringify(message));
-        res.end();
+        res.end(JSON.stringify(allRightJSON));
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
@@ -158,7 +161,7 @@ eventRequest.on('deleteMessage', function (req, res) {
         pm.deleteMessage(new messageClass.Message(req.Message.SenderUser_ID, req.Message.ReceiverUser_ID, req.Message.Text, req.Message.DateTime), (err, result) => {
             if (err) throw err;
         });
-        res.end();
+        res.end(JSON.stringify(allRightJSON));
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
@@ -219,7 +222,7 @@ eventRequest.on('saveTopic', function (req, res) {
         pm.saveTopic(new topicClass.Topic(req.Topic.TopicName), (err, result) => {
             if (err) throw err;
         });
-        res.end();
+        res.end(JSON.stringify(allRightJSON));
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
@@ -232,7 +235,7 @@ eventRequest.on('deleteTopic', function (req, res) {
         pm.deleteTopic(new topicClass.Topic(req.TopicName), (err, result) => {
             if (err) throw err;
         });
-        res.end();
+        res.end(JSON.stringify(allRightJSON));
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
@@ -269,7 +272,7 @@ eventRequest.on('saveChallengeQuestion', function (req, res) {
                             pm.addQuestionTypeInformations(questionID, typeID, (err, result) => {
                                 if (err) throw err;
                             });
-                            res.end();
+                            res.end(JSON.stringify(allRightJSON));
                         }
                         else {
                             errorJSON.error = 'Input error or interaction with the database';
@@ -367,7 +370,7 @@ eventRequest.on('chooseRandomOpponent', function (req, res) {
                             challengeID: id
                         };
                         sendIfPossibleOrSaveNotification(ReceiverProposal_ID, JSON.stringify(notification));
-                        res.end();
+                        res.end(JSON.stringify(allRightJSON));
                     });
                 }
             }
@@ -398,7 +401,7 @@ eventRequest.on('challengeSpecificUser', function (req, res) {
                             challengeID: id
                         };
                         sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(notification));
-                        res.end();
+                        res.end(JSON.stringify(allRightJSON));
                     });
 
                 }
@@ -431,7 +434,7 @@ eventRequest.on('challengeRejected', function (req, res) {
             ReceiverProposal_ID: req.ReceiverProposal_ID
         };
         sendIfPossibleOrSaveNotification(req.SenderProposal_ID, JSON.stringify(notification));
-        res.end();
+        res.end(JSON.stringify(allRightJSON));
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
@@ -482,7 +485,7 @@ eventRequest.on('challengeAccepted', function (req, res) {
                                             challenge.Questions = challenge.Questions.concat(resultCases);
                                             sendIfPossibleOrSaveNotification(req.SenderProposal_ID, JSON.stringify(challenge));
                                             sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(challenge));
-                                            res.end();
+                                            res.end(JSON.stringify(allRightJSON));
                                         }
                                     }
                                     else {
@@ -544,7 +547,7 @@ eventRequest.on('closeConnection', function (req, res) {
         users.get(req.UserID).close();
         if (users.has(req.UserID))
             users.delete(req.UserID);
-        res.end();
+        res.end(JSON.stringify(allRightJSON));
         pm.saveUserActivity(req.UserID, 'Exit', new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), (err, result) => {
             if (err) throw err;
         });
@@ -582,7 +585,7 @@ eventRequest.on('endChallenge', function (req, res) {
         pm.updateChallenge(challenge, (err, result) => {
             if (err) throw err;
         });
-        res.end();
+        res.end(JSON.stringify(allRightJSON));
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
@@ -630,7 +633,7 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
             TopicID : 1
         };
         sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
-        res.end();
+        res.end(JSON.stringify(allRightJSON));
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);

@@ -87,7 +87,10 @@
     request: 'getAllRivals'
     UserID: 1
 }
-
+{
+    request: 'getResultByChallengeID',
+    challengeID: 1
+}
 {
     request: 'answerToChallengeQuestion',
     UserID : 1,

@@ -82,25 +82,6 @@ CREATE TABLE IF NOT EXISTS `1001db`.`QuestionTypeInformation` (
     ON UPDATE CASCADE);
 -- ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `1001db`.`AccumulatedPoints` (
-  `User_ID` INT NOT NULL,
-  `Topic_ID` INT NOT NULL,
-  `XP` INT NOT NULL,
-  PRIMARY KEY (`User_ID`, `Topic_ID`),
-  INDEX `fk_Users_has_Topics_Topics1_idx` (`Topic_ID` ASC),
-  INDEX `fk_Users_has_Topics_Users1_idx` (`User_ID` ASC),
-  CONSTRAINT `fk_Users_has_Topics_Users1`
-    FOREIGN KEY (`User_ID`)
-    REFERENCES `1001db`.`Users` (`ID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_Users_has_Topics_Topics1`
-    FOREIGN KEY (`Topic_ID`)
-    REFERENCES `1001db`.`Topics` (`ID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE);
--- ENGINE = InnoDB;
-
 CREATE TABLE IF NOT EXISTS `1001db`.`ExecutionTable` (
   `KEY` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`KEY`));
@@ -180,4 +161,4 @@ CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeResults` (
     REFERENCES `1001db`.`Challenge` (`ID`)
     ON DELETE CASCADE
     ON UPDATE CASCADE);
--- ALTER TABLE 1001db.users AUTO_INCREMENT=1
+-- ENGINE = InnoDB

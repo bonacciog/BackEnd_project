@@ -1,6 +1,19 @@
 var http = require('http');
 
 /* var postData = JSON.stringify({
+    request: 'answerToChallengeQuestion',
+    UserID : 1,
+    QuestionID : 1,
+    ChallengeID : 1,
+    OpponentID : 2,
+    XP : 10,
+    TopicID : 1
+}); */
+var postData = JSON.stringify({
+    request: 'getResultByChallengeID',
+    challengeID: 1
+})
+/* var postData = JSON.stringify({
     request:'endChallenge',
     challengeID: 1
 }) */
@@ -28,15 +41,15 @@ var postData = JSON.stringify({
     request : "getAllTopics"
 }); */
 
-/* var postData = JSON.stringify({ 
-    request : "getLeaderBoard"
+/* var postData = JSON.stringify({
+    request: "getLeaderBoard"
 }); */
 
-var postData = JSON.stringify({
+/* var postData = JSON.stringify({
     request: "saveUser",
     User: { Firstname: 'Pol', Lastname: "Caligiana", University: "UniGianni" },
     key: "chiave"
-});
+}); */
 
 /* var postData = JSON.stringify({
     request : "challengeRejected",
@@ -46,7 +59,7 @@ var postData = JSON.stringify({
 }) */
 
 var options = {
-    hostname: '80.211.33.82',
+    hostname: 'localhost',
     port: 3000,
     method: 'POST',
     headers: {

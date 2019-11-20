@@ -59,21 +59,9 @@ eventRequest.on('saveUser', function (req, res) {
                     response = JSON.stringify({
                         UserID: id
                     });
-                    pm.getAllTopics(function (err, topics) {
-                        if (topics != "") {
-                            topics.forEach(element => {
-                                pm.saveAccumulatedPoints(id, element.getID, 0, (err, result) => {
-                                    if (err) throw err;
-                                });
-                            });
-                        }
-                        else
-                            console.log("[Controller]: There aren't topics for user initialization");
-
-                    });
-
                     res.end(response);
                 });
+                
             }
             else {
                 errorJSON.error = "key does not coincide";
@@ -611,16 +599,16 @@ eventRequest.on('getResultByChallengeID', function (req, res) {
                     errorJSON.error = "Incorrect parameter";
                     response = JSON.stringify(errorJSON);
                 }
-                else
+                else{
                     response = JSON.stringify(result);
+                }
             }
             else {
                 errorJSON.error = 'Input error or interaction with the database';
                 response = JSON.stringify(errorJSON);
             }
             res.end(response);
-        })
-        res.end();
+        });
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
@@ -630,36 +618,10 @@ eventRequest.on('getResultByChallengeID', function (req, res) {
 
 eventRequest.on('answerToChallengeQuestion', function (req, res) {
     try {
-        pm.saveChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, (err, result) => {
+        pm.saveChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP,(err, result) => {
             if (err) throw err;
         });
-        pm.getUserTopicPoints(req.UserID, req.TopicID, function (err, result) {
-            if (err == null) {
-                var newXP = result + req.XP;
-                pm.updateAccumulatedPoints(req.UserID, req.TopicID, newXP, (err, result) => {
-                    if (err) {
-                        throw err;
-                    }
-                    else {
-                        var notification = {
-                            notificationType: 'questionResponse',
-                            UserID: req.UserID,
-                            QuestionID: req.QuestionID,
-                            ChallengeID: req.ChallengeID,
-                            Correct: req.Correct
-                        };
-                        sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
-                        res.end();
-                    }
-                });
-            }
-            else {
-                errorJSON.error = 'Input error or interaction with the database';
-                response = JSON.stringify(errorJSON);
-                res.end(response);
-            }
-        });
-
+        res.end();
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);

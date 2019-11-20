@@ -471,103 +471,9 @@ function deleteChallengeQuestion(questionID, callback) {
   }
 }
 
-function saveAccumulatedPoints(UserID, TopicID, XP, callback) {
-  try {
-    if (UserID === undefined || TopicID === undefined || XP === undefined)
-      callback(new ParamError('Incorrect Parameter!'), null);
-    var connection = mysql.createConnection(dbParam);
-    connection.connect(function (err) {
-      if (err) callback(err, null);
-      console.log("[PersistenceManager]: Connected to DB!");
-    });
-    var sql = "insert into 1001db.AccumulatedPoints(User_ID, Topic_ID, XP)" +
-      " values (" + UserID + "," + TopicID + "," + XP + ")";
-    connection.query(sql, function (err, result) {
-      if (err) callback(err, null);
-      console.log("[PersistenceManager]: Points of UserID " + UserID + " inserted");
-    });
 
-    connection.end();
-  } catch (err) {
-    callback(err, null);
-  }
-}
 
-function deleteAccumulatedPoints(UserID, TopicID, callback) {
-  try {
-    if (UserID === undefined || TopicID === undefined)
-      callback(new ParamError('Incorrect Parameter!'), null);
-    var connection = mysql.createConnection(dbParam);
-    connection.connect(function (err) {
-      if (err) callback(err, null);
-      console.log("[PersistenceManager]: Connected to DB!");
-    });
-    var sql = "delete from 1001db.AccumulatedPoints where  User_ID = " + UserID + " and Topic_ID = " + TopicID;
-    connection.query(sql, function (err, result) {
-      if (err) callback(err, null);
-      console.log("[PersistenceManager]: Points of UserID " + UserID + " deleted");
-    });
 
-    connection.end();
-  } catch (err) {
-    callback(err, null);
-  }
-}
-
-function getUserTopicPoints(UserID, TopicID, callback) {
-  try {
-    if (UserID === undefined || TopicID === undefined)
-      callback(new ParamError('Incorrect Parameter!'), null);
-    var connection = mysql.createConnection(dbParam);
-    connection.connect(function (err) {
-      if (err) callback(err, null);
-      console.log("[PersistenceManager]: Connected to DB!");
-    });
-    var sql = "select XP " +
-      "from 1001db.AccumulatedPoints" +
-      " where User_ID = " + UserID +
-      " and Topic_ID = " + TopicID;
-    connection.query(sql, function (err, result) {
-      if (err) callback(err, null);
-      else {
-        var XP;
-        Object.keys(result).forEach(function (key) {
-          var row = result[key];
-          XP = row.XP;
-        });
-        callback(null, XP);
-      }
-    });
-    connection.end();
-  } catch (err) {
-    callback(err, null);
-  }
-}
-
-function updateAccumulatedPoints(UserID, TopicID, XP, callback) {
-  try {
-    if (UserID === undefined || TopicID === undefined || XP === undefined)
-      callback(new ParamError('Incorrect Parameter!'), null);
-    var connection = mysql.createConnection(dbParam);
-    connection.connect(function (err) {
-      if (err) callback(err, null);
-      console.log("[PersistenceManager]: Connected to DB!");
-    });
-    var sql = "update 1001db.AccumulatedPoints " +
-      "set XP = " + XP + " " +
-      " where User_ID = " + UserID +
-      " and Topic_ID = " + TopicID;
-    connection.query(sql, function (err, result) {
-      if (err) callback(err, null);
-      console.log("[PersistenceManager]: Points of UserID " + UserID + " updated");
-      callback(null)
-    });
-
-    connection.end();
-  } catch (err) {
-    callback(err, null);
-  }
-}
 
 function getLeaderBoard(callback) {
   try {
@@ -576,12 +482,10 @@ function getLeaderBoard(callback) {
       if (err) callback(err, null);
       console.log("[PersistenceManager]: Connected to DB!");
     });
-    var sql = "select U.ID, Firstname, Lastname, University, sum(XP) AS SUMXPs\n" +
-      "from 1001db.Topics T, 1001db.Users U, 1001db.AccumulatedPoints P\n" +
-      "where T.ID=P.Topic_ID\n" +
-      "and  U.ID=P.User_ID\n" +
-      "group by U.ID\n" +
-      "order by sum(XP) DESC";
+    var sql = "select U.ID, Firstname, Lastname, University, sum(XP) AS SUMXPs\n"+
+    "from 1001db.Users U LEFT JOIN 1001db.ChallengeResults P ON (U.ID=P.PlayerID)\n"+
+    "group by U.ID\n"+
+    "order by sum(XP) DESC";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       else {
@@ -589,13 +493,22 @@ function getLeaderBoard(callback) {
         var res = new Array();
         Object.keys(result).forEach(function (key) {
           var row = result[key];
-          res[resArrayDim] = {
-            Firstname: row.Firstname,
-            Lastname: row.Lastname,
-            University: row.University,
-            UserID: row.ID,
-            XP: row.SUMXPs
-          }
+          if(row.SUMXPs === null)
+            res[resArrayDim] = {
+              Firstname: row.Firstname,
+              Lastname: row.Lastname,
+              University: row.University,
+              UserID: row.ID,            
+              XP: 0
+            }
+          else
+            res[resArrayDim] = {
+              Firstname: row.Firstname,
+              Lastname: row.Lastname,
+              University: row.University,
+              UserID: row.ID,            
+              XP: row.SUMXPs
+            }
           resArrayDim++;
         });
         callback(null, res);
@@ -616,13 +529,12 @@ function getRivals(ID, callback) {
       if (err) callback(err, null);
       console.log("[PersistenceManager]: Connected to DB!");
     });
-    var sql = "select U.ID, Firstname, Lastname, University, sum(XP) AS SUMXPs\n" +
-      "from 1001db.Topics T, 1001db.Users U, 1001db.AccumulatedPoints P\n" +
-      "where T.ID=P.Topic_ID\n" +
-      "and  U.ID=P.User_ID\n" +
-      "and U.ID <> " + ID + "\n" +
-      "group by U.ID\n" +
-      "order by sum(XP) DESC";
+    var sql = "select U.ID, Firstname, Lastname, University, sum(XP) AS SUMXPs\n"+
+    "from 1001db.Users U LEFT JOIN 1001db.ChallengeResults P ON (U.ID=P.PlayerID)\n"+
+    "where U.ID <> " + ID + "\n" +
+    "group by U.ID\n"+
+    "order by sum(XP) DESC";
+
     console.log(sql)
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
@@ -631,13 +543,22 @@ function getRivals(ID, callback) {
         var res = new Array();
         Object.keys(result).forEach(function (key) {
           var row = result[key];
-          res[resArrayDim] = {
-            Firstname: row.Firstname,
-            Lastname: row.Lastname,
-            University: row.University,
-            UserID: row.ID,
-            XP: row.SUMXPs
-          }
+          if(row.SUMXPs === null)
+            res[resArrayDim] = {
+              Firstname: row.Firstname,
+              Lastname: row.Lastname,
+              University: row.University,
+              UserID: row.ID,            
+              XP: 0
+            }
+          else
+            res[resArrayDim] = {
+              Firstname: row.Firstname,
+              Lastname: row.Lastname,
+              University: row.University,
+              UserID: row.ID,            
+              XP: row.SUMXPs
+            }
           resArrayDim++;
         });
         callback(null, res);
@@ -695,8 +616,8 @@ function saveChallenge(challenge, callback) {
       if (err) callback(err, null);
       console.log("[PersistenceManager]: Connected to DB!");
     });
-    var sql = "insert into 1001db.Challenge(SenderProposal_ID, ReceiverProposal_ID, Status)"+ 
-    " values(" + challenge.getSender + "," + challenge.getReceiver + ",'" +  challenge.getStatus + "')";
+    var sql = "insert into 1001db.Challenge(SenderProposal_ID, ReceiverProposal_ID, Status)" +
+      " values(" + challenge.getSender + "," + challenge.getReceiver + ",'" + challenge.getStatus + "')";
 
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
@@ -711,7 +632,7 @@ function saveChallenge(challenge, callback) {
   }
 }
 
-function updateChallenge(challenge, callback){
+function updateChallenge(challenge, callback) {
   try {
     if (!challenge instanceof challengeClass.Challenge)
       callback(new ParamError('Incorrect Parameter!'), null);
@@ -720,8 +641,8 @@ function updateChallenge(challenge, callback){
       if (err) callback(err, null);
       console.log("[PersistenceManager]: Connected to DB!");
     });
-    var sql = "update 1001db.Challenge"+ 
-    " Set Status = '" + challenge.getStatus + "' where ID = " + challenge.getID;
+    var sql = "update 1001db.Challenge" +
+      " Set Status = '" + challenge.getStatus + "' where ID = " + challenge.getID;
 
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);;
@@ -745,7 +666,7 @@ function isPlaying(ID, callback) {
       if (err) callback(err, null);
       console.log("[PersistenceManager]: Connected to DB!");
     });
-    var sql = "select * from 1001db.Challenge where Status = 'Playing' and (SenderProposal_ID = " + ID + " or ReceiverProposal_ID = " + ID +")";
+    var sql = "select * from 1001db.Challenge where Status = 'Playing' and (SenderProposal_ID = " + ID + " or ReceiverProposal_ID = " + ID + ")";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       else {
@@ -846,6 +767,36 @@ function getRandomQuestions(topicID, type, numberRows, callback) {
     callback(err, null);
   }
 }
+
+
+/* function getAllChallengeQuestionsIDs(callback) {
+  try {
+    var connection = mysql.createConnection(dbParam);
+    connection.connect(function (err) {
+      if (err) callback(err, null);
+      console.log("[PersistenceManager]: Connected to DB!");
+    });
+    var sql = "select ID\n" +
+      "from 1001db.ChallengeQuestions";
+
+    connection.query(sql, function (err, result) {
+      if (err) callback(err, null);
+      else {
+        var questionArray = new Array();
+        var questionDim = 0;
+        Object.keys(result).forEach(function (key) {
+          var row = result[key];
+          questionArray[questionDim] = row.ID;
+          questionDim++;
+        });
+        callback(null, questionArray);
+      }
+    });
+    connection.end();
+  } catch (err) {
+    callback(err, null);
+  }
+} */
 
 function addQuestionTypeInformations(questionID, typeID, callback) {
   try {
@@ -1041,7 +992,8 @@ function saveUserActivity(UserID, Type, DateTime, callback) {
   }
 }
 
-function getChallengeResult(ChallengeID,callback){
+
+function getChallengeResult(ChallengeID, callback) {
   try {
     if (ChallengeID === undefined)
       callback(new ParamError('Incorrect Parameter!'), null);
@@ -1058,9 +1010,10 @@ function getChallengeResult(ChallengeID,callback){
       Object.keys(result).forEach(function (key) {
         var row = result[key];
         challengeresult = {
-          PlayerID : row.PlayerID, 
-          QuestionID : row.QuestionID, 
-          ChallengeID : row.ChallengeID
+          PlayerID: row.PlayerID,
+          QuestionID: row.QuestionID,
+          ChallengeID: row.ChallengeID,
+          XP: row.XP
         }
       });
       callback(null, challengeresult);
@@ -1072,7 +1025,7 @@ function getChallengeResult(ChallengeID,callback){
   }
 }
 
-function saveChallengeResult(UserID, QuestionID, ChallengeID, callback) {
+function saveChallengeResult(UserID, QuestionID, ChallengeID, XP, callback) {
   try {
     if (UserID === undefined || QuestionID === undefined || ChallengeID === undefined)
       callback(new ParamError('Incorrect Parameter!'), null);
@@ -1082,8 +1035,8 @@ function saveChallengeResult(UserID, QuestionID, ChallengeID, callback) {
       console.log("[PersistenceManager]: Connected to DB!");
     });
 
-    var sql = "insert into 1001db.ChallengeResults(PlayerID, QuestionID, ChallengeID)\n" +
-      "values (" + UserID + "," + QuestionID + "," + ChallengeID + ")";
+    var sql = "insert into 1001db.ChallengeResults(PlayerID, QuestionID, ChallengeID, XP)\n" +
+      "values (" + UserID + "," + QuestionID + "," + ChallengeID + "," + XP + ")";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       console.log("[PersistenceManager]: A result for User " + UserID + " inserted");
@@ -1094,6 +1047,32 @@ function saveChallengeResult(UserID, QuestionID, ChallengeID, callback) {
     callback(err, null);
   }
 }
+
+/* function updateChallengeResult(UserID, QuestionID, ChallengeID, XP, callback){
+  try {
+    if (UserID === undefined || QuestionID === undefined|| ChallengeID === undefined || !(XP > 0))
+      callback(new ParamError('Incorrect Parameter!'), null);
+      var connection = mysql.createConnection(dbParam);
+      connection.connect(function (err) {
+        if (err) callback(err, null);
+        console.log("[PersistenceManager]: Connected to DB!");
+      });
+      var sql = "update 1001db.ChallengeResults\n"+
+                "set XP = " +XP+"\n"+
+                "where PlayerID = " + UserID +"\n"+
+                "and QuestionID = " + QuestionID +"\n"+
+                "and ChallengeID = " + ChallengeID +"\n";
+      console.log(sql);
+      connection.query(sql, function (err, result) {
+        if (err) callback(err, null);
+        console.log("[PersistenceManager]: A result for User " + UserID + " updated");
+      });
+  
+      connection.end();
+  } catch (err) {
+    callback(err, null);
+  }
+} */
 
 
 exports.getUser = getUser;
@@ -1112,10 +1091,6 @@ exports.saveChallengeQuestion = saveChallengeQuestion;
 exports.deleteChallengeQuestion = deleteChallengeQuestion;
 exports.getAllTopics = getAllTopics;
 exports.getKey = getKey;
-exports.saveAccumulatedPoints = saveAccumulatedPoints;
-exports.deleteAccumulatedPoints = deleteAccumulatedPoints;
-exports.getUserTopicPoints = getUserTopicPoints;
-exports.updateAccumulatedPoints = updateAccumulatedPoints;
 exports.getLeaderBoard = getLeaderBoard;
 exports.getRandomPlayer = getRandomPlayer;
 exports.saveChallenge = saveChallenge;
@@ -1135,3 +1110,5 @@ exports.saveChallengeResult = saveChallengeResult;
 exports.getTopicID = getTopicID;
 exports.updateChallenge = updateChallenge;
 exports.getChallengeResult = getChallengeResult;
+//exports.getAllChallengeQuestionsIDs = getAllChallengeQuestionsIDs;
+//exports.updateChallengeResult = updateChallengeResult;

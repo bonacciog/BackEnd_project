@@ -464,11 +464,9 @@ eventRequest.on('challengeAccepted', function (req, res) {
         pm.updateChallengeUserStatus(req.SenderProposal_ID, req.challengeID, challengeClass.ChallengeStatus.Playing, (err, result) => {
             if (err) throw err;
         });
-        console.log(ecco)
         pm.saveChallengeUserStatus(req.ReceiverProposal_ID, req.challengeID, challengeClass.ChallengeStatus.Playing, (err, result) => {
             if (err) throw err;
         });
-        console.log(ecco)
         pm.getRandomQuestions(req.TopicID, 'Definitions', numberQuestionTypeDefinitions, function (err, resultDefinitions) {
             if (err == null) {
                 if (resultDefinitions == null) {
@@ -604,6 +602,9 @@ eventRequest.on('endChallenge', function (req, res) {
         pm.updateChallengeUserStatus(req.ReceiverProposal_ID, req.challengeID, challengeClass.ChallengeStatus.Finished, (err, result) => {
             if (err) throw err;
         });
+        pm.updateChallenge(challenge, challengeClass.ChallengeStatus.Finished, (err, result) => {
+            if (err) throw err;
+        });
 
         res.end(JSON.stringify(allRightJSON));
     } catch (err) {
@@ -652,10 +653,11 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
             XP: 10,
             TopicID: 1
         };
-        if (req.RoundNumber === 10)
-            pm.updateChallengeUserStatus(req.UserID, req.challengeID, challengeClass.ChallengeStatus.Finished, (err, result) => {
+        if (req.RoundNumber == 10){
+            pm.updateChallengeUserStatus(req.UserID, req.ChallengeID, challengeClass.ChallengeStatus.Finished, (err, result) => {
                 if (err) throw err;
             });
+        }
         sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
         res.end(JSON.stringify(allRightJSON));
     } catch (err) {

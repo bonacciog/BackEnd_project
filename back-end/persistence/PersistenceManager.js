@@ -644,9 +644,7 @@ function updateChallenge(challenge, callback) {
 
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);;
-      console.log("[PersistenceManager]: New Challenge updated.");
-      var id = result.insertId;
-      callback(err, id);
+      console.log("[PersistenceManager]: A Challenge updated.");
 
     });
     connection.end();
@@ -1077,10 +1075,10 @@ function deleteChallengeUserStatus(UserID,ChallengeID,callback){
       if (err) callback(err, null);;
       console.log("[PersistenceManager]: Connected to DB!");
     });
-    var sql = "delete from 1001db.ChallengesUsersStatus where  UserID = " + ID + "and ChallengeID = " + ChallengeID;
+    var sql = "delete from 1001db.ChallengesUsersStatus where  UserID = " + UserID + " and ChallengeID = " + ChallengeID;
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("[PersistenceManager]: A pending notification deleted");
+      console.log("[PersistenceManager]: A UserStatus for User " +UserID+ "deleted");
     });
 
     connection.end();
@@ -1128,7 +1126,7 @@ function updateChallengeUserStatus(UserID, ChallengeID, Status, callback) {
     var sql = "UPDATE 1001DB.ChallengesUsersStatus SET Status = '" + Status + "' where  UserID = " + UserID + " and ChallengeID = " + ChallengeID;
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("[PersistenceManager]: 1 record updated");
+      console.log("[PersistenceManager]: ChallengeUserStatus for user " + UserID +"updated");
     });
     connection.end();
   } catch (err) {

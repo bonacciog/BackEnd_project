@@ -1,6 +1,6 @@
 var http = require('http');
 
-/* var postData = JSON.stringify({
+var postData = JSON.stringify({
     request: 'answerToChallengeQuestion',
     UserID : 1,
     QuestionID : 1,
@@ -8,11 +8,11 @@ var http = require('http');
     OpponentID : 2,
     XP : 10,
     TopicID : 1
-}); */
-var postData = JSON.stringify({
+});
+/* var postData = JSON.stringify({
     request: 'getResultByChallengeID',
     challengeID: 1
-})
+}) */
 /* var postData = JSON.stringify({
     request:'endChallenge',
     challengeID: 1

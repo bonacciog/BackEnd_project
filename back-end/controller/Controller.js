@@ -5,11 +5,9 @@ const topicClass = require('../model/Topic');
 const questionClass = require('../model/ChallengeQuestion');
 const challengeClass = require('../model/Challenge');
 const EventEmitter = require('events').EventEmitter;
+const extractionQuestionsFactory = require('./RandomQuestionAlgorithmFactory');
 
-const numberQuestionTypeDefinitions = 3;
-const numberQuestionTypeHandson = 5;
-const numberQuestionTypeCases = 2;
-const optionsDate = { hour12: false };
+
 const users = new Map();
 
 var eventRequest = new EventEmitter();
@@ -357,7 +355,7 @@ eventRequest.on('chooseRandomOpponent', function (req, res) {
         pm.getRandomPlayer(req.UserID, function (err, ReceiverProposal_ID) {
             if (err == null) {
                 if (ReceiverProposal_ID == null) {
-                    errorJSON.error = "Incorrect parameter";
+                    errorJSON.error = "Incorrect parameter or there isn't free player";
                     response = JSON.stringify(errorJSON);
                     res.end(response);
                 }
@@ -467,63 +465,7 @@ eventRequest.on('challengeAccepted', function (req, res) {
         pm.saveChallengeUserStatus(req.ReceiverProposal_ID, req.challengeID, challengeClass.ChallengeStatus.Playing, (err, result) => {
             if (err) throw err;
         });
-        pm.getRandomQuestions(req.TopicID, 'Definitions', numberQuestionTypeDefinitions, function (err, resultDefinitions) {
-            if (err == null) {
-                if (resultDefinitions == null) {
-                    errorJSON.error = "There aren't questions in DB";
-                    response = JSON.stringify(errorJSON);
-                    res.end(response);
-                }
-                else {
-                    var challenge = {
-                        notificationType: 'startChallenge',
-                        Questions: resultDefinitions
-                    }
-                    pm.getRandomQuestions(req.TopicID, 'HandsOn', numberQuestionTypeHandson, function (err, resultHandsOn) {
-                        if (err == null) {
-                            if (resultHandsOn == null) {
-                                errorJSON.error = "There aren't questions in DB";
-                                response = JSON.stringify(errorJSON);
-                                res.end(response);
-                            }
-                            else {
-                                challenge.Questions = challenge.Questions.concat(resultHandsOn);
-                                pm.getRandomQuestions(req.TopicID, 'Cases', numberQuestionTypeCases, function (err, resultCases) {
-                                    if (err == null) {
-                                        if (resultCases == null) {
-                                            errorJSON.error = "There aren't questions in DB";
-                                            response = JSON.stringify(errorJSON);
-                                            res.end(response);
-                                        }
-                                        else {
-                                            challenge.Questions = challenge.Questions.concat(resultCases);
-                                            sendIfPossibleOrSaveNotification(req.SenderProposal_ID, JSON.stringify(challenge));
-                                            sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(challenge));
-                                            res.end(JSON.stringify(allRightJSON));
-                                        }
-                                    }
-                                    else {
-                                        errorJSON.error = 'Input error or interaction with the database';
-                                        response = JSON.stringify(errorJSON);
-                                        res.end(response);
-                                    }
-                                });
-                            }
-                        }
-                        else {
-                            errorJSON.error = 'Input error or interaction with the database';
-                            response = JSON.stringify(errorJSON);
-                            res.end(response);
-                        }
-                    });
-                }
-            }
-            else {
-                errorJSON.error = 'Input error or interaction with the database';
-                response = JSON.stringify(errorJSON);
-                res.end(response);
-            }
-        });
+        extractionQuestionsFactory.getRandomQuestionAlgorithm(req.TopicID).sendRandomQuestions(req,res);
 
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
@@ -642,7 +584,7 @@ eventRequest.on('getResultByChallengeID', function (req, res) {
 
 eventRequest.on('answerToChallengeQuestion', function (req, res) {
     try {
-        pm.saveChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, (err, result) => {
+        pm.saveChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.TimeInSec, req.XP, (err, result) => {
             if (err) throw err;
         });
         var notification = {
@@ -651,7 +593,8 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
             QuestionID: req.QuestionID,
             ChallengeID: req.ChallengeID,
             XP: 10,
-            TopicID: 1
+            TopicID: 1,
+            TimeInSec : req.TimeInSec
         };
         if (req.RoundNumber == 10){
             pm.updateChallengeUserStatus(req.UserID, req.ChallengeID, challengeClass.ChallengeStatus.Finished, (err, result) => {
@@ -668,3 +611,4 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
 });
 
 exports.eventRequest = eventRequest;
+exports.sendIfPossibleOrSaveNotification = sendIfPossibleOrSaveNotification;

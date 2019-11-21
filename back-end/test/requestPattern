@@ -98,7 +98,9 @@
     ChallengeID : 1,
     OpponentID : 2,
     XP : 10,
-    TopicID : 1
+    TopicID : 1,
+    TimeInSec : 3,
+    RoundNumber: 10
 }
 {
     request:'endChallenge',

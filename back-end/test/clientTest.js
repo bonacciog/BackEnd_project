@@ -2,30 +2,31 @@ var http = require('http');
 
 /* var postData = JSON.stringify({
     request: 'answerToChallengeQuestion',
-    UserID : 1,
+    UserID : 2,
     QuestionID : 1,
-    ChallengeID : 1,
-    OpponentID : 2,
+    ChallengeID : 3,
+    OpponentID : 1,
     XP : 10,
     TopicID : 1,
+    TimeInSec : 3,
     RoundNumber: 10
 }); */
 /* var postData = JSON.stringify({
     request: 'getResultByChallengeID',
     challengeID: 1
 }) */
-/* var postData = JSON.stringify({
+var postData = JSON.stringify({
     request:'endChallenge',
     ReceiverProposal_ID : 2,
     SenderProposal_ID : 1,
-    challengeID: 1
-}) */
+    challengeID: 3
+})
 /* var postData = JSON.stringify({
     request : "challengeAccepted",
     ReceiverProposal_ID : 2,
     SenderProposal_ID : 1,
     TopicID : 1,
-    challengeID : 1
+    challengeID : 3
 }); */
 
 /* var postData = JSON.stringify({ 
@@ -42,19 +43,19 @@ var http = require('http');
 /* var postData = JSON.stringify({
     request: 'getAllRivals',
     UserID: 1
-}); */
+}) */;
 
 /* var postData = JSON.stringify({ 
     request : "getAllTopics"
 }); */
-
-/* var postData = JSON.stringify({
+/* 
+var postData = JSON.stringify({
     request: "getLeaderBoard"
 }); */
 
 /* var postData = JSON.stringify({
     request: "saveUser",
-    User: { Firstname: 'Pol', Lastname: "Caligiana", University: "UniGianni" },
+    User: { Firstname: 'Simo', Lastname: "Bartoli", University: "Uniterri" },
     key: "chiave"
 }); */
 
@@ -62,7 +63,7 @@ var http = require('http');
     request : "challengeRejected",
     ReceiverProposal_ID : 2,
     SenderProposal_ID : 1,
-    challengeID : 10
+    challengeID : 2
 }) */
 
 var options = {

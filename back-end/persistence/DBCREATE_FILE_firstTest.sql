@@ -139,6 +139,7 @@ CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeResults` (
   `QuestionID` INT NOT NULL,
   `ChallengeID` INT NOT NULL,
   `XP` INT NOT NULL,
+  `TimeInSec` INT NOT NULL,
   PRIMARY KEY (`ID`),
   INDEX `ID_User_idx` (`PlayerID` ASC),
   INDEX `ID_Question_idx` (`QuestionID` ASC),

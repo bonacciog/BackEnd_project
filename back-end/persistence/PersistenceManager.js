@@ -579,10 +579,7 @@ function getRandomPlayer(ID, callback) {
     });
     var sql = "select ID\n" +
       "from 1001db.Users\n" +
-      "where ID not in (select SenderProposal_ID\n" +
-      "from 1001db.challenge)\n" +
-      "and ID not in (select ReceiverProposal_ID\n" +
-      "from 1001db.challenge)\n" +
+      "where ID not in (select UserID from 1001db.ChallengesUsersStatus where Status in ('Waiting', 'Playing'))\n" +
       "and ID <> " + ID + "\n" +
       "order by RAND()\n" +
       "limit 1\n"
@@ -1009,7 +1006,8 @@ function getChallengeResult(ChallengeID, callback) {
           PlayerID: row.PlayerID,
           QuestionID: row.QuestionID,
           ChallengeID: row.ChallengeID,
-          XP: row.XP
+          XP: row.XP,
+          TimeInSec: row.TimeInSec
         }
       });
       callback(null, challengeresult);
@@ -1021,7 +1019,7 @@ function getChallengeResult(ChallengeID, callback) {
   }
 }
 
-function saveChallengeResult(UserID, QuestionID, ChallengeID, XP, callback) {
+function saveChallengeResult(UserID, QuestionID, ChallengeID, XP, TimeInSec, callback) {
   try {
     if (UserID === undefined || QuestionID === undefined || ChallengeID === undefined)
       callback(new ParamError('Incorrect Parameter!'), null);
@@ -1031,8 +1029,8 @@ function saveChallengeResult(UserID, QuestionID, ChallengeID, XP, callback) {
       console.log("[PersistenceManager]: Connected to DB!");
     });
 
-    var sql = "insert into 1001db.ChallengeResults(PlayerID, QuestionID, ChallengeID, XP)\n" +
-      "values (" + UserID + "," + QuestionID + "," + ChallengeID + "," + XP + ")";
+    var sql = "insert into 1001db.ChallengeResults(PlayerID, QuestionID, ChallengeID, XP, TimeInSec)\n" +
+      "values (" + UserID + "," + QuestionID + "," + ChallengeID + "," + XP + "," + TimeInSec +")";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       console.log("[PersistenceManager]: A result for User " + UserID + " inserted");
@@ -1078,7 +1076,7 @@ function deleteChallengeUserStatus(UserID,ChallengeID,callback){
     var sql = "delete from 1001db.ChallengesUsersStatus where  UserID = " + UserID + " and ChallengeID = " + ChallengeID;
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("[PersistenceManager]: A UserStatus for User " +UserID+ "deleted");
+      console.log("[PersistenceManager]: A UserStatus for User " +UserID+ " deleted");
     });
 
     connection.end();
@@ -1126,7 +1124,7 @@ function updateChallengeUserStatus(UserID, ChallengeID, Status, callback) {
     var sql = "UPDATE 1001DB.ChallengesUsersStatus SET Status = '" + Status + "' where  UserID = " + UserID + " and ChallengeID = " + ChallengeID;
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("[PersistenceManager]: ChallengeUserStatus for user " + UserID +"updated");
+      console.log("[PersistenceManager]: ChallengeUserStatus for user " + UserID +" updated");
     });
     connection.end();
   } catch (err) {

@@ -91,10 +91,10 @@ eventRequest.on('login', function (req, ws) {
                         }
                         else {
                             response = JSON.stringify(user);
-                            if (!users.has(req.UserID)) {
+                           // if (!users.has(req.UserID)) {
                                 users.set(req.UserID, ws);
                                 console.log("[Controller]: WebSocket for User " + req.UserID + " saved!");
-                            }
+                            //}
                             pm.saveUserActivity(req.UserID, 'Access', new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), (err, result) => {
                                 if (err) throw err;
                             });

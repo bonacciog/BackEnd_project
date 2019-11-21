@@ -15,24 +15,24 @@ var http = require('http');
     request: 'getResultByChallengeID',
     challengeID: 1
 }) */
-var postData = JSON.stringify({
+/* var postData = JSON.stringify({
     request:'endChallenge',
     ReceiverProposal_ID : 2,
     SenderProposal_ID : 1,
     challengeID: 3
-})
+}) */
 /* var postData = JSON.stringify({
     request : "challengeAccepted",
     ReceiverProposal_ID : 2,
-    SenderProposal_ID : 1,
+    SenderProposal_ID : 5,
     TopicID : 1,
-    challengeID : 3
+    challengeID : 9
 }); */
 
 /* var postData = JSON.stringify({ 
     request : "challengeSpecificUser", 
     ReceiverProposal_ID :2,
-    SenderProposal_ID : 1,
+    SenderProposal_ID : 5,
     TopicID : 1
 }); */
 /* var postData = JSON.stringify({ 
@@ -42,20 +42,20 @@ var postData = JSON.stringify({
 }); */
 /* var postData = JSON.stringify({
     request: 'getAllRivals',
-    UserID: 1
-}) */;
+    UserID: 5
+});  */
 
 /* var postData = JSON.stringify({ 
     request : "getAllTopics"
 }); */
-/* 
-var postData = JSON.stringify({
+
+/* var postData = JSON.stringify({
     request: "getLeaderBoard"
 }); */
 
 /* var postData = JSON.stringify({
     request: "saveUser",
-    User: { Firstname: 'Simo', Lastname: "Bartoli", University: "Uniterri" },
+    User: { Firstname: 'Giulio', Lastname: "Stirparo", University: "Uniterri" },
     key: "chiave"
 }); */
 
@@ -67,7 +67,7 @@ var postData = JSON.stringify({
 }) */
 
 var options = {
-    hostname: 'localhost',
+    hostname: '80.211.33.82',
     port: 3000,
     method: 'POST',
     headers: {

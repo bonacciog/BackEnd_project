@@ -1121,7 +1121,7 @@ function updateChallengeUserStatus(UserID, ChallengeID, Status, callback) {
       console.log("[PersistenceManager]: Connected to DB!");
     });
 
-    var sql = "UPDATE 1001DB.ChallengesUsersStatus SET Status = '" + Status + "' where  UserID = " + UserID + " and ChallengeID = " + ChallengeID;
+    var sql = "UPDATE 1001db.ChallengesUsersStatus SET Status = '" + Status + "' where  UserID = " + UserID + " and ChallengeID = " + ChallengeID;
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       console.log("[PersistenceManager]: ChallengeUserStatus for user " + UserID +" updated");

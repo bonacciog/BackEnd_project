@@ -61,8 +61,7 @@ const getFinanceRandomQuestionsAndSend = function(req, res) {
                                     else {
                                         challenge.Questions = challenge.Questions.concat(result3);
                                         c.sendIfPossibleOrSaveNotification(req.SenderProposal_ID, JSON.stringify(challenge));
-                                        c.sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(challenge));
-                                        res.end(JSON.stringify(allRightJSON));
+                                        res.end(JSON.stringify(challenge));
                                     }
                                 }
                                 else {

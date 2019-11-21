@@ -93,21 +93,18 @@ CREATE TABLE IF NOT EXISTS `1001db`.`Challenge` (
   `ReceiverProposal_ID` INT NOT NULL,
   `Status` ENUM('Waiting', 'Playing', 'Finished') NOT NULL,
   PRIMARY KEY (`ID`),
-  INDEX `Player1_idx` (`SenderProposal_ID` ASC) ,
-  INDEX `Player2_idx` (`ReceiverProposal_ID` ASC) ,
-  UNIQUE INDEX `ID_Player1_UNIQUE` (`SenderProposal_ID` ASC) ,
-  UNIQUE INDEX `ID_Player2_UNIQUE` (`ReceiverProposal_ID` ASC) ,
-  CONSTRAINT `Player1`
+  INDEX `Player1_idx` (`SenderProposal_ID` ASC),
+  INDEX `Player2_idx` (`ReceiverProposal_ID` ASC),
+  CONSTRAINT `Player10`
     FOREIGN KEY (`SenderProposal_ID`)
     REFERENCES `1001db`.`Users` (`ID`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `Player2`
+  CONSTRAINT `Player20`
     FOREIGN KEY (`ReceiverProposal_ID`)
     REFERENCES `1001db`.`Users` (`ID`)
     ON DELETE CASCADE
     ON UPDATE CASCADE);
--- ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `1001db`.`PendingNotifications` (
   `ID` INT NOT NULL AUTO_INCREMENT,

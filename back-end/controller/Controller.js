@@ -595,8 +595,8 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
             OpponentID: req.UserID,
             QuestionID: req.QuestionID,
             ChallengeID: req.ChallengeID,
-            XP: 10,
-            TopicID: 1,
+            XP: req.XP,
+            TopicID: req.TopicID,
             TimeInSec : req.TimeInSec
         };
         if (req.RoundNumber == 10){

@@ -1,5 +1,11 @@
 var http = require('http');
 
+
+
+/* var postData = JSON.stringify({ 
+    request : "closeConnection", 
+    UserID: 1
+}); */
 /* var postData = JSON.stringify({
     request: 'answerToChallengeQuestion',
     UserID : 2,
@@ -67,7 +73,7 @@ var http = require('http');
 }) */
 
 var options = {
-    hostname: '80.211.33.82',
+    hostname: 'localhost',
     port: 3000,
     method: 'POST',
     headers: {

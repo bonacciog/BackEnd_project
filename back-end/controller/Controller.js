@@ -499,15 +499,15 @@ eventRequest.on('getUserByID', function (req, res) {
 });
 
 eventRequest.on('closeConnection', function (req, res) {
-    try {
-        users.get(req.UserID).close();
-        if (users.has(req.UserID))
+    try {        
+        if (users.has(req.UserID)){
+            users.get(req.UserID).close();
             users.delete(req.UserID);
+        }
         res.end(JSON.stringify(allRightJSON));
         pm.saveUserActivity(req.UserID, 'Exit', new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), (err, result) => {
             if (err) throw err;
         });
-        console.log("[Controller]: A connection closed!");
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);

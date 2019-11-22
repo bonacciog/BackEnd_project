@@ -25,8 +25,6 @@ var allRightJSON = {
 var response;
 
 const getFinanceRandomQuestionsAndSend = function(req, res) {
-    
-    console.log("getFinanceRandomQuestions")
     var typesIndex = 0;
     pm.getRandomQuestions(TopicID, types[typesIndex].typeName, types[typesIndex].questionsNumber, function (err, result1) {
         typesIndex++;

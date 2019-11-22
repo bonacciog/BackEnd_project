@@ -21,7 +21,7 @@ server.on('request', function (req, res) {
     req.on('end', function () {
         try {
             console.log("[Server]: Arrived request:\n" + body)
-            var req = JSON.parse(body);
+	    var req = JSON.parse(body);
             c.eventRequest.emit(req.request, req, res);
         }
         catch (err) {

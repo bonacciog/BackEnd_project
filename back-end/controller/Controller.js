@@ -19,7 +19,8 @@ var allRightJSON = {
 }
 var response;
 
-function sendIfPossibleOrSaveNotification(UserID, notification) {
+function sendIfPossibleOrSaveNotification(ID, notification) {
+    var UserID = parseInt(ID, 10);
     if (users.has(UserID))
         users.get(UserID).send(notification);
     else
@@ -92,7 +93,7 @@ eventRequest.on('login', function (req, ws) {
                         else {
                             response = JSON.stringify(user);
                            // if (!users.has(req.UserID)) {
-                                users.set(req.UserID, ws);
+                                users.set(parseInt(req.UserID, 10), ws);
                                 console.log("[Controller]: WebSocket for User " + req.UserID + " saved!");
                             //}
                             pm.saveUserActivity(req.UserID, 'Access', new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), (err, result) => {
@@ -500,10 +501,12 @@ eventRequest.on('getUserByID', function (req, res) {
 
 eventRequest.on('closeConnection', function (req, res) {
     try {        
-        if (users.has(req.UserID)){
-            users.get(req.UserID).close();
-            users.delete(req.UserID);
+	var ID = parseInt(req.UserID, 10);
+	if (users.has(ID)){
+            users.get(ID).close();
+            users.delete(ID);
         }
+	console.log("[Controller]: Connessione per utente " + req.UserID + " chiusa");
         res.end(JSON.stringify(allRightJSON));
         pm.saveUserActivity(req.UserID, 'Exit', new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), (err, result) => {
             if (err) throw err;
@@ -612,3 +615,4 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
 
 exports.eventRequest = eventRequest;
 exports.sendIfPossibleOrSaveNotification = sendIfPossibleOrSaveNotification;
+exports.Users = users;

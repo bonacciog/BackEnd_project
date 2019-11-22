@@ -4,7 +4,7 @@ var http = require('http');
 
 /* var postData = JSON.stringify({ 
     request : "closeConnection", 
-    UserID: 1
+    UserID: 2
 }); */
 /* var postData = JSON.stringify({
     request: 'answerToChallengeQuestion',
@@ -30,15 +30,15 @@ var http = require('http');
 /* var postData = JSON.stringify({
     request : "challengeAccepted",
     ReceiverProposal_ID : 2,
-    SenderProposal_ID : 5,
+    SenderProposal_ID : 1,
     TopicID : 1,
-    challengeID : 9
+    challengeID : 3
 }); */
 
 /* var postData = JSON.stringify({ 
     request : "challengeSpecificUser", 
     ReceiverProposal_ID :2,
-    SenderProposal_ID : 5,
+    SenderProposal_ID : 1,
     TopicID : 1
 }); */
 /* var postData = JSON.stringify({ 

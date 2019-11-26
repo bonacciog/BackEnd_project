@@ -402,7 +402,7 @@ function getTopicID(topic, callback) {
       console.log("[PersistenceManager]: Connected to DB!");
     });
     var sql = "select ID " +
-      "from 1001db.Topics where TopicName = " + topic;
+      "from 1001db.Topics where TopicName = '" + topic +"'";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       else {
@@ -411,7 +411,7 @@ function getTopicID(topic, callback) {
           var row = result[key];
           topicID = row.ID;
         });
-        callback(null, topic);
+        callback(null, topicID);
       }
     });
     connection.end();
@@ -435,9 +435,7 @@ function saveChallengeQuestion(question, callback) {
         " values ('" + question.getQuestionText + "','" + question.getAnswer_A + "','" + question.getAnswer_B + "','" + question.getAnswer_C + "','" + question.getAnswer_D + "'," + question.getXPValue + "," + question.getTopic_ID + ")";
     else
       var sql = "insert into 1001db.ChallengeQuestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Explanation)" +
-        " values ('" + question.getQuestionText + "','" + question.getAnswer_A + "','" + question.getAnswer_B + "','" + question.getAnswer_C + "','" + question.getAnswer_D + "'," + question.getXPValue + "," + question.getTopic_ID + ",'" + question.getExplanation + "')";
-
-    connection.query(sql, function (err, result) {
+        " values ('" + question.getQuestionText + "','" + question.getAnswer_A + "','" + question.getAnswer_B + "','" + question.getAnswer_C + "','" + question.getAnswer_D + "'," + question.getXPValue + "," + question.getTopic_ID + ",'" + question.getExplanation + "')";    connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       console.log("[PersistenceManager]: New question with ID = " + result.insertId + " inserted");
       var id = result.insertId;
@@ -449,6 +447,7 @@ function saveChallengeQuestion(question, callback) {
     callback(err, null);
   }
 }
+
 
 function deleteChallengeQuestion(questionID, callback) {
   try {
@@ -813,6 +812,8 @@ function addQuestionTypeInformations(questionID, typeID, callback) {
   }
 }
 
+
+
 function saveTypeInformations(type, timeInSec, callback) {
   try {
     if (type === undefined || timeInSec == undefined)
@@ -885,6 +886,9 @@ function getTypeInformationsID(type, callback) {
     callback(err, null);
   }
 }
+
+
+
 
 function savePendingNotification(UserID, NotificationJSON, callback) {
   try {
@@ -1172,3 +1176,5 @@ exports.getChallengeResult = getChallengeResult;
 exports.saveChallengeUserStatus = saveChallengeUserStatus;
 exports.deleteChallengeUserStatus = deleteChallengeUserStatus;
 exports.updateChallengeUserStatus = updateChallengeUserStatus;
+
+  // ASYNC METHOD

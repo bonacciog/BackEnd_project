@@ -4,15 +4,15 @@ const c = require('./Controller');
 const TopicID = 1;
 const types = [ 
     {
-        typeName:'Definitions',
+        typeName:'THEORY',
         questionsNumber: 3
     },
     {
-        typeName:'HandsOn',
+        typeName:'HANDSON',
         questionsNumber: 5
     },
     {
-        typeName:'Cases',
+        typeName:'CASES',
         questionsNumber: 2
     }
 ];

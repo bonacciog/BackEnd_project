@@ -8,7 +8,7 @@
 			"AnswerD": "altra risposta",
 			"Type": "theory",
 			"XPValue": 10,
-			"Topic": "Finance",
+			"Topic": "Programming Tools",
 			"Explanation": "explanation"
 		},
 		{
@@ -17,27 +17,7 @@
 			"AnswerB": "altra riszcxzcposta",
 			"AnswerC": "altra rispzcxzcxosta",
 			"AnswerD": "altra riszcxxzcposta",
-			"Type": "HandsOn",
-			"XPValue": 10,
-			"Topic": "Programming Tools"
-		},
-		{
-			"Text": "tesssssto dexczcxzczxczxclla domanda",
-			"CorrectAnswer": "risposzxczxcta corretta",
-			"AnswerB": "altra riszcxzcposta",
-			"AnswerC": "altra rispzcxzcxosta",
-			"AnswerD": "altra riszcxxzcposta",
-			"Type": "HandsOn",
-			"XPValue": 10,
-			"Topic": "Programming Tools"
-		},
-		{
-			"Text": "testo dexczcxzczxczxclla doddddanda",
-			"CorrectAnswer": "risposzxczxcta corretta",
-			"AnswerB": "altra riszcxzcposta",
-			"AnswerC": "altra rispzcxzcxosta",
-			"AnswerD": "altra riszcxxzcposta",
-			"Type": "HandsOn",
+			"Type": "theory",
 			"XPValue": 10,
 			"Topic": "Programming Tools"
 		}

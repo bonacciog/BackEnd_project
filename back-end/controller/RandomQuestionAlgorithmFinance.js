@@ -8,7 +8,7 @@ const types = [
         questionsNumber: 3
     },
     {
-        typeName:'HANDSON',
+        typeName:'HANDS ON',
         questionsNumber: 5
     },
     {

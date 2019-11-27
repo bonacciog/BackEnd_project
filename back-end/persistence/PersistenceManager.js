@@ -420,7 +420,7 @@ function getTopicID(topic, callback) {
   }
 }
 
-function saveChallengeQuestion(question, callback) {
+async function saveChallengeQuestion(question, callback) {
   try {
     if (!question instanceof questionClass.ChallengeQuestion) {
       callback(new ParamError("Incorrect parameter!"), null);
@@ -431,15 +431,17 @@ function saveChallengeQuestion(question, callback) {
       console.log("[PersistenceManager]: Connected to DB!");
     });
     if (question.getExplanation === undefined)
-      var sql = "insert into 1001db.ChallengeQuestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID)" +
+      var sql = "insert into 1001db.ChallengeQuestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID)\n" +
         " values ('" + question.getQuestionText + "','" + question.getAnswer_A + "','" + question.getAnswer_B + "','" + question.getAnswer_C + "','" + question.getAnswer_D + "'," + question.getXPValue + "," + question.getTopic_ID + ")";
     else
-      var sql = "insert into 1001db.ChallengeQuestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Explanation)" +
-        " values ('" + question.getQuestionText + "','" + question.getAnswer_A + "','" + question.getAnswer_B + "','" + question.getAnswer_C + "','" + question.getAnswer_D + "'," + question.getXPValue + "," + question.getTopic_ID + ",'" + question.getExplanation + "')";    connection.query(sql, function (err, result) {
-      if (err) callback(err, null);
-      console.log("[PersistenceManager]: New question with ID = " + result.insertId + " inserted");
+      var sql = "insert into 1001db.ChallengeQuestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Explanation)\n" +
+        " values ('" + question.getQuestionText + "','" + question.getAnswer_A + "','" + question.getAnswer_B + "','" + question.getAnswer_C + "','" + question.getAnswer_D + "'," + question.getXPValue + "," + question.getTopic_ID + ",'" + question.getExplanation + "')";    
+    
+    connection.query(sql, function (err, result) {
+    if (err) callback(err, null);
+      console.log("[PersistenceManager]: New question with ID = " + result.insertId + " inserted ");
       var id = result.insertId;
-      callback(null, id);
+     callback(null, id);
     });
 
     connection.end();
@@ -792,7 +794,7 @@ function getRandomQuestions(topicID, type, numberRows, callback) {
 
 function addQuestionTypeInformations(questionID, typeID, callback) {
   try {
-    if (questionID === undefined || typeID == undefined)
+    if (questionID === undefined || typeID === undefined)
       callback(new ParamError('Incorrect Parameter!'), null);
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {

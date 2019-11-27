@@ -1,0 +1,516 @@
+{
+	"Questions": [
+		{
+			"Text": "What does Enterprise value really represent?",
+			"CorrectAnswer": "The value of a company’s core business operations to all the investors in the company.",
+			"AnswerB": "The value of a company’s whole business operations to all the investors in the company.",
+			"AnswerC": "The value of a company’s equity to only equity investors.",
+			"AnswerD": "The value of a company’s equity to all the investors in the company",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance"
+		},
+        {
+			"Text": "What is Value of equity actually?",
+			"CorrectAnswer": "The value of the whole business to the only equity",
+			"AnswerB": "The value of the equity (only) to the only equity investors",
+			"AnswerC": "The value of the core business to the only equity investors",
+			"AnswerD": "The value of the equity (only) to all the investors",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance"
+		},
+        {
+			"Text": "When calculating the Value of equity, what are the figures you have to leave out from the equation?",
+			"CorrectAnswer": "You leave out current liabilities and long term debt plus the “other liabilities",
+			"AnswerB": "You leave out the accounts payable, current debt and accrued liabilities",
+			"AnswerC": "You leave out the long term debt, the additional paid in capital and the accumulated deficit",
+			"AnswerD": "You leave out the current debt, the long term debt and the accumulated deficit",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance",
+            "Explanation": "All the figures which concern the debt holders are not relevant, as by definition, when we address the value of equity we are taking into account the value of the whole business for the equity investors only"
+        },
+        {
+			"Text": "When assessing the enterprise value, should you subtract from calculations cash, assets held for sale and assets of discontinued business? ",
+			"CorrectAnswer": "Yes, definitely. Anyhow, be aware that the cash you are subtracting should be the excess cash to be precise. ",
+			"AnswerB": "Yes, definitely.",
+			"AnswerC": "No, these are not “non-operating assets",
+			"AnswerD": "No. Subtract only cash and assets held for sale.",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance",
+            "Explanation": "Companies always need buffer to stay alive, thus the cash you know can be considered not necessary to the operating business is the amount you actually have to subtract."
+        },
+        {
+			"Text": "When addressing the enterprise value - How about subtracting  Accounts receivable, current content assets and current tax receivables from the equity value?",
+			"CorrectAnswer": "That’s wrong! They are operating assets! ",
+			"AnswerB": "That’s only partly right. Do not subtract current tax receivables",
+			"AnswerC": "That’s right. They are non operating assets",
+			"AnswerD": "That’s right. Rememeber to include also excess cash in your subtraction!",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance"
+        },
+        {
+			"Text": "When assessing the enterprise value - With regards to current financial assets, do you subtract them from the equity value?",
+			"CorrectAnswer": "It actually depends on how liquid they are and how core to the business they are",
+			"AnswerB": "Yes, always do it.",
+			"AnswerC": "It actually depends on how liquid they are.",
+			"AnswerD": "That’s right. Rememeber to include also excess cash in your subtraction!",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance"
+        },
+        {
+			"Text": "When assessing the enterprise value - considering PPE something which is fixed, are you  going to subtract them from the equity value, right?",
+			"CorrectAnswer": "No, don’t do it! ",
+			"AnswerB": "Exactly",
+			"AnswerC": "Yes, but it depends how core they are",
+			"AnswerD": "None of the previous",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance"
+        },
+        {
+			"Text": "When assessing the enterprise value – you guess you are going to subtract goodwill and other intangibles from the equity value:",
+			"CorrectAnswer": "No, don’t do it! ",
+			"AnswerB": "Yes, always do it.",
+			"AnswerC": "You cannot say a priori.",
+			"AnswerD": "It depends on the kind of company acquiring the other company.",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance"
+        },
+        {
+			"Text": "A friend of yours asks is valuating a start up which still faces net losses and is willing to target another smaller company with a leverage buyout. She wants you to analyze the current value of the start up, but she is  afraid she is not focusing on the right multiple. She guesses she should focus on P/E. What do you think?",
+			"CorrectAnswer": "Why don’t you focus more on E.V/EBITDA? ",
+			"AnswerB": "That’s a good idea. P/E is really useful to understand how much the investors are appreciating this company.",
+			"AnswerC": "Try to focus on E.V/Sales ",
+			"AnswerD": "Why don’t you focus more on Market capitalization/Net Income?",
+			"Type": "cases",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance",
+            "Explanation": "E.V/EBITDA would be a proper multiple to analyze the value of the company because EBITDA allows to understand the amount of cash available, which is fundamental for a company which wants to undergo a LBO and also enables to value a firm facing net losses, given that EBITDA is almost for sure still positive."
+        },
+        {
+			"Text": "On October 31st  after the memorandum of understanding, While FCA shares soared 8.7 per cent, PSA shares fell 12.8 per cent. Analysts at Citi pointed out that this fact was caused by:",
+			"CorrectAnswer": "The lack of cash out for PSA’s shareholders, who were asked to remain patient",
+			"AnswerB": "The fact that FCA executive Mike Manley would drive the ship, leaving out PSA executive ",
+			"AnswerC": "The disinvestments that PSA has been forced to do in order to cash out its shareholders",
+			"AnswerD": "The pressure of the French government for the closure of several plants.",
+			"Type": "cases",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance",
+            "Explanation": "While FCA shareholders will receive a €5.5bn cash payout and proceeds from the sale of its robot-making Comau unit, estimated at between €200m and €300m, Groupe PSA shareholders are being asked to remain patient"
+		},
+		{
+			"Text": "The Investment bank told your client that in this critical moment the restructuring solution would be almost impossible. Can you please explain him why?.",
+			"CorrectAnswer": "Lenders are often reluctant to increase their exposure to the company",
+			"AnswerB": "Shareholders are worried about a higher exposure and would start selling",
+			"AnswerC": "The management fears a reputational loss if their proposals to lenders fail, thus they tend to avoid such transaction",
+			"AnswerD": "The bank earns less commissions in case of restructuring, thus it is mainly a matter of money",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance"
+		},
+		{
+			"Text": "What would be the advantage of filing for bankruptcy?",
+			"CorrectAnswer": "Bankruptcy would be the best way to negotiate with lenders, reduce obligations and get additional financing.",
+			"AnswerB": "Bankruptcy would be the best way to reduce obligations and get additional financing.",
+			"AnswerC": "Bankruptcy would be the best way to negotiate with lenders and get additional financing.",
+			"AnswerD": "Bankruptcy would be the best way to negotiate with lenders, reduce obligations, get additional financing and reacquire the trust of former shareholders.",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance"
+		},
+		{
+			"Text": "Some people familiar with your client`s creditor company told you that they hired the top in the market to serve them. Who do you think they may be? ",
+			"CorrectAnswer": "Houlihan Lokey",
+			"AnswerB": "Blackstone",
+			"AnswerC": "Goldman Sachs",
+			"AnswerD": "Lazard ",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance"
+		},
+		{
+			"Text": "The manager of the structured finance team of the Investment bank told me today that we had better file for a Chapter 7 bankruptcy. What do you think he is meaning? ",
+			"CorrectAnswer": "Chapter 7 bankruptcy is a liquidation bankruptcy",
+			"AnswerB": "Chapter 7 bankruptcy is a reorganization bankruptcy",
+			"AnswerC": "Chapter 7 bankruptcy is a sales-oriented bankruptcy",
+			"AnswerD": "Chapter 7 is a conditional financing-based bankruptcy",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance"
+		},
+		{
+			"Text": "Your client wishes to save its distressed company at any cost.One young member of the IB team argued that a way to do so could be the Debtor in possession financing, but that is would also be hazardous. Why do you think he argued such a thing?",
+			"CorrectAnswer": "Some DIP lending firms are known to take over companies at a significant discount due to the huge amount of collateral they have.",
+			"AnswerB": "DIP implies a higher interest rate for the company and thus a heavier debt burden after a while.",
+			"AnswerC": "DIP implies that the strategic control of the company is given to the DIP lending firm right in the moment of the refinancing agreement.",
+			"AnswerD": "DIP financing implies the respect of covenants which paralyses the innovation of the company, leading to a loss of competitivity.",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance"
+		},
+		{
+			"Text": "Your client has accepted selling his distressed company at the highest price possible. Which of the following is a reasonable way to achieve the goal?",
+			"CorrectAnswer": "The only real way is to have multiple bidders ",
+			"AnswerB": "The only real way is to cut the timing as much as possible, also reducing the marketing material",
+			"AnswerC": "The only real way is to increase the number of marketing events and rely on the roadshow",
+			"AnswerD": "The only real way is to sell the crown jewels.",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance"
+		},
+		{
+			"Text": "If the aim of the owner of a distressed company is to sell at the highest price possible and the structured finance team, would it be consistent to pursue a sale on “current liabilities assumed” basis?",
+			"CorrectAnswer": "No, on a “current liabilities assumed” the enterprise value will be lower",
+			"AnswerB": "Yes, on a “current liabilities assumed” the enterprise value will be higher.",
+			"AnswerC": "It depends on how liquid the current liabilities are.",
+			"AnswerD": "It depends on how liquid all the financial assets are.",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance",
+            "Explanation": "Since “owed expenses” line items like Accounts Payable and Accrued expense are often much higher than they would be for a healthy company, you need to subtract the difference as you are assuming the current liabilities"
+		},
+		{
+			"Text": "Which kind of sale deal should a distressed company pursue to close?",
+			"CorrectAnswer": "A stock purchase",
+			"AnswerB": "An asset sale",
+			"AnswerC": "In this moment of crisis, the difference between an asset and a stock purchase is negligible",
+			"AnswerD": "None of the previous.",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance",
+            "Explanation": "A distressed company would love to get rid of all its liabilities. This can happen thanks to a stock purchase; moreover the company will get taxed less heavily when selling the entire business instead of specific assets"
+		},
+        {
+			"Text": "Announced on June 25th, AbbVie Inc acquired:",
+			"CorrectAnswer": "Allergan plc",
+			"AnswerB": "Bristol-Myers Squibb",
+			"AnswerC": "Celgene",
+			"AnswerD": "Biogen Inc",
+			"Type": "cases",
+			"XPValue": 20,
+			"Topic": "Investment banking and finance"                      
+		},
+        {
+			"Text": "Which move caused Softbank`s stocks to drop and investors to change their minds about the investment bank?",
+			"CorrectAnswer": "the investment in WeWork",
+			"AnswerB": "The investment in IWG",
+			"AnswerC": "The investment in Left",
+			"AnswerD": "None of the previous",
+			"Type": "cases",
+			"XPValue": 20,
+			"Topic": "Investment banking and finance"                      
+		},
+		{
+			"Text": "You have to quickly give a snapshot of the financial situation of a company to your boss. You know you can’t talk about all of the three financial statement and need to pick just one. Which statement do you immediately talk about?",
+			"CorrectAnswer": "Cashflow statement",
+			"AnswerB": "Balance sheet",
+			"AnswerC": "Income statement",
+			"AnswerD": "None of the previous",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance",
+            "Explanation": "Cashflow statement gives a true picture of how much cash a company is generating, independent of all the non-cash expenses you might have"
+		},
+		{
+			"Text": "Depreciation is going up by $ 20 ml this year. What is happening to the cashflow statement, considering the tax rate is equal to 20%?",
+			"CorrectAnswer": "Cashflow from operations goes up by $8 ml",
+			"AnswerB": "Cashflow from operation is not affected",
+			"AnswerC": "Cashflow from operations goes down by $8 ml",
+			"AnswerD": "Cashflow from operations goes down by $12 ml",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance",
+            "Explanation": "Net income firstly goes down by 20; given the 40% tax rate, we know we can deduct 8; thus Net income goes down by 12. With regards to the cashflow statement, we have to add back the depreciation since it is a non-cash expense: -12+20=8"
+		},
+		{
+			"Text": "Depreciation is going up by $ 20 ml this year. What is happening to the cashflow statement, considering the tax rate is equal to 20%: what happens then to the overall assets?",
+			"CorrectAnswer": "Overall assets is down by $ 12 ml ",
+			"AnswerB": "Overall assets is down by $ 8 ml",
+			"AnswerC": "Overall assets is up by $ 8 ml",
+			"AnswerD": "Overall assets is up by $ 12 ml",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance",
+            "Explanation": "Cash is up by 8, but depreciation decreases PPE value by 20, thus assets are down by 12"
+		},
+		{
+			"Text": "StillHere ltd has mainly invested the proceeds of its IPO in Net working capital, increasing the Inventory by $ 25 ml paying in cash. How is this going to be reflected on the cashflow statement?",
+			"CorrectAnswer": "The Net change in cash is minus $ 25 ml",
+			"AnswerB": "The cashflow statement is not going to be affected",
+			"AnswerC": "The Net change in cash is plus $ 25 ml",
+			"AnswerD": "None of the previous",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance",
+            "Explanation": "Cash is up by 8, but depreciation decreases PPE value by 20, thus assets are down by 12"
+		},
+		{
+			"Text": "Shareholders would have favored the issue of $ 25 ml of debt to pay for the increase in inventory. How would have net change in cash been in this scenario?",
+			"CorrectAnswer": "The Net change in cash is minus $ 25 ml",
+			"AnswerB": "Net cash is up by $25 ml and assets are up by $25 ml",
+			"AnswerC": "Net cash is down by $25 ml and assets are up by $25 ml",
+			"AnswerD": "Net cash is down by $25 ml and assets are up by $25 ml",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance",
+            "Explanation": "The cashflow from investing would reduce net cash, but the debt raised would show as an addition to cashflow, canceling the investment activity"
+		},
+		{
+			"Text": "What would have happened to Rocketstars ltd`s cashflow if  they ordered new inventory using cash on hand without having manufactured or sold anything yet?",
+			"CorrectAnswer": "Cashflow from operations would have decreased ",
+			"AnswerB": "Cashflow from operation would not have been affected ",
+			"AnswerC": "Cashflow from operation would have increased",
+			"AnswerD": "None of the previous is precise enough",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance"
+		},
+		{
+			"Text": "A company benefits from $100 ml written down debt with a 40% tax rate: what`s the impact on Net income and Net cash? ",
+			"CorrectAnswer": "Net income up by 60 and Net cash down by 40. ",
+			"AnswerB": "Net income down by 60 and Net cash up by 40.",
+			"AnswerC": "Net income was not affected but Net cash was down by 40.",
+			"AnswerD": "Net income was not affected but Net cash was up by 40",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance"
+		},
+		{
+			"Text": "You are noticing your client`s net working capital. is negative… You seem to remember you once read on the Financial Times that even Amazon was facing such a result. You start wandering whether was a bad thing and conclude that:",
+			"CorrectAnswer": "It can be positive as customer pay upfront and cash is used to pay off accounts payables early in time",
+			"AnswerB": "It is always negative since it means that the company is carrying a high debt balance.",
+			"AnswerC": "It is always negative since it is given mostly by deferred revenue.",
+			"AnswerD": "None of the previous is precise",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance",
+            "Explanation": "Business efficiency may imply this situation. This has happened for McDonald’s, Walmart and Amazon"
+		},
+		{
+			"Text": "In 2019 Apple recorded a cash reserve which was higher than the cash a country you maybe went on holiday had in its treasury. Which one was the country?",
+			"CorrectAnswer": "Ciprus",
+			"AnswerB": "Greece",
+			"AnswerC": "Egypt",
+			"AnswerD": "Turkey",
+			"Type": "cases",
+			"XPValue": 20,
+			"Topic": "Investment banking and finance"
+		},
+		{
+			"Text": "There are several reasons why a company may build a huge cash pile. Do you know who had the greatest in 2019?",
+			"CorrectAnswer": "Microsoft",
+			"AnswerB": "Alphabet",
+			"AnswerC": "Berkshire Hathaway",
+			"AnswerD": "Apple",
+			"Type": "cases",
+			"XPValue": 20,
+			"Topic": "Investment banking and finance",
+            "Explanation": "Microsoft ranks as first with $136.6 bn, followed by Berkshire Hathaway With $128.2 bn, Alphabet with $121.2 bn and Apple with $100.6 bn."
+		},
+		{
+			"Text": "When evaluating a firm, can you identify the method which is systematically giving the highest expected value?",
+			"CorrectAnswer": "There is no ranking that always holds",
+			"AnswerB": "DCF always results in the highest expexted value",
+			"AnswerC": "Comparable companies always results in the highest expected value",
+			"AnswerD": "Precedent transactions always results in the highest expected value",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance"
+        },
+		{
+			"Text": "About DCF analysis:",
+			"CorrectAnswer": "It is the methodology that shows the most variable results in terms of expected value",
+			"AnswerB": "It is the methodology that always gives the highest expected value",
+			"AnswerC": "It is the methodology that always gives the lowest expected value",
+			"AnswerD": "The value is always between the ones of the other two methodologies",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance"
+        },
+		{
+			"Text": "You shouldn`t use the DCF analysis:",
+			"CorrectAnswer": "for tech and bio tech start ups, banks and financial institutions",
+			"AnswerB": "for banks and financial institutions",
+			"AnswerC": "for tech and bio tech start ups",
+			"AnswerD": "for tech and bio tech start ups and financial institution.",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance",
+            "Explanation": "Start ups may have unpredictable cashflows, while banks and financial institutions use debt and working capital really differently from other kinds of companies as they do not reinvest debt and working capital is a huge part of their balance sheet"
+        },
+		{
+			"Text": "The sum of the parts can be a valid way to assess the value of some companies. Which of the following can be one of these?",
+			"CorrectAnswer": "General Electric",
+			"AnswerB": "Apple",
+			"AnswerC": "Microsoft",
+			"AnswerD": "GlaxoSmithKline",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance",
+            "Explanation": "General Electric is a conglomerate company: this means it can be divided into completely different, unrelated divisions"
+        },
+		{
+			"Text": "Unlike DCF, an LBO model itself does not give a specific valuation. In order to determine how much a PE would pay for that company, you have to set a determined:",
+			"CorrectAnswer": "IRR",
+			"AnswerB": "ROA",
+			"AnswerC": "ROS",
+			"AnswerD": "ROE",
+			"Type": "hands on",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance"
+        },
+		{
+			"Text": "If you had had to valuate Facebook in 2004 you would have used:",
+			"CorrectAnswer": "A not far in the future DCF and  EV/Unique visitors as a proper ",
+			"AnswerB": "A far in the future DCF and EV/Unique visitors as a proper multiple",
+			"AnswerC": "A not far in the future DCF and  EV/Revenue as a proper multiple",
+			"AnswerD": "A far in the future DCF and EV/Revenue as a proper multiple",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance"
+        },
+		{
+			"Text": "Which multiple does Mr. Warren Buffett avoid to rely on?",
+			"CorrectAnswer": "EBITDA multiples",
+			"AnswerB": "Sales multiple",
+			"AnswerC": "EBIT multiples ",
+			"AnswerD": "Earnings multiples",
+			"Type": "cases",
+			"XPValue": 20,
+			"Topic": "Investment banking and finance",
+            "Explanation": "Mr. Buffett does not appreciate EBITDA multiples As he says, there is no tooth fairy paying for capital expenditures and depreciation and amortization are a measure of what the company is spending or needs to spend on capital expenditure to maintain or grow the business. That’s why he gives the most relevance to EBIT multiples"
+        },
+		{
+			"Text": "One disadvantage when using revenue multiples has to be taken into account: which one?",
+			"CorrectAnswer": "They mislead the value of distressed companies ",
+			"AnswerB": "They are more volatile",
+			"AnswerC": "They can be easily manipulated by accounting practices",
+			"AnswerD": "They are not available for every firm",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance"
+        },
+		{
+			"Text": "If you were evaluating a listed merchant bank today, which multiple do you think I took the most care of?",
+			"CorrectAnswer": "P/E",
+			"AnswerB": "Enterprise value to sales ratio",
+			"AnswerC": "Enterprise value to EBIT",
+			"AnswerD": "Enterprise value to EBITDA",
+			"Type": "cases",
+			"XPValue": 20,
+			"Topic": "Investment banking and finance",
+            "Explanation": "P/E depends on the company’s capital structure, which is fundamental for banks, financial institutions and other companies where the interest payments/expenses are critical"
+		},
+		{
+			"Text": "The wanderlust ltd is acquiring Peters4 Inc, which has a lower P/E. Will this acquisition be accretive or dilutive?",
+			"CorrectAnswer": "Cannot tell ",
+			"AnswerB": "It will be accretive",
+			"AnswerC": "It will be dilutive",
+			"AnswerD": "It will be accretive only in the short term, but not in the long term",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance",
+            "Explanation": "That’s a tricky question as you cannot tell until you know it is an all-stock deal. In case this acquisition was an all-cash or an all-debt deal, P/E multiples of the buyer and seller would not matter as no stock is being issued"
+        },
+		{
+			"Text": "In an all-stock deal, would such acquisition be accretive or dilutive?",
+			"CorrectAnswer": "It would be accretive ",
+			"AnswerB": "It would be dilutive",
+			"AnswerC": "It will be accretive only in the short term, but not in the long term",
+			"AnswerD": "Cannot tell",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance",
+            "Explanation": "You are paying less for earnings than what the market values your own earnings"
+        },
+		{
+			"Text": "Which of these entities you think would be generally willing to pay more to acquire a company?",
+			"CorrectAnswer": "Another company",
+			"AnswerB": "A private equity firm",
+			"AnswerC": "A venture capital",
+			"AnswerD": "A hedge fund",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance",
+            "Explanation": "A company may be a strategic acquirer willing to realize revenue and cost synergies that the other financial players cannot realize, unless they combine the company with a complementary portfolio company"
+        },
+		{
+			"Text": "All else being equal, which method would a company prefer to use when acquiring another company?",
+			"CorrectAnswer": "Cash",
+			"AnswerB": "Stock",
+			"AnswerC": "Debt",
+			"AnswerD": "A balanced mix of them",
+			"Type": "theory",
+			"XPValue": 10,
+			"Topic": "Investment banking and finance",
+            "Explanation": "Cash is cheaper than debt as interest rates on cash are lower. With respect t stock, we also know that cost of equity is almost always more expensive than cost of debt. It is also less risky, because the buyer’s share price may change dramatically once the acquisition is announced.]"
+        },
+		{
+			"Text": "If you had to assess how much debt a company could raise for an acquisition, what would you take into account?",
+			"CorrectAnswer": "The combined last twelve month EBITDA of the company multiplied by the median of the Debt to EBITDA ratio of the set of comparables. (",
+			"AnswerB": "The combined last twelve month EBITDA of the company multiplied by the average Debt to EBITDA ratio of the set of comparables.",
+			"AnswerC": "The average Debt to EBITDA ratio of the set of comparables.",
+			"AnswerD": "The median of the Debt to EBITDA ratio of the set of comparables.",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance"                    
+        },
+		{
+			"Text": "You are targeting a firm for an acquisition and you have to make sure your company is offering a price that will satisfy shareholders. What’s the premium you are generally going to offer?",
+			"CorrectAnswer": "15-30% more than the company’s current share price ",
+			"AnswerB": "10-20% more than the company’s current share price",
+			"AnswerC": "5-15% more than the company’s current share price",
+			"AnswerD": "25-40% more than the company’s current share price",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance"                    
+        },
+		{
+			"Text": "The company you are advising is acquiring Cantstop, a startup in the fintech industry which is recording staggering growth. You decide to offer additional $8 ml in 2 years in case they can hit $70 ml revenue by then. What are you techinically offering?",
+			"CorrectAnswer": "An earnout",
+			"AnswerB": "An accretion",
+			"AnswerC": "A dilution",
+			"AnswerD": "A payment dilation",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance"                    
+        },
+		{
+			"Text": "The company you are advising is acquiring Cantstop, a startup in the fintech industry which is recording staggering growth. You decide to offer additional $8 ml in 2 years in case they can hit $70 ml revenue by then. What are you techinically offering?",
+			"CorrectAnswer": "An earnout",
+			"AnswerB": "An accretion",
+			"AnswerC": "A dilution",
+			"AnswerD": "A payment dilation",
+			"Type": "hands on",
+			"XPValue": 15,
+			"Topic": "Investment banking and finance"                    
+        },
+		{
+			"Text": "What kind of merger was the United Technologies-Raytheon deal?",
+			"CorrectAnswer": "An all-share merger that will create a new aerospace and defence giant ",
+			"AnswerB": "A debt and stock merger that will create a new aerospace and defence giant",
+			"AnswerC": "A debt and stock merger that will create a new consumer goods giant",
+			"AnswerD": "An all-share merger that will create a new consumer goods giant",
+			"Type": "cases",
+			"XPValue": 20,
+			"Topic": "Investment banking and finance"                    
+        },
+		{
+			"Text": "Occidental Petroleum acquiring Anadarko has been a deal which disappointed the investors mainly because:",
+			"CorrectAnswer": "Occidental’s chief executive overrated the oil and gas production growth for year 2020 ",
+			"AnswerB": "The repayment of the borrowings got for the delay is worrying the investors",
+			"AnswerC": "The cost synergies haven’t realized as planned",
+			"AnswerD": "None of the previous answers is precise enough ",
+			"Type": "cases",
+			"XPValue": 20,
+			"Topic": "Investment banking and finance",
+            "Explanation": "The slow down in the growth of oil and gas production is severe: Vicki Hollub, Occidental chief executive forecasted a 5% growth rate against the actual 2%. Moreover the debt accumulated to finance the deal puts additional pressure on Occidental petroleum’s management"                    
+        }
+	]
+}

@@ -434,11 +434,11 @@ eventRequest.on('challengeSpecificUser', function (req, res) {
 eventRequest.on('challengeRejected', function (req, res) {
     try {
         pm.deleteChallenge(req.challengeID, (err, result) => {
-            if (err) throw err;
+            pm.deleteChallengeUserStatus(req.SenderProposal_ID, req.challengeID, (err, result) => {
+                if (err) throw err;
+            });
         });
-        pm.deleteChallengeUserStatus(req.SenderProposal_ID, req.challengeID, (err, result) => {
-            if (err) throw err;
-        });
+        
         var notification = {
             notificationType: "challengeRejected",
             ReceiverProposal_ID: req.ReceiverProposal_ID

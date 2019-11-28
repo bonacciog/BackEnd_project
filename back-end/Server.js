@@ -20,12 +20,12 @@ server.on('request', function (req, res) {
 
     req.on('end', function () {
         try {
-            console.log("[Server]: Arrived request:\n" + body)
+            console.log("["+Date(Date.now()).toString()+"] - "+"[Server]: Arrived request:\n" + body)
 	    var req = JSON.parse(body);
             c.eventRequest.emit(req.request, req, res);
         }
         catch (err) {
-            console.log("[Server]: Error in trying to serve the request: \n" + err)
+            console.log("["+Date(Date.now()).toString()+"] - "+"[Server]: Error in trying to serve the request: \n" + err)
         }
     });
 });
@@ -34,14 +34,14 @@ wss.on('connection', function (ws) {
 
     ws.on('message', function (req) {
         try {
-            console.log("[Server]: Arrived request:\n" + req)
+            console.log("["+Date(Date.now()).toString()+"] - "+"[Server]: Arrived request:\n" + req)
             var request = JSON.parse(req);
             c.eventRequest.emit(request.request, request, this);
         }
         catch (err) {
-            console.log("[Server]: Error in trying to serve the request: \n" + err)
+            console.log("["+Date(Date.now()).toString()+"] - "+"[Server]: Error in trying to serve the request: \n" + err)
         }
     });
 });
 
-console.log('[Server]: Listening on http://' + ipAddress +':'+port);
+console.log("["+Date(Date.now()).toString()+"] - "+'[Server]: Listening on http://' + ipAddress +':'+port);

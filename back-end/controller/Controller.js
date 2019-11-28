@@ -587,7 +587,7 @@ eventRequest.on('getResultByChallengeID', function (req, res) {
 
 eventRequest.on('answerToChallengeQuestion', function (req, res) {
     try {
-        pm.saveChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.TimeInSec, req.XP, (err, result) => {
+        pm.saveChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec,  (err, result) => {
             if (err) throw err;
         });
         var notification = {

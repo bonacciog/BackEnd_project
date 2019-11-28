@@ -40,7 +40,7 @@ function notificationCheck(UserID, ws) {
                     });
                 }
                 else
-                    console.log("[Controller]: There aren't notifications for user " + UserID);
+                    console.log("["+Date(Date.now()).toString()+"] - "+"[Controller]: There aren't notifications for user " + UserID);
             }
         });
         pm.deletePendingNotification(UserID, (err, result) => {
@@ -94,7 +94,7 @@ eventRequest.on('login', function (req, ws) {
                             response = JSON.stringify(user);
                            // if (!users.has(req.UserID)) {
                                 users.set(parseInt(req.UserID, 10), ws);
-                                console.log("[Controller]: WebSocket for User " + req.UserID + " saved!");
+                                console.log("["+Date(Date.now()).toString()+"] - "+"[Controller]: WebSocket for User " + req.UserID + " saved!");
                             //}
                             pm.saveUserActivity(req.UserID, 'Access', new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), (err, result) => {
                                 if (err) throw err;
@@ -506,7 +506,7 @@ eventRequest.on('closeConnection', function (req, res) {
             users.get(ID).close();
             users.delete(ID);
         }
-	console.log("[Controller]: Connessione per utente " + req.UserID + " chiusa");
+	console.log("["+Date(Date.now()).toString()+"] - "+"[Controller]: Connessione per utente " + req.UserID + " chiusa");
         res.end(JSON.stringify(allRightJSON));
         pm.saveUserActivity(req.UserID, 'Exit', new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), (err, result) => {
             if (err) throw err;

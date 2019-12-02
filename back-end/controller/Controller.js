@@ -6,6 +6,8 @@ const questionClass = require('../model/ChallengeQuestion');
 const challengeClass = require('../model/Challenge');
 const EventEmitter = require('events').EventEmitter;
 const extractionQuestionsFactory = require('./RandomQuestionAlgorithmFactory');
+const challengeResultClass = require('../model/ChallengeResult');
+
 
 
 const users = new Map();
@@ -40,7 +42,7 @@ function notificationCheck(UserID, ws) {
                     });
                 }
                 else
-                    console.log("["+Date(Date.now()).toString()+"] - "+"[Controller]: There aren't notifications for user " + UserID);
+                    console.log("[" + Date(Date.now()).toString() + "] - " + "[Controller]: There aren't notifications for user " + UserID);
             }
         });
         pm.deletePendingNotification(UserID, (err, result) => {
@@ -92,9 +94,9 @@ eventRequest.on('login', function (req, ws) {
                         }
                         else {
                             response = JSON.stringify(user);
-                           // if (!users.has(req.UserID)) {
-                                users.set(parseInt(req.UserID, 10), ws);
-                                console.log("["+Date(Date.now()).toString()+"] - "+"[Controller]: WebSocket for User " + req.UserID + " saved!");
+                            // if (!users.has(req.UserID)) {
+                            users.set(parseInt(req.UserID, 10), ws);
+                            console.log("[" + Date(Date.now()).toString() + "] - " + "[Controller]: WebSocket for User " + req.UserID + " saved!");
                             //}
                             pm.saveUserActivity(req.UserID, 'Access', new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), (err, result) => {
                                 if (err) throw err;
@@ -294,44 +296,6 @@ eventRequest.on('saveChallengeQuestion', function (req, res) {
     }
 });
 
-/* eventRequest.on('deleteChallengeQuestion', function (req, res) {
-    try {
-        pm.deleteChallengeQuestion(req.QuestionID, (err, result) => {
-            if (err) throw err;
-        });
-        res.end();
-    } catch (err) {
-        errorJSON.error = err.message;
-        response = JSON.stringify(errorJSON);
-        res.end(response);
-    }
-}); */
-
-/* eventRequest.on('savePoints', function (req, res) {
-    try {
-        pm.saveAccumulatedPoints(req.UserID, req.TopicID, req.XP, (err, result) => {
-            if (err) throw err;
-        });;
-        res.end();
-    } catch (err) {
-        errorJSON.error = err.message;
-        response = JSON.stringify(errorJSON);
-        res.end(response);
-    }
-}); */
-
-/* eventRequest.on('deletePoints', function (req, res) {
-    try {
-        pm.deleteAccumulatedPoints(req.UserID, req.TopicID, (err, result) => {
-            if (err) throw err;
-        });
-        res.end();
-    } catch (err) {
-        errorJSON.error = err.message;
-        response = JSON.stringify(errorJSON);
-        res.end(response);
-    }
-}); */
 
 eventRequest.on('getLeaderBoard', function (req, res) {
     try {
@@ -365,7 +329,7 @@ eventRequest.on('chooseRandomOpponent', function (req, res) {
                         pm.saveChallengeUserStatus(req.UserID, id, challengeClass.ChallengeStatus.WaitingforAcceptance, (err, result) => {
                             if (err) throw err;
                         });
-                       var notification = {
+                        var notification = {
                             notificationType: "challengeProposal",
                             TopicID: req.TopicID,
                             SenderProposal_ID: req.UserID,
@@ -393,37 +357,18 @@ eventRequest.on('chooseRandomOpponent', function (req, res) {
 
 eventRequest.on('challengeSpecificUser', function (req, res) {
     try {
-        pm.isPlaying(req.SenderProposal_ID, function (err, result) {
-            if (err == null) {
-                if (result == null) {
-                    pm.saveChallenge(new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.WaitingforAcceptance), function (err, id) {
-                        pm.saveChallengeUserStatus(req.SenderProposal_ID, id, challengeClass.ChallengeStatus.WaitingforAcceptance, (err, result) => {
-                            if (err) throw err;
-                        });
-                        var notification = {
-                            notificationType: "challengeProposal",
-                            TopicID: req.TopicID,
-                            SenderProposal_ID: req.SenderProposal_ID,
-                            ReceiverProposal_ID: req.ReceiverProposal_ID,
-                            challengeID: id
-                        };
-                        sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(notification));
-                        res.end(JSON.stringify(notification));
-                    });
-
-                }
-                else {
-                    errorJSON.error = "Your rival is currently busy on another challenge. You have been lined up for the fight.";
-                    response = JSON.stringify(errorJSON);
-                    res.end(response);
-                }
-            }
-            else {
-                errorJSON.error = 'Input error or interaction with the database';
-                response = JSON.stringify(errorJSON);
-                res.end(response);
-            }
+        pm.saveChallenge(new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.WaitingforAcceptance), function (err, id) {
+            var notification = {
+                notificationType: "challengeProposal",
+                TopicID: req.TopicID,
+                SenderProposal_ID: req.SenderProposal_ID,
+                ReceiverProposal_ID: req.ReceiverProposal_ID,
+                challengeID: id
+            };
+            sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(notification));
+            res.end(JSON.stringify(notification));
         });
+
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
@@ -434,11 +379,8 @@ eventRequest.on('challengeSpecificUser', function (req, res) {
 eventRequest.on('challengeRejected', function (req, res) {
     try {
         pm.deleteChallenge(req.challengeID, (err, result) => {
-            pm.deleteChallengeUserStatus(req.SenderProposal_ID, req.challengeID, (err, result) => {
-                if (err) throw err;
-            });
+            if (err) throw err;
         });
-        
         var notification = {
             notificationType: "challengeRejected",
             ReceiverProposal_ID: req.ReceiverProposal_ID
@@ -460,13 +402,10 @@ eventRequest.on('challengeAccepted', function (req, res) {
     try {
         var challenge = new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.Playing);
         challenge.setID = req.challengeID;
-        pm.updateChallengeUserStatus(req.SenderProposal_ID, req.challengeID, challengeClass.ChallengeStatus.Playing, (err, result) => {
+        pm.updateChallenge(challenge, challengeClass.ChallengeStatus.Playing, (err, result) => {
             if (err) throw err;
         });
-        pm.saveChallengeUserStatus(req.ReceiverProposal_ID, req.challengeID, challengeClass.ChallengeStatus.Playing, (err, result) => {
-            if (err) throw err;
-        });
-        extractionQuestionsFactory.getRandomQuestionAlgorithm(req.TopicID).sendRandomQuestions(req,res);
+        extractionQuestionsFactory.getRandomQuestionAlgorithm(req.TopicID).saveAndSendRandomQuestions(req, res);
 
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
@@ -500,13 +439,13 @@ eventRequest.on('getUserByID', function (req, res) {
 });
 
 eventRequest.on('closeConnection', function (req, res) {
-    try {        
-	var ID = parseInt(req.UserID, 10);
-	if (users.has(ID)){
+    try {
+        var ID = parseInt(req.UserID, 10);
+        if (users.has(ID)) {
             users.get(ID).close();
             users.delete(ID);
         }
-	console.log("["+Date(Date.now()).toString()+"] - "+"[Controller]: Connessione per utente " + req.UserID + " chiusa");
+        console.log("[" + Date(Date.now()).toString() + "] - " + "[Controller]: Connessione per utente " + req.UserID + " chiusa");
         res.end(JSON.stringify(allRightJSON));
         pm.saveUserActivity(req.UserID, 'Exit', new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), (err, result) => {
             if (err) throw err;
@@ -541,16 +480,9 @@ eventRequest.on('endChallenge', function (req, res) {
     try {
         var challenge = new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.Finished);
         challenge.setID = req.challengeID;
-        pm.updateChallengeUserStatus(req.SenderProposal_ID, req.challengeID, challengeClass.ChallengeStatus.Finished, (err, result) => {
-            if (err) throw err;
-        });
-        pm.updateChallengeUserStatus(req.ReceiverProposal_ID, req.challengeID, challengeClass.ChallengeStatus.Finished, (err, result) => {
-            if (err) throw err;
-        });
         pm.updateChallenge(challenge, challengeClass.ChallengeStatus.Finished, (err, result) => {
             if (err) throw err;
         });
-
         res.end(JSON.stringify(allRightJSON));
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
@@ -587,7 +519,7 @@ eventRequest.on('getResultByChallengeID', function (req, res) {
 
 eventRequest.on('answerToChallengeQuestion', function (req, res) {
     try {
-        pm.saveChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec,  (err, result) => {
+        pm.updateChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered), (err, result) => {
             if (err) throw err;
         });
         var notification = {
@@ -597,13 +529,10 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
             ChallengeID: req.ChallengeID,
             XP: req.XP,
             TopicID: req.TopicID,
-            TimeInSec : req.TimeInSec
+            TimeInSec: req.TimeInSec,
+            RoundNumber: req.RoundNumber
         };
-        if (req.RoundNumber == 10){
-            pm.updateChallengeUserStatus(req.UserID, req.ChallengeID, challengeClass.ChallengeStatus.Finished, (err, result) => {
-                if (err) throw err;
-            });
-        }
+
         sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
         res.end(JSON.stringify(allRightJSON));
     } catch (err) {
@@ -613,6 +542,27 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
     }
 });
 
+eventRequest.on('getWaitingChallengeByID', function (req, res) {
+    try {
+        pm.getWaitingChallenge(req.UserID, (err, result)=>{
+            if (err == null) {
+                if (result == null) {
+                    errorJSON.error = "There aren't questions in DB";
+                    response = JSON.stringify(errorJSON);
+                    res.end(response);
+                }
+                else {
+                    response = JSON.stringify(result);
+                    res.end(response);
+                }
+            }
+        });
+    } catch (err) {
+        errorJSON.error = 'Input error or interaction with the database';
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
 exports.eventRequest = eventRequest;
 exports.sendIfPossibleOrSaveNotification = sendIfPossibleOrSaveNotification;
-exports.Users = users;

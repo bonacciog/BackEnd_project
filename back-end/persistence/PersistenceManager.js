@@ -9,6 +9,7 @@ const messageClass = require('../model/Message');
 const topicClass = require('../model/Topic');
 const questionClass = require('../model/ChallengeQuestion');
 const challengeClass = require('../model/Challenge');
+const challengeResultClass = require('../model/ChallengeResult');
 
 var dbParam = {
   host: "localhost",
@@ -28,14 +29,14 @@ function saveUser(user, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "insert into 1001db.Users(Firstname, Lastname, University) values	('" +
       user.getFirstname + "','" + user.getLastname + "','" + user.getUniversity + "')";
 
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);;
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: New User with ID = " + result.insertId + " inserted.");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: New User with ID = " + result.insertId + " inserted.");
       var id = result.insertId;
       callback(err, id);
 
@@ -56,13 +57,13 @@ function deleteUser(ID, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
 
     var sql = "delete from 1001db.Users where ID = '" + ID + "'";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: A User with ID = " + ID + " deleted.");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A User with ID = " + ID + " deleted.");
 
     });
     connection.end();
@@ -80,7 +81,7 @@ function getUser(ID, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "select * from 1001db.Users where  ID = " + ID;
 
@@ -110,7 +111,7 @@ function updateUser(user, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
 
     var sql = "UPDATE 1001DB.Users SET Firstname = '" + user.getFirstname + "'," +
@@ -119,7 +120,7 @@ function updateUser(user, callback) {
       " WHERE ID = " + user.getID;
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: 1 record updated");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: 1 record updated");
     });
     connection.end();
   } catch (err) {
@@ -135,7 +136,7 @@ function saveMessage(message, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
 
     var sql = "insert into 1001db.Messages(SenderUser_ID, ReceiverUser_ID, Text, DateTime)" +
@@ -143,7 +144,7 @@ function saveMessage(message, callback) {
 
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: New message with ID = " + result.insertId + " inserted");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: New message with ID = " + result.insertId + " inserted");
     });
 
     connection.end();
@@ -160,13 +161,13 @@ function deleteMessage(message, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
 
     var sql = "delete from 1001db.Messages where SenderUser_ID = " + message.getSenderUserID + " and ReceiverUser_ID = " + message.getReceiverUserID + " and DateTime = '" + message.getDateTime + "'";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: A message deleted");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A message deleted");
     });
 
 
@@ -191,7 +192,7 @@ function getMessages(SenderUserID, ReceiverUserID, limit, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);;
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "select * " +
       "from 1001db.Messages" +
@@ -235,7 +236,7 @@ function getAllMessages(ID_1, ID_2, limit, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "select * " +
       "from 1001db.Messages" +
@@ -266,7 +267,7 @@ function getKey(callback) {
   var connection = mysql.createConnection(dbParam);
   connection.connect(function (err) {
     if (err) callback(err, null);
-    console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+    console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
   });
   var sql = "select * " +
     "from 1001db.ExecutionTable"
@@ -293,7 +294,7 @@ function saveTopic(topic, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
 
     var sql = "insert into 1001db.Topics(TopicName)" +
@@ -301,7 +302,7 @@ function saveTopic(topic, callback) {
 
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: New topic with ID = " + result.insertId + " inserted");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: New topic with ID = " + result.insertId + " inserted");
     });
 
     connection.end();
@@ -317,13 +318,13 @@ function deleteTopic(topicName, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "delete from 1001db.Topics " +
       "where ID in (select ID from (SELECT * FROM 1001db.Topics) as T2 where TopicName = '" + topicName + "')";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: 1 record deleted");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: 1 record deleted");
     });
 
     connection.end();
@@ -337,7 +338,7 @@ function getAllTopics(callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "select * " +
       "from 1001db.Topics";
@@ -366,10 +367,10 @@ function getTopicID(topic, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "select ID " +
-      "from 1001db.Topics where TopicName = '" + topic +"'";
+      "from 1001db.Topics where TopicName = '" + topic + "'";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       else {
@@ -395,20 +396,20 @@ async function saveChallengeQuestion(question, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     if (question.getExplanation === undefined)
       var sql = "insert into 1001db.ChallengeQuestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID)\n" +
         " values ('" + question.getQuestionText + "','" + question.getAnswer_A + "','" + question.getAnswer_B + "','" + question.getAnswer_C + "','" + question.getAnswer_D + "'," + question.getXPValue + "," + question.getTopic_ID + ")";
     else
       var sql = "insert into 1001db.ChallengeQuestions(QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Explanation)\n" +
-        " values ('" + question.getQuestionText + "','" + question.getAnswer_A + "','" + question.getAnswer_B + "','" + question.getAnswer_C + "','" + question.getAnswer_D + "'," + question.getXPValue + "," + question.getTopic_ID + ",'" + question.getExplanation + "')";    
-    
+        " values ('" + question.getQuestionText + "','" + question.getAnswer_A + "','" + question.getAnswer_B + "','" + question.getAnswer_C + "','" + question.getAnswer_D + "'," + question.getXPValue + "," + question.getTopic_ID + ",'" + question.getExplanation + "')";
+
     connection.query(sql, function (err, result) {
-    if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: New question with ID = " + result.insertId + " inserted ");
+      if (err) callback(err, null);
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: New question with ID = " + result.insertId + " inserted ");
       var id = result.insertId;
-     callback(null, id);
+      callback(null, id);
     });
 
     connection.end();
@@ -425,12 +426,12 @@ function deleteChallengeQuestion(questionID, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "delete from 1001db.ChallengeQuestions where ID = " + questionID;
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: A question deleted");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A question deleted");
     });
 
     connection.end();
@@ -448,7 +449,7 @@ function getLeaderBoard(callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "select U.ID, Firstname, Lastname, University, sum(XP) AS SUMXPs\n" +
       "from 1001db.Users U LEFT JOIN 1001db.ChallengeResults P ON (U.ID=P.PlayerID)\n" +
@@ -495,7 +496,7 @@ function getRivals(ID, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "select U.ID, Firstname, Lastname, University, sum(XP) AS SUMXPs\n" +
       "from 1001db.Users U LEFT JOIN 1001db.ChallengeResults P ON (U.ID=P.PlayerID)\n" +
@@ -543,11 +544,11 @@ function getRandomPlayer(ID, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "select ID\n" +
       "from 1001db.Users\n" +
-      "where ID not in (select UserID from 1001db.ChallengesUsersStatus where Status in ('Waiting', 'Playing'))\n" +
+      "where ID not in (select UserID from 1001db.ChallengesUsersStatus where Status in ('Playing'))\n" +
       "and ID <> " + ID + "\n" +
       "order by RAND()\n" +
       "limit 1\n"
@@ -578,13 +579,13 @@ function saveChallenge(challenge, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "insert into 1001db.Challenge(SenderProposal_ID, ReceiverProposal_ID, Status)" +
       " values(" + challenge.getSender + "," + challenge.getReceiver + ",'" + challenge.getStatus + "')";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: New Challenge with ID = " + result.insertId + " inserted.");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: New Challenge with ID = " + result.insertId + " inserted.");
       var id = result.insertId;
       callback(null, id);
 
@@ -602,14 +603,14 @@ function updateChallenge(challenge, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "update 1001db.Challenge" +
       " Set Status = '" + challenge.getStatus + "' where ID = " + challenge.getID;
 
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);;
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: A Challenge updated.");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A Challenge updated.");
 
     });
     connection.end();
@@ -618,7 +619,7 @@ function updateChallenge(challenge, callback) {
   }
 }
 
-function isPlaying(UserID, callback) {
+/* function isPlaying(UserID, callback) {
   try {
     if (UserID === undefined)
       callback(new ParamError('Incorrect Parameter!'), null);
@@ -627,7 +628,7 @@ function isPlaying(UserID, callback) {
       if (err) callback(err, null);
       console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
     });
-    var sql = "select * from 1001db.ChallengesUsersStatus where (Status = 'Playing' or Status = 'Waiting') and UserID = " + UserID;
+    var sql = "select * from 1001db.ChallengesUsersStatus where Status = 'Playing' and UserID = " + UserID;
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       else {
@@ -641,7 +642,7 @@ function isPlaying(UserID, callback) {
   } catch (err) {
     callback(err, null);
   }
-}
+} */
 
 
 function deleteChallenge(ID, callback) {
@@ -651,12 +652,12 @@ function deleteChallenge(ID, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "delete from 1001db.Challenge where  ID = " + ID;
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: A challenge with ID = " + ID + " deleted");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A challenge with ID = " + ID + " deleted");
     });
 
     connection.end();
@@ -672,7 +673,7 @@ function getRandomQuestions(topicID, type, numberRows, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "select C.ID, QuestionText, Answer_A, Answer_B, Answer_C, Answer_D, XPValue, Topics_ID, Explanation, Type, TimeInSec\n" +
       "from 1001db.ChallengeQuestions C, 1001db.QuestionTypeInformation Q, 1001db.TypeInformations T\n" +
@@ -712,13 +713,13 @@ function addQuestionTypeInformations(questionID, typeID, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "insert into 1001db.QuestionTypeInformation(ChallengeQuestions_ID, TypeInformations_ID)\n" +
       "values(" + questionID + "," + typeID + ")";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: A QuestionTypeInformation inserted");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A QuestionTypeInformation inserted");
     });
 
     connection.end();
@@ -736,12 +737,12 @@ function saveTypeInformations(type, timeInSec, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "insert into 1001db.TypeInformations(Type, TimeInSec) values('" + type + "'," + timeInSec + ")";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: A Type inserted");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A Type inserted");
     });
 
     connection.end();
@@ -758,12 +759,12 @@ function deleteTypeInformations(ID, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);;
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "delete from 1001db.TypeInformations where  ID = " + ID;
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: A Type deleted");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A Type deleted");
     });
 
     connection.end();
@@ -780,7 +781,7 @@ function getTypeInformationsID(type, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "select ID\n" +
       "from 1001db.TypeInformations\n" +
@@ -812,14 +813,14 @@ function savePendingNotification(UserID, NotificationJSON, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
 
     var sql = "insert into 1001db.PendingNotifications(UserID, NotificationJSON)\n" +
       "values (" + UserID + ",'" + NotificationJSON + "')";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: A pending notification for User " + UserID + " inserted");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A pending notification for User " + UserID + " inserted");
     });
 
     connection.end();
@@ -835,12 +836,12 @@ function deletePendingNotification(ID, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);;
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "delete from 1001db.PendingNotifications where  UserID = " + ID;
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: A pending notification deleted");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A pending notification deleted");
     });
 
     connection.end();
@@ -857,7 +858,7 @@ function getPendingNotifications(UserID, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "select *\n" +
       "from 1001db.PendingNotifications\n" +
@@ -888,14 +889,14 @@ function saveUserActivity(UserID, Type, DateTime, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
 
     var sql = "insert into 1001db.UsersActivities(UserID, Type, DateTime)\n" +
       "values (" + UserID + ",'" + Type + "','" + DateTime + "')";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: An activities for User " + UserID + " inserted");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: An activities for User " + UserID + " inserted");
     });
 
     connection.end();
@@ -912,7 +913,7 @@ function getChallengeResult(ChallengeID, callback) {
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
 
     var sql = "select * from 1001db.ChallengeResults";
@@ -921,13 +922,8 @@ function getChallengeResult(ChallengeID, callback) {
       var challengeresult;
       Object.keys(result).forEach(function (key) {
         var row = result[key];
-        challengeresult = {
-          PlayerID: row.PlayerID,
-          QuestionID: row.QuestionID,
-          ChallengeID: row.ChallengeID,
-          XP: row.XP,
-          TimeInSec: row.TimeInSec
-        }
+        challengeresult = new challengeResultClass.ChallengeResult(row.PlayerID, row.QuestionID, row.ChallengeID, row.XP, row.TimeInSec, row.Status)
+        challengeresult.setID = row.ID;
       });
       callback(null, challengeresult);
     });
@@ -938,21 +934,21 @@ function getChallengeResult(ChallengeID, callback) {
   }
 }
 
-function saveChallengeResult(UserID, QuestionID, ChallengeID, XP, TimeInSec, callback) {
+function saveChallengeResult(challengeResult, callback) {
   try {
-    if (UserID === undefined || QuestionID === undefined || ChallengeID === undefined)
+    if (!(challengeResult instanceof challengeResultClass.ChallengeResult))
       callback(new ParamError('Incorrect Parameter!'), null);
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
 
-    var sql = "insert into 1001db.ChallengeResults(PlayerID, QuestionID, ChallengeID, XP, TimeInSec)\n" +
-      "values (" + UserID + "," + QuestionID + "," + ChallengeID + "," + XP + "," + TimeInSec +")";
+    var sql = "insert into 1001db.ChallengeResults(PlayerID, QuestionID, ChallengeID, XP, TimeInSec, Status)\n" +
+      "values (" + challengeResult.getPlayerID + "," + challengeResult.getQuestionID + "," + challengeResult.getChallengeID + "," + challengeResult.getXP + "," + challengeResult.getTimeInSec + ",'" + challengeResult.getStatus + "')";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: A result for User " + UserID + " inserted");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A result for User " + challengeResult.getPlayerID + " inserted");
     });
 
     connection.end();
@@ -961,7 +957,63 @@ function saveChallengeResult(UserID, QuestionID, ChallengeID, XP, TimeInSec, cal
   }
 }
 
-function saveChallengeUserStatus(UserID,ChallengeID, Status, callback) {
+function updateChallengeResult(challengeResult, callback) {
+  try {
+    if (!(challengeResult instanceof challengeResultClass.ChallengeResult))
+      callback(new ParamError('Incorrect Parameter!'), null);
+    var connection = mysql.createConnection(dbParam);
+    connection.connect(function (err) {
+      if (err) callback(err, null);
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
+    });
+
+    var sql = "update 1001db.ChallengeResults\n" +
+      "set Status = '" + challengeResult.getStatus + "',\n" +
+      " TimeInSec = " + challengeResult.getTimeInSec + ",\n" +
+      " XP = " + challengeResult.getXP + "\n" +
+      "where PlayerID = " + challengeResult.getPlayerID + "\n" +
+      "and QuestionID = " + challengeResult.getQuestionID + "\n" +
+      "and ChallengeID = " + challengeResult.getChallengeID;
+    connection.query(sql, function (err, result) {
+      if (err) callback(err, null);
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A result for User " + challengeResult.getPlayerID + " updated");
+    });
+
+    connection.end();
+  } catch (err) {
+    callback(err, null);
+  }
+}
+
+function getWaitingChallenge(UserID, callback) {
+  try {
+  if (UserID === undefined)
+    callback(new ParamError('Incorrect Parameter!'), null);
+  var connection = mysql.createConnection(dbParam);
+  connection.connect(function (err) {
+    if (err) callback(err, null);
+    console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
+  });
+  var sql = "select * from 1001db.Challenge where SenderProposal_ID = "+ UserID+" and Status = 'Waiting'";
+  connection.query(sql, function (err, result) {
+    if (err) callback(err, null);
+    var challenge = new Array();
+    var challengeDim = 0;
+    Object.keys(result).forEach(function (key) {
+      var row = result[key];
+      challenge[challengeDim] = new challengeClass.Challenge(row.SenderProposal_ID, row.ReceiverProposal_ID, row.Status);
+      challenge[challengeDim].setID = row.ID;
+      challengeDim++;
+    });
+    callback(null, challenge);
+  });
+
+  connection.end();
+} catch (err) {
+  callback(err, null);
+}
+}
+/* function saveChallengeUserStatus(UserID,ChallengeID, Status, callback) {
   try {
     if (UserID === undefined || ChallengeID === undefined)
       callback(new ParamError('Incorrect Parameter!'), null);
@@ -1024,7 +1076,7 @@ function updateChallengeUserStatus(UserID, ChallengeID, Status, callback) {
   } catch (err) {
     callback(err, null);
   }
-}
+} */
 
 exports.getUser = getUser;
 exports.updateUser = updateUser;
@@ -1043,7 +1095,7 @@ exports.getKey = getKey;
 exports.getLeaderBoard = getLeaderBoard;
 exports.getRandomPlayer = getRandomPlayer;
 exports.saveChallenge = saveChallenge;
-exports.isPlaying = isPlaying;
+/* exports.isPlaying = isPlaying; */
 exports.deleteChallenge = deleteChallenge;
 exports.getRandomQuestions = getRandomQuestions;
 exports.saveTypeInformations = saveTypeInformations;
@@ -1058,7 +1110,9 @@ exports.saveUserActivity = saveUserActivity;
 exports.saveChallengeResult = saveChallengeResult;
 exports.getTopicID = getTopicID;
 exports.updateChallenge = updateChallenge;
-exports.getChallengeResult = getChallengeResult;
+exports.getChallengeResult = getChallengeResult;/* 
 exports.saveChallengeUserStatus = saveChallengeUserStatus;
 exports.deleteChallengeUserStatus = deleteChallengeUserStatus;
-exports.updateChallengeUserStatus = updateChallengeUserStatus;
+exports.updateChallengeUserStatus = updateChallengeUserStatus; */
+exports.updateChallengeResult = updateChallengeResult;
+exports.getWaitingChallenge=getWaitingChallenge;

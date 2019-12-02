@@ -140,6 +140,7 @@ CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeResults` (
   `ChallengeID` INT NOT NULL,
   `XP` INT NOT NULL,
   `TimeInSec` INT NOT NULL,
+  `Status` ENUM('NotAnswered', 'Answered') NULL,
   PRIMARY KEY (`ID`),
   INDEX `ID_User_idx` (`PlayerID` ASC),
   INDEX `ID_Question_idx` (`QuestionID` ASC),
@@ -158,23 +159,6 @@ CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeResults` (
     FOREIGN KEY (`ChallengeID`)
     REFERENCES `1001db`.`Challenge` (`ID`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE);
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
     
-CREATE TABLE IF NOT EXISTS `1001db`.`ChallengesUsersStatus` (
-  `UserID` INT NOT NULL,
-  `ChallengeID` INT NOT NULL,
-  `Status` ENUM('Waiting', 'Playing', 'Finished') NOT NULL,
-  INDEX `UserID_idx` (`UserID` ASC),
-  INDEX `ChallengeID_idx` (`ChallengeID` ASC),
-  PRIMARY KEY (`UserID`, `ChallengeID`),
-  CONSTRAINT `User_ID`
-    FOREIGN KEY (`UserID`)
-    REFERENCES `1001db`.`Users` (`ID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `Challenge_ID`
-    FOREIGN KEY (`ChallengeID`)
-    REFERENCES `1001db`.`Challenge` (`ID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE);
--- ENGINE = InnoDB

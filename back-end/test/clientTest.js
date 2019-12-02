@@ -1,22 +1,25 @@
 var http = require('http');
 
-
+/*  var postData = JSON.stringify({ 
+    request : "getWaitingChallengeByID", 
+    UserID: 1
+});  */
 
 /* var postData = JSON.stringify({ 
     request : "closeConnection", 
     UserID: 2
 }); */
-/* var postData = JSON.stringify({
+var postData = JSON.stringify({
     request: 'answerToChallengeQuestion',
-    UserID : 2,
+    UserID : 1,
     QuestionID : 1,
     ChallengeID : 3,
-    OpponentID : 1,
+    OpponentID : 3,
     XP : 10,
     TopicID : 1,
     TimeInSec : 3,
-    RoundNumber: 10
-}); */
+    RoundNumber: 1
+});
 /* var postData = JSON.stringify({
     request: 'getResultByChallengeID',
     challengeID: 1
@@ -27,19 +30,19 @@ var http = require('http');
     SenderProposal_ID : 1,
     challengeID: 3
 }) */
-var postData = JSON.stringify({
+/* var postData = JSON.stringify({
     request : "challengeAccepted",
-    ReceiverProposal_ID : 2,
-    SenderProposal_ID : 1,
-    TopicID : 2,
-    challengeID : 1
-});
+    ReceiverProposal_ID : 1,
+    SenderProposal_ID : 3,
+    TopicID : 1,
+    challengeID : 3
+}); */
 
 /* var postData = JSON.stringify({ 
     request : "challengeSpecificUser", 
-    ReceiverProposal_ID :2,
-    SenderProposal_ID : 1,
-    TopicID : 2
+    ReceiverProposal_ID :3,
+    SenderProposal_ID : 5,
+    TopicID : 1
 }); */
 /* var postData = JSON.stringify({ 
     request : "chooseRandomOpponent", 
@@ -48,7 +51,7 @@ var postData = JSON.stringify({
 }); */
 /* var postData = JSON.stringify({
     request: 'getAllRivals',
-    UserID: 5
+    UserID: 1
 });  */
 
 /* var postData = JSON.stringify({ 

@@ -21,7 +21,7 @@ var allRightJSON = {
     response: "It's all right!"
 }
 var response;
-const getProgrammingToolsRandomQuestionsAndSend = function (req, res) {
+const getSaveAndSendProgrammingToolsRandomQuestions = function (req, res) {
     var typesIndex = 0;
     pm.getRandomQuestions(TopicID, types[typesIndex].typeName, types[typesIndex].questionsNumber, function (err, result1) {
         typesIndex++;
@@ -67,4 +67,4 @@ const getProgrammingToolsRandomQuestionsAndSend = function (req, res) {
     });
 };
 
-exports.sendRandomQuestions = getProgrammingToolsRandomQuestionsAndSend;
+exports.saveAndSendRandomQuestions = getSaveAndSendProgrammingToolsRandomQuestions;

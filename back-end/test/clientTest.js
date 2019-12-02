@@ -1,5 +1,10 @@
 var http = require('http');
 
+
+ var postData = JSON.stringify({ 
+    request : "getAllChallengesResults", 
+    UserID: 1
+}); 
 /*  var postData = JSON.stringify({ 
     request : "getWaitingChallengeByID", 
     UserID: 1
@@ -9,7 +14,7 @@ var http = require('http');
     request : "closeConnection", 
     UserID: 2
 }); */
-var postData = JSON.stringify({
+/* var postData = JSON.stringify({
     request: 'answerToChallengeQuestion',
     UserID : 1,
     QuestionID : 1,
@@ -19,7 +24,7 @@ var postData = JSON.stringify({
     TopicID : 1,
     TimeInSec : 3,
     RoundNumber: 1
-});
+}); */
 /* var postData = JSON.stringify({
     request: 'getResultByChallengeID',
     challengeID: 1

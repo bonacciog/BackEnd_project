@@ -987,31 +987,85 @@ function updateChallengeResult(challengeResult, callback) {
 
 function getWaitingChallenge(UserID, callback) {
   try {
-  if (UserID === undefined)
-    callback(new ParamError('Incorrect Parameter!'), null);
-  var connection = mysql.createConnection(dbParam);
-  connection.connect(function (err) {
-    if (err) callback(err, null);
-    console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
-  });
-  var sql = "select * from 1001db.Challenge where SenderProposal_ID = "+ UserID+" and Status = 'Waiting'";
-  connection.query(sql, function (err, result) {
-    if (err) callback(err, null);
-    var challenge = new Array();
-    var challengeDim = 0;
-    Object.keys(result).forEach(function (key) {
-      var row = result[key];
-      challenge[challengeDim] = new challengeClass.Challenge(row.SenderProposal_ID, row.ReceiverProposal_ID, row.Status);
-      challenge[challengeDim].setID = row.ID;
-      challengeDim++;
+    if (UserID === undefined)
+      callback(new ParamError('Incorrect Parameter!'), null);
+    var connection = mysql.createConnection(dbParam);
+    connection.connect(function (err) {
+      if (err) callback(err, null);
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
-    callback(null, challenge);
-  });
+    var sql = "select * from 1001db.Challenge where SenderProposal_ID = " + UserID + " and Status = 'Waiting'";
+    connection.query(sql, function (err, result) {
+      if (err) callback(err, null);
+      var challenge = new Array();
+      var challengeDim = 0;
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        challenge[challengeDim] = new challengeClass.Challenge(row.SenderProposal_ID, row.ReceiverProposal_ID, row.Status);
+        challenge[challengeDim].setID = row.ID;
+        challengeDim++;
+      });
+      callback(null, challenge);
+    });
 
-  connection.end();
-} catch (err) {
-  callback(err, null);
+    connection.end();
+  } catch (err) {
+    callback(err, null);
+  }
 }
+
+function getAllChallengesResults(UserID, callback){
+  try {
+    if (UserID === undefined)
+      callback(new ParamError('Incorrect Parameter!'), null);
+    var connection = mysql.createConnection(dbParam);
+    connection.connect(function (err) {
+      if (err) callback(err, null);
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
+    });
+    var sql = "select  C.ID, TopicName, C.ReceiverProposal_ID as Opponent, sum(CR.XP) as MYXP, IF(sum(CR.XP)>sum(OpponentTable.OpponentXPs),'true','false') as Win\n"+
+    " from 1001db.Challenge C, 1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ, 1001db.Topics T, (\n"+
+    "select ReceiverProposal_ID, XP as OpponentXPs, ChallengeID\n"+
+      " from 1001db.Challenge C, 1001db.ChallengeResults CR\n"+
+        " where C.ID = CR.ChallengeID\n"+
+        " group by ReceiverProposal_ID\n"+
+        ") as OpponentTable\n"+
+    "where C.SenderProposal_ID = "+ UserID +"\n"+
+    "and CQ.ID = CR.QuestionID\n"+
+    " and T.ID = CQ.Topics_ID\n"+
+    " and OpponentTable.ChallengeID = C.ID\n"+
+    "and OpponentTable.ReceiverProposal_ID = C.ReceiverProposal_ID\n"+
+    "UNION\n"+
+    "select  C.ID, TopicName, C.SenderProposal_ID, sum(CR.XP) as MYXP, IF(sum(CR.XP)>sum(OpponentTable.OpponentXPs),'true','false') as Win\n"+
+    "from 1001db.Challenge C, 1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ, 1001db.Topics T, (\n"+
+    "select SenderProposal_ID, XP as OpponentXPs, ChallengeID\n"+
+      "from 1001db.Challenge C, 1001db.ChallengeResults CR\n"+
+        " where C.ID = CR.ChallengeID\n"+
+        " group by SenderProposal_ID\n"+
+        ") as OpponentTable\n"+
+    "where C.ReceiverProposal_ID = "+ UserID +"\n"+
+    "and CQ.ID = CR.QuestionID\n"+
+    "and T.ID = CQ.Topics_ID\n"+
+    "and OpponentTable.ChallengeID = C.ID\n"+
+    "and OpponentTable.SenderProposal_ID = C.SenderProposal_ID\n";
+    connection.query(sql, function (err, result) {
+      if (err) callback(err, null);
+      var challengeInfo = new Array();
+      var challengeInfoDim = 0;
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        challengeInfo[challengeInfoDim] = {
+          ID:row.ID, TopicName:row.TopicName, Opponent:row.Opponent, MYXP:row.MYXP, Win:row.Win
+        };
+        challengeInfoDim++;
+      });
+      callback(null, challengeInfo);
+    });
+
+    connection.end();
+  } catch (err) {
+    callback(err, null);
+  }
 }
 /* function saveChallengeUserStatus(UserID,ChallengeID, Status, callback) {
   try {
@@ -1115,4 +1169,5 @@ exports.saveChallengeUserStatus = saveChallengeUserStatus;
 exports.deleteChallengeUserStatus = deleteChallengeUserStatus;
 exports.updateChallengeUserStatus = updateChallengeUserStatus; */
 exports.updateChallengeResult = updateChallengeResult;
-exports.getWaitingChallenge=getWaitingChallenge;
+exports.getWaitingChallenge = getWaitingChallenge;
+exports.getAllChallengesResults = getAllChallengesResults;

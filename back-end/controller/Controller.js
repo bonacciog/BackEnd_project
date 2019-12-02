@@ -564,5 +564,27 @@ eventRequest.on('getWaitingChallengeByID', function (req, res) {
     }
 });
 
+eventRequest.on('getAllChallengesResults', function (req, res) {
+    try {
+        pm.getAllChallengesResults(req.UserID, (err, result)=>{
+            if (err == null) {
+                if (result == null) {
+                    errorJSON.error = "There aren't questions in DB";
+                    response = JSON.stringify(errorJSON);
+                    res.end(response);
+                }
+                else {
+                    response = JSON.stringify(result);
+                    res.end(response);
+                }
+            }
+        });
+    } catch (err) {
+        errorJSON.error = 'Input error or interaction with the database';
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
 exports.eventRequest = eventRequest;
 exports.sendIfPossibleOrSaveNotification = sendIfPossibleOrSaveNotification;

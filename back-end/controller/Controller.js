@@ -317,35 +317,55 @@ eventRequest.on('getLeaderBoard', function (req, res) {
 
 eventRequest.on('chooseRandomOpponent', function (req, res) {
     try {
-        pm.getRandomPlayer(req.UserID, function (err, ReceiverProposal_ID) {
+        pm.isThereASlot(req.UserID, function (err, result) {
             if (err == null) {
-                if (ReceiverProposal_ID == null) {
-                    errorJSON.error = "Incorrect parameter or there isn't free player";
-                    response = JSON.stringify(errorJSON);
-                    res.end(response);
+                if(result == null){
+                    pm.saveChallenge(new challengeClass.Challenge(req.UserID, null, challengeClass.ChallengeStatus.WaitingforAcceptance),(err, resultID) => {
+                        if(err) throw err;
+                        else if(resultID !== null && resultID !== undefined){
+                            var req_modified = {
+                                UserID : req.UserID,
+                                Topic : req.Topic,
+                                challengeID : resultID
+                            }
+                            extractionQuestionsFactory.getRandomQuestionAlgorithm(req.TopicID).saveAndSendRandomQuestions(req_modified, res);
+                        }
+                        
+                    });
+
                 }
-                else {
-                    pm.saveChallenge(new challengeClass.Challenge(req.UserID, ReceiverProposal_ID, challengeClass.ChallengeStatus.WaitingforAcceptance), function (err, id) {
-                        pm.saveChallengeUserStatus(req.UserID, id, challengeClass.ChallengeStatus.WaitingforAcceptance, (err, result) => {
-                            if (err) throw err;
-                        });
-                        var notification = {
-                            notificationType: "challengeProposal",
-                            TopicID: req.TopicID,
-                            SenderProposal_ID: req.UserID,
-                            ReceiverProposal_ID: ReceiverProposal_ID,
-                            challengeID: id
-                        };
-                        sendIfPossibleOrSaveNotification(ReceiverProposal_ID, JSON.stringify(notification));
-                        res.end(JSON.stringify(notification));
+                else{
+                    var challenge_tmp = new challengeClass.Challenge(result.SenderProposal_ID, req.UserID, challengeClass.ChallengeStatus.Playing);
+                    challenge_tmp.setID = result.ID;
+                    pm.updateChallenge(challenge_tmp, (err, result) => {
+                        if (err) throw err;
+                    });
+                    pm.getQuestionsByChallengeID(result.ID,function (err, questions) {
+                        if (err == null) {
+                            if (questions == null) {
+                                errorJSON.error = "There aren't questions in DB";
+                                response = JSON.stringify(errorJSON);
+                                res.end(response);
+                            }
+                            else {
+                                var challenge = {
+                                    notificationType: 'startChallenge',
+                                    Questions: questions
+                                }
+                                challenge.Questions.forEach((question) => {
+                                    pm.saveChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, question.getID, result.ID, 0, 0, challengeResultClass.ChallengeResultStatus.NotAnswered), (err, result) => {
+                                        if (err) throw err;
+                                    });
+                                });
+                                sendIfPossibleOrSaveNotification(req.UserID, JSON.stringify(challenge));
+                                res.end(JSON.stringify(allRightJSON));
+                            }
+                        }
                     });
                 }
             }
-            else {
-                errorJSON.error = 'Input error or interaction with the database';
-                response = JSON.stringify(errorJSON);
-                res.end(response);
-            }
+            else
+                throw err;
         });
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
@@ -402,7 +422,7 @@ eventRequest.on('challengeAccepted', function (req, res) {
     try {
         var challenge = new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.Playing);
         challenge.setID = req.challengeID;
-        pm.updateChallenge(challenge, challengeClass.ChallengeStatus.Playing, (err, result) => {
+        pm.updateChallenge(challenge, (err, result) => {
             if (err) throw err;
         });
         extractionQuestionsFactory.getRandomQuestionAlgorithm(req.TopicID).saveAndSendRandomQuestions(req, res);
@@ -480,7 +500,7 @@ eventRequest.on('endChallenge', function (req, res) {
     try {
         var challenge = new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.Finished);
         challenge.setID = req.challengeID;
-        pm.updateChallenge(challenge, challengeClass.ChallengeStatus.Finished, (err, result) => {
+        pm.updateChallenge(challenge, (err, result) => {
             if (err) throw err;
         });
         res.end(JSON.stringify(allRightJSON));

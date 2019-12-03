@@ -52,10 +52,6 @@ for (i = 0; i < 30; i++) {
  
 
 
-const challengeClass = require('../model/Challenge');
-var ch=new challengeClass.Challenge(1, 2, challengeClass.ChallengeStatus.WaitingforAcceptance);
-console.log(ch)
-pm.saveChallenge(ch, function (err, id) {
-    console.log(err);
-    console.log(id);
-})
+pm.isThereASlot(1, function (err, result) {
+    console.log(err + " " + result)
+});

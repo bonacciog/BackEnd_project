@@ -46,8 +46,27 @@ const getSaveAndSendProgrammingToolsRandomQuestions = function (req, res) {
                         }
                         else {
                             challenge.Questions = challenge.Questions.concat(result2);
-                            c.sendIfPossibleOrSaveNotification(req.SenderProposal_ID, JSON.stringify(challenge));
-                            c.sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(challenge));
+                            // This if because the first is for random event, specific user for the second
+                            if (req.UserID === undefined) {
+                                challenge.Questions.forEach((question) => {
+                                    pm.saveChallengeResult(new challengeResultClass.ChallengeResult(req.SenderProposal_ID, question.getID, req.challengeID, 0, 0, challengeResultClass.ChallengeResultStatus.NotAnswered), (err, result) => {
+                                        if (err) throw err;
+                                    });
+                                    pm.saveChallengeResult(new challengeResultClass.ChallengeResult(req.ReceiverProposal_ID, question.getID, req.challengeID, 0, 0, challengeResultClass.ChallengeResultStatus.NotAnswered), (err, result) => {
+                                        if (err) throw err;
+                                    });
+                                })
+                                c.sendIfPossibleOrSaveNotification(req.SenderProposal_ID, JSON.stringify(challenge));
+                                c.sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(challenge));
+                            }
+                            else{
+                                challenge.Questions.forEach((question) => {
+                                    pm.saveChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, question.getID, req.challengeID, 0, 0, challengeResultClass.ChallengeResultStatus.NotAnswered), (err, result) => {
+                                        if (err) throw err;
+                                    });
+                                })
+                                c.sendIfPossibleOrSaveNotification(req.UserID, JSON.stringify(challenge));
+                            }
                             res.end(JSON.stringify(allRightJSON));
                         }
                     }

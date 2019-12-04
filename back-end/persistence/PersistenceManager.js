@@ -537,7 +537,7 @@ function getRivals(ID, callback) {
   }
 }
 
-function getRandomPlayer(ID, callback) {
+function isThereASlot(ID, callback) {
   try {
     if (ID === undefined)
       callback(new ParamError('Incorrect Parameter!'), null);
@@ -546,23 +546,30 @@ function getRandomPlayer(ID, callback) {
       if (err) callback(err, null);
       console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
-    var sql = "select ID\n" +
-      "from 1001db.Users\n" +
-      "where ID not in (select UserID from 1001db.ChallengesUsersStatus where Status in ('Playing'))\n" +
-      "and ID <> " + ID + "\n" +
-      "order by RAND()\n" +
-      "limit 1\n"
+    var sql = "select ID, SenderProposal_ID\n"+
+    "from 1001db.Challenge\n"+
+    "where  Status = 'Waiting'\n"+
+    "and ReceiverProposal_ID is null\n"+
+    "and SenderProposal_ID <> " +ID +"\n"+
+    "order by ID\n"+
+    "limit 1\n";
 
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       else {
-        var resultID;
-        Object.keys(result).forEach(function (key) {
-          var row = result[key];
-          resultID = row.ID
-        });
-
-        callback(err, resultID);
+        if (Object.keys(result).length == 0)
+          callback(null, null);
+        else {
+          var result;
+          Object.keys(result).forEach(function (key) {
+            var row = result[key];
+            result = {
+              ID: row.ID,
+              SenderProposal_ID: row.SenderProposal_ID
+            }
+          });
+          callback(null, result);
+        }
       }
     });
     connection.end();
@@ -606,12 +613,53 @@ function updateChallenge(challenge, callback) {
       console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "update 1001db.Challenge" +
-      " Set Status = '" + challenge.getStatus + "' where ID = " + challenge.getID;
+      " Set Status = '" + challenge.getStatus + "', SenderProposal_ID = " + challenge.getSender + ", ReceiverProposal_ID = " + challenge.getReceiver + " where ID = " + challenge.getID;
 
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);;
       console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A Challenge updated.");
 
+    });
+    connection.end();
+  } catch (err) {
+    callback(err, null);
+  }
+}
+
+function getQuestionsByChallengeID(ID, callback) {
+  try {
+    if (ID === undefined)
+      callback(new ParamError('Incorrect Parameter!'), null);
+    var connection = mysql.createConnection(dbParam);
+    connection.connect(function (err) {
+      if (err) callback(err, null);
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
+    });
+    var sql = "select CQ.*,T.Type, T.TimeInSec\n" +
+      "from 1001db.Challenge C, 1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ,1001db.QuestionTypeInformation Q, 1001db.TypeInformations T\n" +
+    "where  C.ID = " + ID + "\n"+
+    "and CQ.ID = Q.ChallengeQuestions_ID\n" +
+    "and T.ID = Q.TypeInformations_ID\n" +
+    "and C.ID = CR.ChallengeID\n"+
+    "and CQ.ID = CR.QuestionID\n"+
+    "order by CR.ID";
+
+    connection.query(sql, function (err, result) {
+      if (err) callback(err, null);
+      else {
+        var questionArray = new Array();
+        var questionDim = 0;
+        Object.keys(result).forEach(function (key) {
+          var row = result[key];
+          questionArray[questionDim] = new questionClass.ChallengeQuestion(row.QuestionText, row.Answer_A,
+            row.Answer_B, row.Answer_C, row.Answer_D, row.XPValue, row.Topics_ID, row.Explanation);
+          questionArray[questionDim].setType = row.Type;
+          questionArray[questionDim].setID = row.ID;
+          questionArray[questionDim].setTimeInSec = row.TimeInSec;
+          questionDim++;
+        });
+        callback(err, questionArray);
+      }
     });
     connection.end();
   } catch (err) {
@@ -1014,7 +1062,7 @@ function getWaitingChallenge(UserID, callback) {
   }
 }
 
-function getAllChallengesResults(UserID, callback){
+function getAllChallengesResults(UserID, callback) {
   try {
     if (UserID === undefined)
       callback(new ParamError('Incorrect Parameter!'), null);
@@ -1023,31 +1071,31 @@ function getAllChallengesResults(UserID, callback){
       if (err) callback(err, null);
       console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
-    var sql = "select  C.ID, TopicName, C.ReceiverProposal_ID as Opponent, sum(CR.XP) as MYXP, IF(sum(CR.XP)>sum(OpponentTable.OpponentXPs),'true','false') as Win\n"+
-    " from 1001db.Challenge C, 1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ, 1001db.Topics T, (\n"+
-    "select ReceiverProposal_ID, XP as OpponentXPs, ChallengeID\n"+
-      " from 1001db.Challenge C, 1001db.ChallengeResults CR\n"+
-        " where C.ID = CR.ChallengeID\n"+
-        " group by ReceiverProposal_ID\n"+
-        ") as OpponentTable\n"+
-    "where C.SenderProposal_ID = "+ UserID +"\n"+
-    "and CQ.ID = CR.QuestionID\n"+
-    " and T.ID = CQ.Topics_ID\n"+
-    " and OpponentTable.ChallengeID = C.ID\n"+
-    "and OpponentTable.ReceiverProposal_ID = C.ReceiverProposal_ID\n"+
-    "UNION\n"+
-    "select  C.ID, TopicName, C.SenderProposal_ID, sum(CR.XP) as MYXP, IF(sum(CR.XP)>sum(OpponentTable.OpponentXPs),'true','false') as Win\n"+
-    "from 1001db.Challenge C, 1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ, 1001db.Topics T, (\n"+
-    "select SenderProposal_ID, XP as OpponentXPs, ChallengeID\n"+
-      "from 1001db.Challenge C, 1001db.ChallengeResults CR\n"+
-        " where C.ID = CR.ChallengeID\n"+
-        " group by SenderProposal_ID\n"+
-        ") as OpponentTable\n"+
-    "where C.ReceiverProposal_ID = "+ UserID +"\n"+
-    "and CQ.ID = CR.QuestionID\n"+
-    "and T.ID = CQ.Topics_ID\n"+
-    "and OpponentTable.ChallengeID = C.ID\n"+
-    "and OpponentTable.SenderProposal_ID = C.SenderProposal_ID\n";
+    var sql = "select  C.ID, TopicName, C.ReceiverProposal_ID as Opponent, sum(CR.XP) as MYXP, IF(sum(CR.XP)>sum(OpponentTable.OpponentXPs),'true','false') as Win\n" +
+      " from 1001db.Challenge C, 1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ, 1001db.Topics T, (\n" +
+      "select ReceiverProposal_ID, XP as OpponentXPs, ChallengeID\n" +
+      " from 1001db.Challenge C, 1001db.ChallengeResults CR\n" +
+      " where C.ID = CR.ChallengeID\n" +
+      " group by ReceiverProposal_ID\n" +
+      ") as OpponentTable\n" +
+      "where C.SenderProposal_ID = " + UserID + "\n" +
+      "and CQ.ID = CR.QuestionID\n" +
+      " and T.ID = CQ.Topics_ID\n" +
+      " and OpponentTable.ChallengeID = C.ID\n" +
+      "and OpponentTable.ReceiverProposal_ID = C.ReceiverProposal_ID\n" +
+      "UNION\n" +
+      "select  C.ID, TopicName, C.SenderProposal_ID, sum(CR.XP) as MYXP, IF(sum(CR.XP)>sum(OpponentTable.OpponentXPs),'true','false') as Win\n" +
+      "from 1001db.Challenge C, 1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ, 1001db.Topics T, (\n" +
+      "select SenderProposal_ID, XP as OpponentXPs, ChallengeID\n" +
+      "from 1001db.Challenge C, 1001db.ChallengeResults CR\n" +
+      " where C.ID = CR.ChallengeID\n" +
+      " group by SenderProposal_ID\n" +
+      ") as OpponentTable\n" +
+      "where C.ReceiverProposal_ID = " + UserID + "\n" +
+      "and CQ.ID = CR.QuestionID\n" +
+      "and T.ID = CQ.Topics_ID\n" +
+      "and OpponentTable.ChallengeID = C.ID\n" +
+      "and OpponentTable.SenderProposal_ID = C.SenderProposal_ID\n";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       var challengeInfo = new Array();
@@ -1055,7 +1103,7 @@ function getAllChallengesResults(UserID, callback){
       Object.keys(result).forEach(function (key) {
         var row = result[key];
         challengeInfo[challengeInfoDim] = {
-          ID:row.ID, TopicName:row.TopicName, Opponent:row.Opponent, MYXP:row.MYXP, Win:row.Win
+          ID: row.ID, TopicName: row.TopicName, Opponent: row.Opponent, MYXP: row.MYXP, Win: row.Win
         };
         challengeInfoDim++;
       });
@@ -1147,7 +1195,7 @@ exports.deleteChallengeQuestion = deleteChallengeQuestion;
 exports.getAllTopics = getAllTopics;
 exports.getKey = getKey;
 exports.getLeaderBoard = getLeaderBoard;
-exports.getRandomPlayer = getRandomPlayer;
+exports.isThereASlot = isThereASlot;
 exports.saveChallenge = saveChallenge;
 /* exports.isPlaying = isPlaying; */
 exports.deleteChallenge = deleteChallenge;
@@ -1171,3 +1219,4 @@ exports.updateChallengeUserStatus = updateChallengeUserStatus; */
 exports.updateChallengeResult = updateChallengeResult;
 exports.getWaitingChallenge = getWaitingChallenge;
 exports.getAllChallengesResults = getAllChallengesResults;
+exports.getQuestionsByChallengeID = getQuestionsByChallengeID;

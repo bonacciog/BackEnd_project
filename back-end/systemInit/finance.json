@@ -453,7 +453,7 @@
         },
 		{
 			"Text": "If you had to assess how much debt a company could raise for an acquisition, what would you take into account?",
-			"CorrectAnswer": "The combined last twelve month EBITDA of the company multiplied by the median of the Debt to EBITDA ratio of the set of comparables. (",
+			"CorrectAnswer": "The combined last twelve month EBITDA of the company multiplied by the median of the Debt to EBITDA ratio of the set of comparables.",
 			"AnswerB": "The combined last twelve month EBITDA of the company multiplied by the average Debt to EBITDA ratio of the set of comparables.",
 			"AnswerC": "The average Debt to EBITDA ratio of the set of comparables.",
 			"AnswerD": "The median of the Debt to EBITDA ratio of the set of comparables.",

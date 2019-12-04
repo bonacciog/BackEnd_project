@@ -315,7 +315,7 @@ eventRequest.on('getLeaderBoard', function (req, res) {
     }
 });
 
-eventRequest.on('chooseRandomOpponent', function (req, res) {
+/* eventRequest.on('chooseRandomOpponent', function (req, res) {
     try {
         pm.isThereASlot(req.UserID, function (err, result) {
             if (err == null) {
@@ -372,7 +372,7 @@ eventRequest.on('chooseRandomOpponent', function (req, res) {
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
-});
+}); */
 
 
 eventRequest.on('challengeSpecificUser', function (req, res) {

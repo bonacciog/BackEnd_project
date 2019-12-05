@@ -1,83 +1,18 @@
 {
 	"Questions": [
 		{
-			"Text": "What is the output of the following?
-			Class ChangeIt
-{
-Static void doIt( int[] z )
-{
-Int temp = z[ z.length-1 ] ;
-Z[0] = temp;
-}
-}
-
-Class TestIt
-{
-public static void main ( String[] args )
-{
-int myArray = {1, 2, 3, 4, 5} ;
-
-ChangeIt.doIt( myArray );
-
-For (int j=0; j<myArray.length; j++ )
-System.out.print( myArray[j] + “ “ ) ;
-}
-}
-",
+			"Text": "What is the output of the following?\nclass ChangeIt\n{\nstatic void doIt( int[] z )\n{\nInt[] A = z\nA[0] = 99\n}\n}\nclass TestIt\n{\npublic state void main ( String[] args )\n{\nint myArray = {1, 2, 3, 4, 5} ;\nChangeIt.doIt( myArray );\nFor (int j=0; j<myArray.length; j++ )\nSystem.out.print( myArray[j] + “ “ ) ;\n}\n}",
 			"CorrectAnswer": "5 2 3 4 5",
 			"AnswerB": "0 2 3 4 5",
 			"AnswerC": "5 2 3 4 1",
 			"AnswerD": "1 2 3 4 5",
 			"Type": "hands on",
 			"XPValue": 15,
-			"Topic": "JAVA"
+			"Topic": "Programming Tools"
 		},
-                {
-			"Text": "What is the output of the following?
-Class ChangeIt
-{
-Static void doIt( int[] z )
-{
-Z[0] = 0
-}
-}
+		{
+			"Text": "What is the output of the following?\nClass ChangeIt\n{\nStatic void doIt( int[] z )\n{\nZ[0] = 0\n}\n}\nClass TestIt\n{\npublic static void main ( String[] args )\n{\nint myArray = {1, 2, 3, 4, 5} ;\nChangeIt.doIt( myArray );\nFor (int j=0; j<myArray.length; j++ )\nSystem.out.print( myArray[j] + “ “ ) ;\n}\n}\nClass ChangeIt\n{\nStatic void doIt( int[] z )\n{\nInt temp = z[ z.length-1 ] ;\n Z[0] = temp;\n }\n}\nClass TestIt\n{\npublic static void main ( String[] args )\n{\nint myArray = {1, 2, 3, 4, 5} ;\nChangeIt.doIt( myArray );\nFor (int j=0; j<myArray.length; j++ )\nSystem.out.print( myArray[j] + “ “ ) ;\n}\n}\n",
 
-Class TestIt
-{
-public static void main ( String[] args )
-{
-int myArray = {1, 2, 3, 4, 5} ;
-
-ChangeIt.doIt( myArray );
-
-For (int j=0; j<myArray.length; j++ )
-System.out.print( myArray[j] + “ “ ) ;
-}
-}
-?
-
-Class ChangeIt
-{
-Static void doIt( int[] z )
-{
-Int temp = z[ z.length-1 ] ;
-Z[0] = temp;
-}
-}
-
-Class TestIt
-{
-public static void main ( String[] args )
-{
-int myArray = {1, 2, 3, 4, 5} ;
-
-ChangeIt.doIt( myArray );
-
-For (int j=0; j<myArray.length; j++ )
-System.out.print( myArray[j] + “ “ ) ;
-}
-}
-",
 			"CorrectAnswer": "0 2 3 4 5",
 			"AnswerB": "0 1 2 3 4",
 			"AnswerC": "5 2 3 4 1",
@@ -86,13 +21,9 @@ System.out.print( myArray[j] + “ “ ) ;
 			"XPValue": 15,
 			"Topic": "JAVA"
 		},
-                {
-			"Text": "What type of parameter must the following method be called with?
-Int myMethod ( double[] ar)
-{
-. . . . 
-}
-",
+		{
+			"Text": "What type of parameter must the following method be called with?\nInt myMethod ( double[] ar)\n{\n. . . .\n}\n ",
+
 			"CorrectAnswer": "A reference to an array that contains elements of type double",
 			"AnswerB": "An empty double array",
 			"AnswerC": "A reference to an array that contains zero or more elements of type int",
@@ -101,7 +32,7 @@ Int myMethod ( double[] ar)
 			"XPValue": 15,
 			"Topic": "JAVA"
 		},
-                {
+		{
 			"Text": "What would display from the following statements? Int [ ] nums = {1,2,3,4,5,6}; System.out.printIn((nums[1] + nums[3]));",
 			"CorrectAnswer":"6",
 			"AnswerB": "2+4",
@@ -111,30 +42,9 @@ Int myMethod ( double[] ar)
 			"XPValue": 15,
 			"Topic": "JAVA"
 		},
-                {
-			"Text": "What is the output of the following?
-class ChangeIt
-{
-static void doIt( int[] z )
-{
-Int[] A = z
-A[0] = 99
-}
-}
+		{
+			"Text": "What is the output of the following?\nclass ChangeIt\n{\nstatic void doIt( int[] z )\n{\nInt[] A = z\nA[0] = 99\n}\n}\nclass TestIt\n{\npublic state void main ( String[] args )\n{\nint myArray = {1, 2, 3, 4, 5} ;\nChangeIt.doIt( myArray );\nFor (int j=0; j<myArray.length; j++ )\nSystem.out.print( myArray[j] + “ “ ) ;\n}\n}\n",
 
-class TestIt
-{
-public state void main ( String[] args )
-{
-int myArray = {1, 2, 3, 4, 5} ;
-
-ChangeIt.doIt( myArray );
-
-For (int j=0; j<myArray.length; j++ )
-System.out.print( myArray[j] + “ “ ) ;
-}
-}
-",
 			"CorrectAnswer": "99 2 3 4 5",
 			"AnswerB": "1 2 3 4 5",
 			"AnswerC": "0 2 3 4 5 ",
@@ -143,73 +53,30 @@ System.out.print( myArray[j] + “ “ ) ;
 			"XPValue": 15,
 			"Topic": "JAVA"
 		},
-                {
-			"Text": "What is the output of the following?
-Class LowHighSwap
-{
-static void doIt( int[] z )
-{
-Int temp = z[ z.length-1 ]
-z[ z.length-1 ] = Z[0] ;
-z[0] = temp;
-}
-}
+		{
+			"Text": "What is the output of the following?\nClass LowHighSwap\n{\nstatic void doIt( int[] z )\n{\nInt temp = z[ z.length-1 ]\nz[ z.length-1 ] = Z[0] ;\nz[0] = temp;\n}\n}\nclass TestIt\n{\npublic state void main ( String[] args )\n{\nint myArray = {1, 2, 3, 4, 5} ;\nChangeIt.doIt( myArray );\nFor (int j=0; j<myArray.length; j++ )\nSystem.out.print( myArray[j] + “ “ ) ;\n }\n}\n",
 
-class TestIt
-{
-public state void main ( String[] args )
-{
-int myArray = {1, 2, 3, 4, 5} ;
 
-ChangeIt.doIt( myArray );
-
-For (int j=0; j<myArray.length; j++ )
-System.out.print( myArray[j] + “ “ ) ;
-}
-}
-"
-
-                        "CorrectAnswer": "5 2 3 4 1",
+             "CorrectAnswer": "5 2 3 4 1",
 			"AnswerB": "1 2 3 4 5",
 			"AnswerC": "1 2 3 4 1 ",
 			"AnswerD": "5 2 3 4 5",
 			"Type": "hands on",
 			"XPValue": 15,
 			"Topic": "JAVA"
-},
-
-{
-			"Text": "What is the output of the following?
-class ChangeIt
-{
-static void doIt( int[] z )
-{
-z = null 
-}
-}
-
-class TestIt
-{
-public state void main ( String[] args )
-{
-int myArray = {1, 2, 3, 4, 5} ;
-
-ChangeIt.doIt( myArray );
-
-For (int j=0; j<myArray.length; j++ )
-System.out.print( myArray[j] + “ “ ) ;
-}
-}
-",
-			"CorrectAnswer": "1 2 3 4 5",
-			"AnswerB": "Nothing will be printed",
-			"AnswerC": "The program will halt with a run time error",
-			"AnswerD": "0 0 0 0 0",
-			"Type": "hands on",
-			"XPValue": 15,
-			"Topic": "JAVA"
 		},
-                 {
+		{
+	"Text": "What is the output of the following?\nclass ChangeIt\n{\nstatic void doIt( int[] z )\n{\n z = null \n}\n}\nclass TestIt\n{\npublic state void main ( String[] args )\n{\nint myArray = {1, 2, 3, 4, 5} ;\nChangeIt.doIt( myArray );\nFor (int j=0; j<myArray.length; j++ )\nSystem.out.print( myArray[j] + “ “ ) ;\n}\n }\n",
+
+	"CorrectAnswer": "1 2 3 4 5",
+	"AnswerB": "Nothing will be printed",
+	"AnswerC": "The program will halt with a run time error",
+	"AnswerD": "0 0 0 0 0",
+	"Type": "hands on",
+	"XPValue": 15,
+	"Topic": "JAVA"
+		},
+		{
 			"Text": "The last value in array called ar can be found at index:",
 			"CorrectAnswer": "ar.length-1",
 			"AnswerB": "0",
@@ -219,17 +86,9 @@ System.out.print( myArray[j] + “ “ ) ;
 			"XPValue": 15,
 			"Topic": "JAVA"
 		},
-                {
-			"Text": "What does the following method do?
-void blur ( char[] z, String st)
-{
-if ( z.length < st.length() ) return;
+		{
+			"Text": "What does the following method do?\nvoid blur ( char[] z, String st)\n{\nif ( z.length < st.length() ) return;\nfor ( int j=0; < st.length; j++ )\nz[j] = st.charAt( j );\n}\n",
 
-for ( int j=0; < st.length; j++ )
-z[j] = st.charAt( j );
-
-}
-",
 			"CorrectAnswer": "If there are enough slots in the array, it copies characters one by one from the string to the array",
 			"AnswerB": "It determines if the array contains the same characters as the strings",
 			"AnswerC": "It copies characters from the array to the string",
@@ -238,29 +97,9 @@ z[j] = st.charAt( j );
 			"XPValue": 15,
 			"Topic": "JAVA"
 		},
-                {
-			"Text": "What is the output of the following?
-class ChangeIt
-{
-static void doIt( int[] z )
-{
-z[0] = z[ z.length-1 ];
-}
-}
+		{
+			"Text": "What is the output of the following?\nclass ChangeIt\n{\nstatic void doIt( int[] z )\n{\nz[0] = z[ z.length-1 ];\n}\n}\nclass TestIt\n{\n public state void main ( String[] args )\n{\nint myArray = {1, 2, 3, 4, 5} ;\nChangeIt.doIt( myArray );\nFor (int j=0; j<myArray.length; j++ )\nSystem.out.print( myArray[j] + “ “ ) ;\n}}\n}\n",
 
-class TestIt
-{
-public state void main ( String[] args )
-{
-int myArray = {1, 2, 3, 4, 5} ;
-
-ChangeIt.doIt( myArray );
-
-For (int j=0; j<myArray.length; j++ )
-System.out.print( myArray[j] + “ “ ) ;
-}
-}
-",
 			"CorrectAnswer": "5 2 3 4 5",
 			"AnswerB": "1 2 3 4 5",
 			"AnswerC": "5 2 3 4 1",
@@ -269,9 +108,8 @@ System.out.print( myArray[j] + “ “ ) ;
 			"XPValue": 15,
                         "Topic": "JAVA"
 		},
-                {
-			"Text": "Given the declaration : int [ ] ar = {1, 2, 3, 4, 5}; What is the value of ar[4]?
-",
+		{
+			"Text": "Given the declaration : int [ ] ar = {1, 2, 3, 4, 5}; What is the value of ar[4]?\n",
 			"CorrectAnswer": "5",
 			"AnswerB": "3",
 			"AnswerC": "4",
@@ -280,11 +118,9 @@ System.out.print( myArray[j] + “ “ ) ;
 			"XPValue": 15,
                         "Topic": "JAVA"
 		},
-                {
-			"Text": "Java uses call by value. Which is the value that is being passed into routine by method call in the following?
-double[] rats = {1.2, 3.4, 5.6}; 
+		{
+			"Text": "Java uses call by value. Which is the value that is being passed into routine by method call in the following?\ndouble[] rats = {1.2, 3.4, 5.6};\nroutine( rats );",
 
-routine( rats );",
 			"CorrectAnswer": "A reference to the array object rats",
 			"AnswerB": "A copy of the array rats",
 			"AnswerC": "The value of the elements of Rats",
@@ -293,11 +129,9 @@ routine( rats );",
 			"XPValue": 10,
                         "Topic": "JAVA"
 		},
-                {
-			"Text": "Java uses call by value. Which is the value that is being passed into routine by method call in the following?
-double[] rats = {1.2, 3.4, 5.6}; 
+		{
+			"Text": "Java uses call by value. Which is the value that is being passed into routine by method call in the following?\ndouble[] rats = {1.2, 3.4, 5.6};\nroutine( rats );",
 
-routine( rats );",
 			"CorrectAnswer": "6",
 			"AnswerB": "5",
 			"AnswerC": "0",
@@ -306,7 +140,7 @@ routine( rats );",
 			"XPValue": 10,
                         "Topic": "JAVA"
 		},
-                {
+		{
 			"Text": "What loop will display each of the numbers in this array on a separate line: float [ ] nums= {1.1f, 2.2f, 3.3f};",
 			"CorrectAnswer": "for (int i =1; i < 3; i++) System.out.printIn( nums[i]);",
 			"AnswerB": "for (int i =0; i < 3; i++) System.out.printIn( nums[i]);",
@@ -315,17 +149,10 @@ routine( rats );",
 			"Type": "hands on",
 			"XPValue": 15,
                         "Topic": "JAVA"
-		}, 
-                {
-			"Text": "Which statement is true?
-public class Person {
-private String name;
-public Person(String name) { this.name = name; }
-public Boolean equals(Person p) {
-return p.name.equals(this.name);
-}
-}
-",
+		},
+		{
+			"Text": "Which statement is true?\npublic class Person {\nprivate String name;\npublic Person(String name) { this.name = name; }\npublic Boolean equals(Person p) {\nreturn p.name.equals(this.name);\n}\n}\n",
+
 			"CorrectAnswer": "The equal method does NOT properly override the Object.equals method",
 			"AnswerB": "Compilation fails because the private attribute p.name cannot be accessed in line 5",
 			"AnswerC": "To work correctly with hash-based data structures, this class must also implement the hashCode method",
@@ -334,26 +161,9 @@ return p.name.equals(this.name);
 			"XPValue": 15,
                         "Topic": "JAVA"
 		},
-                {
-			"Text": "Class Test  {
-Public static void main(String args[]) {
+		{
+			"Text": "Class Test  {\nPublic static void main(String args[]) {\nTry {\n// some code here\n} catch (NullPointerException e1) {\nSystem.out.print( “a” );\n} catch (Exception e2) {\nSystem.out.print( “b” );\n} finally {\nSystem.out.print( “c” );\n}\n }\n}\nIf some sort of exception is thrown at line 34, which output is possible?\n",
 
-Try {
-// some code here
-} catch (NullPointerException e1) {
-System.out.print( “a” );
-} catch (Exception e2) {
-System.out.print( “b” );
-} finally {
-System.out.print( “c” );
-}
-
-}
-}
-
-If some sort of exception is thrown at line 34, which output is possible?
-
-",
 			"CorrectAnswer": "c",
 			"AnswerB": "a",
 			"AnswerC": "b",
@@ -362,19 +172,9 @@ If some sort of exception is thrown at line 34, which output is possible?
 			"XPValue": 15,
                         "Topic": "JAVA"
 		},
-                {
-			"Text": "class Test
-public static void main(String args[]) {
+		{
+			"Text": "class Test\npublic static void main(String args[]) {\nint x = 0\nint y = 10\ny—;\n++x;\n} while (x < 5);\nSystem.out.print(x + “,” + y);\n}\n}\n",
 
-int x = 0
-int y = 10
-y--;
-++x;
-} while (x < 5);
-System.out.print(x + “,” + y);
-}
-}
-",
 			"CorrectAnswer": "5,5",
 			"AnswerB": "6,5",
 			"AnswerC": "4,5",
@@ -383,20 +183,9 @@ System.out.print(x + “,” + y);
 			"XPValue": 15,
                         "Topic": "JAVA"
 		},
-                {
-			"Text": "public void testIfA() {
-if (testIfB(“True”);
-System.out.printIn(“True”);
-       } else {
-System.out.printIn(“Not true”);
-}
-}
-public Boolean testIfB(String str) {
-return Boolean.value Of(str);
-}
+		{
+			"Text": "public void testIfA() {\nif (testIfB(“True”);\nSystem.out.printIn(“True”);\n       } else {\nSystem.out.printIn(“Not true”);\n}\n}\npublic Boolean testIfB(String str) {\nreturn Boolean.value Of(str);\n}\nWhat is the result when method testIfA is invoked?\n",
 
-What is the result when method testIfA is invoked?
-",
 			"CorrectAnswer": "True",
 			"AnswerB": "Not true",
 			"AnswerC": "An exception is thrown at runtime",
@@ -405,18 +194,10 @@ What is the result when method testIfA is invoked?
 			"XPValue": 15,
                         "Topic": "JAVA"
 		},
-                {
-			"Text": "Given:
-Public void go(int x) {
-assert (x > 0);
-switch(x) {
-case 2: ;
-default: assert false;
-       }
-       }
-       private void go2(int x) { assert (x < 0); }
+		{
+			"Text": "Given:\nPublic void go(int x) {\nassert (x > 0);\nswitch(x) {\ncase 2: ;default: assert false;\n       }\n       }\n       private void go2(int x) { assert (x < 0); }\n       Which statement is true?",
 
-       Which statement is true?",
+
 			"CorrectAnswer": "Only the assert statements on line 12 is used appropriately",
 			"AnswerB": "All of the assert statements are used appropriately",
 			"AnswerC": "Only the assert statements on line 15 is used appropriately ",
@@ -425,80 +206,50 @@ default: assert false;
 			"XPValue": 15,
                         "Topic": "JAVA"
 		},
-                {
+		{
 			"Text": "Which one code fragments will execute the method doStuff() in a separate thread?",
-			"CorrectAnswer": "new Thread() {
-public void run() { doStuff(); }
-};
-",
-			"AnswerB": "new Thread() {
-public void start() { doStuff(); }
-};
-",
-			"AnswerC": "new Thread() {
-public void start() { doStuff(); }
-}.run();
-",
-			"AnswerD": "new Thread() {
-public void start() { doStuff(); }
-}.start();
-",
+			"CorrectAnswer": "new Thread() {\npublic void run() { doStuff(); }\n};\n",
+			"AnswerB": "new Thread() {\npublic void start() { doStuff(); }\n};\n",
+			"AnswerC": "new Thread() {\npublic void start() { doStuff(); }\n}.run();\n",
+			"AnswerD": "new Thread() {\npublic void start() { doStuff(); }\n}.start();\n",
 			"Type": "hands on",
 			"XPValue": 15,
-                        "Topic": "JAVA"
+            "Topic": "JAVA"
 		},
-                {
-			"Text": "class Test{
-public static void main(String[] args) {
-for (int i = 0; i <= 10; i++) {
-if (i > 6) break;
-}
-System.out.printIn(i);
-}
-}
+		{
+			"Text": "class Test{\npublic static void main(String[] args) {\nfor (int i = 0; i <= 10; i++) {\nif (i > 6) break;\n}\nSystem.out.printIn(i);\n}\n}\nWhat is the result?",
 
-What is the result?",
 			"CorrectAnswer": "10",
 			"AnswerB": "6",
 			"AnswerC": "7",
 			"AnswerD": "Compilation fails",
 			"Type": "hands on",
 			"XPValue": 15,
-                        "Topic": "JAVA"
+            "Topic": "JAVA"
 		},
-                                {
+		{
 			"Text": "Which can appropriately be thrown by a programmer using Java SE technology to create  a desktop application?",
+
 			"CorrectAnswer": "NumberFormatException",
 			"AnswerB": "ClassCastException",
 			"AnswerC": "NullPointerException",
 			"AnswerD": "NoClassDefFoundError",
 			"Type": "theory",
 			"XPValue": 10,
-                        "Topic": "JAVA"
+            "Topic": "JAVA"
 		},
-                {
-			"Text": "Given:
-Public class Person {
-Private string name;
-Public Person(String name) {
-this.name = name;
-}
-Public Boolean equals(Object o) {
-If ( ! ( o instanceof Person) ) return false;
-Person p = (Person) o;
-Return p.name.equals(this.name);
-}
-}
-",
+		{
+			"Text": "Given:\nPublic class Person {\nPrivate string name;\nPublic Person(String name) {\nthis.name = name;\n}\nPublic Boolean equals(Object o) {\nIf ( ! ( o instanceof Person) ) return false;\nPerson p = (Person) o;\nReturn p.name.equals(this.name);\n}\n}\n",
+
 			"CorrectAnswer": "Compilation fails because the HashCode method is not overridden",
 			"AnswerB": "A hashSet could contain multiple Person objects with the same name",
 			"AnswerC": "All Person objects will have the same hashCode because the hashCode is not overridden",
-			"AnswerD": "If a HashSet contains more than one Person object with name=”Fred”, then 	removing another  Person, also with the name=”Fred”, will remove them all.",
+			"AnswerD": "If a HashSet contains more than one Person object with name=”Fred”, then removing another Person, also with the name=”Fred”, will remove them all.",
 			"Type": "hands on",
 			"XPValue": 15,
-                        "Topic": "JAVA"
+        	"Topic": "JAVA"
 		},
-                {
+		{
 			"Text": "Which of the following is not OOPS concept in Java?",
 			"CorrectAnswer": "Compilation",
 			"AnswerB": "Inheritance",
@@ -506,10 +257,10 @@ Return p.name.equals(this.name);
 			"AnswerD": "Polymorphism",
 			"Type": "theory",
 			"XPValue": 10,
-                        "Topic": "JAVA",
-                        "Explanation": "There are 4 OOPS concepts in Java. Inheritance, Encapsulation, Polymorphism and Abstraction."
+            "Topic": "JAVA",
+            "Explanation": "There are 4 OOPS concepts in Java. Inheritance, Encapsulation, Polymorphism and Abstraction."
 		},
-                {
+		{
 			"Text": "Which of the following is a type of polymorphism in Java?",
 			"CorrectAnswer": "Compile time polymorphism",
 			"AnswerB": "Execution time polymorphism",
@@ -517,11 +268,10 @@ Return p.name.equals(this.name);
 			"AnswerD": "Multiple polymorphism",
 			"Type": "theory",
 			"XPValue": 10,
-                        "Topic": "JAVA",
-                        "Explanation": "There are two types of polymorphism in Java. Compile time polymorphism (overloading) and runtime polymorphism (overriding)."
-           
+            "Topic": "JAVA",
+            "Explanation": "There are two types of polymorphism in Java. Compile time polymorphism (overloading) and runtime polymorphism (overriding)."  
 		},
-                {
+		{
 			"Text": "Which component is used to compile, debug and execute java program?",
 			"CorrectAnswer": "JDK",
 			"AnswerB": "JVM",
@@ -529,11 +279,10 @@ Return p.name.equals(this.name);
 			"AnswerD": "JRE",
 			"Type": "theory",
 			"XPValue": 10,
-                        "Topic": "JAVA",
-                        "Explanation": "JDK is a core component of Java Environment and provides all the tools, executables and binaries required to compile, debug and execute a Java Program."
-           
-		},
-                {
+            "Topic": "JAVA",
+            "Explanation": "JDK is a core component of Java Environment and provides all the tools, executables and binaries required to compile, debug and execute a Java Program."
+		   },
+		   {
 			"Text": "Which component is responsible for converting bytecode into machine specific code?",
 			"CorrectAnswer": "JVM",
 			"AnswerB": "JDK",
@@ -541,39 +290,23 @@ Return p.name.equals(this.name);
 			"AnswerD": "JRE",
 			"Type": "theory",
 			"XPValue": 10,
-                        "Topic": "JAVA",
-                        "Explanation": "JVM is responsible to converting bytecode to the machine specific code. JVM is also platform dependent and provides core java functions like garbage collection, memory management, security etc"
-           	},
-                {
-			"Text": "What will be the output of the following Java program?
-1.	    class selection_statements 
-2.	    {
-3.	        public static void main(String args[])
-4.	        {
-5.	            int var1 = 5; 
-6.	            int var2 = 6;
-7.	            if ((var2 = 1) == var1)
-8.	                System.out.print(var2);
-9.	            else 
-10.	                System.out.print(++var2);
-11.	        } 
-12.	    }
-",
+             "Topic": "JAVA",
+            "Explanation": "JVM is responsible to converting bytecode to the machine specific code. JVM is also platform dependent and provides core java functions like garbage collection, memory management, security etc"
+			},
+			{
+			"Text": "What will be the output of the following Java program?\nclass selection_statements\n{\npublic static void main(String args[])\n{\nint var1 = 5; \nint var2 = 6;\nif ((var2 = 1) == var1)\nSystem.out.print(var2);\nelse \nSystem.out.print(++var2);\n}\n}\n",
+	
 			"CorrectAnswer": "2",
 			"AnswerB": "1",
 			"AnswerC": "3",
 			"AnswerD": "4",
 			"Type": "hands on",
 			"XPValue": 15,
-                        "Topic": "JAVA",
-                        "Explanation": "var2 is initialised to 1. The conditional statement returns false and the else part gets executed.
-output:
-$ javac selection_statements.java
-$ java selection_statements
-2
-"
-           	},
-                {
+			"Topic": "JAVA",
+			"Explanation": "var2 is initialised to 1. The conditional statement returns false and the else part gets executed.\nOutput:\n javac selection_statements.java\n  java selection_statements\n2\n"
+		    },
+
+			{		
 			"Text": "Which of the following is a valid declaration of an object of class Box?",
 			"CorrectAnswer": "Box obj = new Box();(",
 			"AnswerB": "Box obj = new Box;",
@@ -581,9 +314,9 @@ $ java selection_statements
 			"AnswerD": "new Box obj;",
 			"Type": "theory",
 			"XPValue": 10,
-                        "Topic": "JAVA"
-           	},
-                {
+			"Topic": "JAVA"
+			},
+			{
 			"Text": "Which of these statement is incorrect?",
 			"CorrectAnswer": "Every class must contain a main() method",
 			"AnswerB": "Applets do not require a main() method at all",
@@ -591,10 +324,10 @@ $ java selection_statements
 			"AnswerD": "main() method must be made public",
 			"Type": "theory",
 			"XPValue": 10,
-                        "Topic": "JAVA",
-                        "Explanation": "Every class does not need to have a main() method, there can be only one main() method which is made public."
-           	},
-                {
+			"Topic": "JAVA",
+			"Explanation": "Every class does not need to have a main() method, there can be only one main() method which is made public."
+			 },
+			 {
 			"Text": "Which of these is correct way of inheriting class A by class B?",
 			"CorrectAnswer": "class B extends A {}",
 			"AnswerB": "class B inherits class A {}",
@@ -602,9 +335,9 @@ $ java selection_statements
 			"AnswerD": "class B extends class A {}",
 			"Type": "theory",
 			"XPValue": 10,
-                        "Topic": "JAVA"
-           	},
-                {
+			"Topic": "JAVA"
+			 },
+			{
 			"Text": "What would be the result if a class extends two interfaces and both have a method with same name and signature? Let's assume that the class is not implementing that method.",
 			"CorrectAnswer": "Compile time error",
 			"AnswerB": "Runtime error",
@@ -612,10 +345,10 @@ $ java selection_statements
 			"AnswerD": "First called method is executed successfully",
 			"Type": "theory",
 			"XPValue": 10,
-                        "Topic": "JAVA",
-                        "Explanation": "In case of such conflict, compiler will not be able to link a method call due to ambiguity. It will throw compile time error."
-           	},
-                {
+        	"Topic": "JAVA",
+            "Explanation": "In case of such conflict, compiler will not be able to link a method call due to ambiguity. It will throw compile time error."
+			},
+			{
 			"Text": "Which of the following is used for implementing inheritance through an interface?",
 			"CorrectAnswer": "implements",
 			"AnswerB": "inherited",
@@ -623,10 +356,10 @@ $ java selection_statements
 			"AnswerD": "extends",
 			"Type": "theory",
 			"XPValue": 10,
-                        "Topic": "JAVA",
-                        "Explanation": "Interface is implemented using implements keyword. A concrete class must implement all the methods of an interface, else it must be declared abstract."
-           	},
-                {
+            "Topic": "JAVA",
+            "Explanation": "Interface is implemented using implements keyword. A concrete class must implement all the methods of an interface, else it must be declared abstract."
+           	},   
+			{
 			"Text": "What is not type of inheritance?",
 			"CorrectAnswer": "Double inheritance",
 			"AnswerB": "Hierarchical inheritance",
@@ -634,10 +367,10 @@ $ java selection_statements
 			"AnswerD": "Multiple inheritance",
 			"Type": "theory",
 			"XPValue": 10,
-                        "Topic": "JAVA",
-                        "Explanation": "Inheritance is way of acquiring attributes and methods of parent class. Java supports hierarchical inheritance directly."
-           	},
-                           {
+            "Topic": "JAVA",
+            "Explanation": "Inheritance is way of acquiring attributes and methods of parent class. Java supports hierarchical inheritance directly."
+			},
+			{
 			"Text": "Which of these is not a correct statement?",
 			"CorrectAnswer": "Abstract class can be initiated by new operator",
 			"AnswerB": "Every class containing abstract method must be declared abstract",
@@ -645,10 +378,10 @@ $ java selection_statements
 			"AnswerD": "Abstract class can be inherited",
 			"Type": "theory",
 			"XPValue": 10,
-                        "Topic": "JAVA",
-                        "Explanation": "Abstract class cannot be directly initiated with new operator, Since abstract class does not contain any definition of implementation it is not possible to create an abstract object"
+            "Topic": "JAVA",
+        	"Explanation": "Abstract class cannot be directly initiated with new operator, Since abstract class does not contain any definition of implementation it is not possible to create an abstract object"
            	},
-                {
+        	{
 			"Text": "Which of these is a wrapper around everything associated with a reply from an http server?",
 			"CorrectAnswer": "HttpResponse",
 			"AnswerB": " HTTP",
@@ -656,10 +389,10 @@ $ java selection_statements
 			"AnswerD": " httpserver",
 			"Type": "theory",
 			"XPValue": 10,
-                        "Topic": "JAVA",
-                        "Explanation": " HttpResponse is wrapper around everything associated with a reply from an http server"
+            "Topic": "JAVA",
+            "Explanation": " HttpResponse is wrapper around everything associated with a reply from an http server"
            	},
-                {
+			{
 			"Text": "Which of these is a protocol for breaking and sending packets to an address across a network?",
 			"CorrectAnswer": "TCP/IP",
 			"AnswerB": "DNS",
@@ -667,15 +400,8 @@ $ java selection_statements
 			"AnswerD": "Proxy Server",
 			"Type": "theory",
 			"XPValue": 10,
-                        "Topic": "JAVA",
-                        "Explanation": "TCP/IP – Transfer control protocol/Internet Protocol is used to break data into small packets an send them to an address across a network."
-                }]
-
-
+            "Topic": "JAVA",
+            "Explanation": "TCP/IP – Transfer control protocol/Internet Protocol is used to break data into small packets an send them to an address across a network."
+        	} 
+	]
 }
-
-
-
-
-
-

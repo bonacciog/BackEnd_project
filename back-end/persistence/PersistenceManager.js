@@ -1073,12 +1073,13 @@ function getAllChallengesResults(UserID, callback) {
     });
     var sql = "select  C.ID, TopicName, C.ReceiverProposal_ID as Opponent, sum(CR.XP) as MYXP, IF(sum(CR.XP)>sum(OpponentTable.OpponentXPs),'true','false') as Win\n" +
       " from 1001db.Challenge C, 1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ, 1001db.Topics T, (\n" +
-      "select ReceiverProposal_ID, XP as OpponentXPs, ChallengeID\n" +
+      "select ReceiverProposal_ID, sum(XP) as OpponentXPs, ChallengeID\n" +
       " from 1001db.Challenge C, 1001db.ChallengeResults CR\n" +
       " where C.ID = CR.ChallengeID\n" +
       " group by ReceiverProposal_ID\n" +
       ") as OpponentTable\n" +
       "where C.SenderProposal_ID = " + UserID + "\n" +
+      "and C.SenderProposal_ID = PlayerID\n"+
       "and CQ.ID = CR.QuestionID\n" +
       " and T.ID = CQ.Topics_ID\n" +
       " and OpponentTable.ChallengeID = C.ID\n" +
@@ -1087,12 +1088,13 @@ function getAllChallengesResults(UserID, callback) {
       "UNION\n" +
       "select  C.ID, TopicName, C.SenderProposal_ID, sum(CR.XP) as MYXP, IF(sum(CR.XP)>sum(OpponentTable.OpponentXPs),'true','false') as Win\n" +
       "from 1001db.Challenge C, 1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ, 1001db.Topics T, (\n" +
-      "select SenderProposal_ID, XP as OpponentXPs, ChallengeID\n" +
+      "select SenderProposal_ID, sum(XP) as OpponentXPs, ChallengeID\n" +
       "from 1001db.Challenge C, 1001db.ChallengeResults CR\n" +
       " where C.ID = CR.ChallengeID\n" +
       " group by SenderProposal_ID\n" +
       ") as OpponentTable\n" +
       "where C.ReceiverProposal_ID = " + UserID + "\n" +
+      "and C.ReceiverProposal_ID = PlayerID\n"+
       "and CQ.ID = CR.QuestionID\n" +
       "and T.ID = CQ.Topics_ID\n" +
       "and OpponentTable.ChallengeID = C.ID\n" +

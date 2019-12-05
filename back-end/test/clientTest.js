@@ -3,7 +3,7 @@ var http = require('http');
 
  var postData = JSON.stringify({ 
     request : "getAllChallengesResults", 
-    UserID: 1
+    UserID: 2
 }); 
 /*  var postData = JSON.stringify({ 
     request : "getWaitingChallengeByID", 
@@ -17,9 +17,9 @@ var http = require('http');
 /* var postData = JSON.stringify({
     request: 'answerToChallengeQuestion',
     UserID : 1,
-    QuestionID : 1,
-    ChallengeID : 3,
-    OpponentID : 3,
+    QuestionID :44,
+    ChallengeID : 1,
+    OpponentID : 2,
     XP : 10,
     TopicID : 1,
     TimeInSec : 3,
@@ -33,7 +33,7 @@ var http = require('http');
     request:'endChallenge',
     ReceiverProposal_ID : 2,
     SenderProposal_ID : 1,
-    challengeID: 8
+    challengeID: 1
 }) */
 /* var postData = JSON.stringify({
     request : "challengeAccepted",
@@ -81,7 +81,7 @@ var http = require('http');
 }) */
 
 var options = {
-    hostname: '80.211.33.82',
+    hostname: 'localhost',
     port: 3000,
     method: 'POST',
     headers: {

@@ -1083,6 +1083,7 @@ function getAllChallengesResults(UserID, callback) {
       " and T.ID = CQ.Topics_ID\n" +
       " and OpponentTable.ChallengeID = C.ID\n" +
       "and OpponentTable.ReceiverProposal_ID = C.ReceiverProposal_ID\n" +
+      "group by C.ID\n"+
       "UNION\n" +
       "select  C.ID, TopicName, C.SenderProposal_ID, sum(CR.XP) as MYXP, IF(sum(CR.XP)>sum(OpponentTable.OpponentXPs),'true','false') as Win\n" +
       "from 1001db.Challenge C, 1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ, 1001db.Topics T, (\n" +
@@ -1095,7 +1096,8 @@ function getAllChallengesResults(UserID, callback) {
       "and CQ.ID = CR.QuestionID\n" +
       "and T.ID = CQ.Topics_ID\n" +
       "and OpponentTable.ChallengeID = C.ID\n" +
-      "and OpponentTable.SenderProposal_ID = C.SenderProposal_ID\n";
+      "and OpponentTable.SenderProposal_ID = C.SenderProposal_ID\n"+
+      "group by C.ID;"
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       var challengeInfo = new Array();

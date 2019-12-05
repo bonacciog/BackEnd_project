@@ -1,7 +1,8 @@
 const { readFile, readFileSync } = require('fs')
 const pm = require('../persistence/PersistenceManager');
 const questionClass = require('../model/ChallengeQuestion');
-var __filename = "java.json";
+var __filename = process.argv[2];
+
 const { promisify } = require('util');
 
 const getTopicIDPromise = promisify(pm.getTopicID);

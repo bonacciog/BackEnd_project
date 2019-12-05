@@ -1,5 +1,5 @@
 const financeAlgorithm = require('./RandomQuestionAlgorithmFinance');
-const programmingToolsAlgorithm = require('./RandomQuestionAlgorithmProgrammingTools');
+const programmingToolsAlgorithm = require('./RandomQuestionAlgorithmJAVA');
 const questionsExtractionAlgorithm=[ financeAlgorithm, programmingToolsAlgorithm ];
 
 function getRandomQuestionAlgorithm(topicID) {

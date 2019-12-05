@@ -5,6 +5,6 @@ insert into 1001db.TypeInformations(Type, TimeInSec)
  
  insert into 1001db.Topics(TopicName)
  values('Investment banking and finance'),
-       ('Programming Tools');
+       ('JAVA');
 insert into 1001db.ExecutionTable values('chiave');
 SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));

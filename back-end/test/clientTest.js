@@ -1,10 +1,10 @@
 var http = require('http');
 
 
- var postData = JSON.stringify({ 
+/*  var postData = JSON.stringify({ 
     request : "getAllChallengesResults", 
     UserID: 2
-}); 
+}); */ 
 /*  var postData = JSON.stringify({ 
     request : "getWaitingChallengeByID", 
     UserID: 1

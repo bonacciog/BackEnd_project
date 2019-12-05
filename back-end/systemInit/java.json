@@ -8,7 +8,7 @@
 			"AnswerD": "1 2 3 4 5",
 			"Type": "hands on",
 			"XPValue": 15,
-			"Topic": "Programming Tools"
+			"Topic": "JAVA"
 		},
 		{
 			"Text": "What is the output of the following?\nClass ChangeIt\n{\nStatic void doIt( int[] z )\n{\nZ[0] = 0\n}\n}\nClass TestIt\n{\npublic static void main ( String[] args )\n{\nint myArray = {1, 2, 3, 4, 5} ;\nChangeIt.doIt( myArray );\nFor (int j=0; j<myArray.length; j++ )\nSystem.out.print( myArray[j] + “ “ ) ;\n}\n}\nClass ChangeIt\n{\nStatic void doIt( int[] z )\n{\nInt temp = z[ z.length-1 ] ;\n Z[0] = temp;\n }\n}\nClass TestIt\n{\npublic static void main ( String[] args )\n{\nint myArray = {1, 2, 3, 4, 5} ;\nChangeIt.doIt( myArray );\nFor (int j=0; j<myArray.length; j++ )\nSystem.out.print( myArray[j] + “ “ ) ;\n}\n}\n",
@@ -338,7 +338,7 @@
 			"Topic": "JAVA"
 			 },
 			{
-			"Text": "What would be the result if a class extends two interfaces and both have a method with same name and signature? Let's assume that the class is not implementing that method.",
+			"Text": "What would be the result if a class extends two interfaces and both have a method with same name and signature? Let`s assume that the class is not implementing that method.",
 			"CorrectAnswer": "Compile time error",
 			"AnswerB": "Runtime error",
 			"AnswerC": "Code runs successfully",

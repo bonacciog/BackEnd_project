@@ -7,3 +7,4 @@ insert into 1001db.TypeInformations(Type, TimeInSec)
  values('Investment banking and finance'),
        ('Programming Tools');
 insert into 1001db.ExecutionTable values('chiave');
+SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));

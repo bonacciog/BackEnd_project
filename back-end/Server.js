@@ -1,7 +1,6 @@
 const c = require('./controller/Controller');
 const http = require('http');
 const WebSocket = require('ws');
-const { readFileSync } = require('fs')
 
 const ipAddress = '80.211.33.82';
 const port = 3000;

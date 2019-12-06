@@ -7,4 +7,27 @@ insert into 1001db.TypeInformations(Type, TimeInSec)
  values('Investment banking and finance'),
        ('JAVA');
 insert into 1001db.ExecutionTable values('chiave');
+
+INSERT INTO `1001db`.`companysizes`
+(`Quantity`)
+VALUES
+('0-1 employees'),
+('2-10 employees'),
+('11-50 employees'),
+('51-200 employees');
+
+INSERT INTO `1001db`.`companytypes`
+(`Name`)
+VALUES
+('Public company'),
+('Self-employed'),
+('Government agency'),
+('Nonprofit'),
+('Sole proprietorship'),
+('Privately held'),
+('Partnership');
+
 SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+
+
+

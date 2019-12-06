@@ -159,6 +159,49 @@ CREATE TABLE IF NOT EXISTS `1001db`.`ChallengeResults` (
     FOREIGN KEY (`ChallengeID`)
     REFERENCES `1001db`.`Challenge` (`ID`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
+    ON UPDATE CASCADE);
+-- ENGINE = InnoDB
+
+CREATE TABLE IF NOT EXISTS `1001db`.`Industries` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `Name` LONGTEXT NOT NULL,
+  PRIMARY KEY (`ID`));
     
+CREATE TABLE IF NOT EXISTS `1001db`.`CompanyTypes` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`ID`));
+  
+CREATE TABLE IF NOT EXISTS `1001db`.`CompanySizes` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `Quantity` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`ID`));
+  
+  CREATE TABLE IF NOT EXISTS `1001db`.`Companies` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(45) NOT NULL,
+  `WebSiteURL` LONGTEXT NOT NULL,
+  `LinkedinProfileURL` LONGTEXT NOT NULL,
+  `Logo_path` VARCHAR(45) NULL,
+  `Industries_ID` INT NOT NULL,
+  `CompanyTypes_ID` INT NOT NULL,
+  `CompanySizes_ID` INT NOT NULL,
+  PRIMARY KEY (`ID`),
+  INDEX `fk_Companies_Industries1_idx` (`Industries_ID` ASC),
+  INDEX `fk_Companies_CompanyTypes1_idx` (`CompanyTypes_ID` ASC),
+  INDEX `fk_Companies_CompanySizes1_idx` (`CompanySizes_ID` ASC),
+  CONSTRAINT `fk_Companies_Industries1`
+    FOREIGN KEY (`Industries_ID`)
+    REFERENCES `1001db`.`Industries` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Companies_CompanyTypes1`
+    FOREIGN KEY (`CompanyTypes_ID`)
+    REFERENCES `1001db`.`CompanyTypes` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Companies_CompanySizes1`
+    FOREIGN KEY (`CompanySizes_ID`)
+    REFERENCES `1001db`.`CompanySizes` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);

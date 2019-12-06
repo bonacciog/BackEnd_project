@@ -1,5 +1,9 @@
 var http = require('http');
 
+/* var postData = JSON.stringify({
+    request: "saveCompany",
+    Company: { Name:'Prova', WebSiteURL:'Prova', LinkedinProfileURL:'Prova', Industries_ID:1, CompanyTypeID:1, CompanySizeID:1 }
+}); */
 
 /*  var postData = JSON.stringify({ 
     request : "getAllChallengesResults", 

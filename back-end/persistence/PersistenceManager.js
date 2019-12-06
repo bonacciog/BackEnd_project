@@ -10,6 +10,7 @@ const topicClass = require('../model/Topic');
 const questionClass = require('../model/ChallengeQuestion');
 const challengeClass = require('../model/Challenge');
 const challengeResultClass = require('../model/ChallengeResult');
+const companyClass = require('../model/Company');
 
 var dbParam = {
   host: "localhost",
@@ -667,31 +668,6 @@ function getQuestionsByChallengeID(ID, callback) {
   }
 }
 
-/* function isPlaying(UserID, callback) {
-  try {
-    if (UserID === undefined)
-      callback(new ParamError('Incorrect Parameter!'), null);
-    var connection = mysql.createConnection(dbParam);
-    connection.connect(function (err) {
-      if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
-    });
-    var sql = "select * from 1001db.ChallengesUsersStatus where Status = 'Playing' and UserID = " + UserID;
-    connection.query(sql, function (err, result) {
-      if (err) callback(err, null);
-      else {
-        if (Object.keys(result).length == 0)
-          callback(err, null);
-        else
-          callback(err, result);
-      }
-    });
-    connection.end();
-  } catch (err) {
-    callback(err, null);
-  }
-} */
-
 
 function deleteChallenge(ID, callback) {
   try {
@@ -1119,70 +1095,60 @@ function getAllChallengesResults(UserID, callback) {
     callback(err, null);
   }
 }
-/* function saveChallengeUserStatus(UserID,ChallengeID, Status, callback) {
-  try {
-    if (UserID === undefined || ChallengeID === undefined)
-      callback(new ParamError('Incorrect Parameter!'), null);
-    var connection = mysql.createConnection(dbParam);
-    connection.connect(function (err) {
-      if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
-    });
-    var sql = "insert into 1001db.ChallengesUsersStatus(UserID,ChallengeID, Status)\n" +
-      "values (" + UserID + "," + ChallengeID + ",'" + Status + "')";
-    connection.query(sql, function (err, result) {
-      if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: A ChallengeUserStatus for User " + UserID + " inserted");
-    });
 
-    connection.end();
+function saveIndustry(Name, callback){
+  try {
+    if (Name === undefined)
+      callback(new ParamError('Incorrect Parameter!'), null);
+      var connection = mysql.createConnection(dbParam);
+      connection.connect(function (err) {
+        if (err) callback(err, null);
+        console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
+      });
+      var sql = "insert into 1001db.Industries(Name)" +
+        " values('" +Name+ "')";
+      connection.query(sql, function (err, result) {
+        if (err) callback(err, null);
+        console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: New Industry with ID = " + result.insertId + " inserted.");
+        var id = result.insertId;
+        callback(null, id);
+  
+      });
+      connection.end();
   } catch (err) {
-    callback(err, null);
+      callback(err, null);
   }
 }
 
-function deleteChallengeUserStatus(UserID,ChallengeID,callback){
+function saveCompany(company, callback){
   try {
-    if (UserID === undefined || ChallengeID === undefined)
-      callback(new ParamError('Incorrect Parameter!'), null);
-    var connection = mysql.createConnection(dbParam);
-    connection.connect(function (err) {
-      if (err) callback(err, null);;
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
-    });
-    var sql = "delete from 1001db.ChallengesUsersStatus where  UserID = " + UserID + " and ChallengeID = " + ChallengeID;
-    connection.query(sql, function (err, result) {
-      if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: A UserStatus for User " +UserID+ " deleted");
-    });
-
-    connection.end();
-  } catch (err) {
-    callback(err, null);
-  }
-}
-
-function updateChallengeUserStatus(UserID, ChallengeID, Status, callback) {
-  try {
-    if (UserID === undefined || ChallengeID === undefined || Status === undefined) {
+    if (!company instanceof companyClass.Company) {
       callback(new ParamError("Incorrect parameter!"), null);
     }
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: Connected to DB!");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
+    if (company.getLogoPath === undefined)
+      var sql = "insert into 1001db.Companies(Name, WebSiteURL, LinkedinProfileURL, Industries_ID, CompanyTypes_ID, CompanySizes_ID)\n" +
+        " values ('" + company.getName + "','" + company.getWebSiteURL + "','" + company.getLinkedinProfileURL + "'," + company.getIndustry + "," + company.getCompanyType + "," + company.getCompanySize +")";
+    else
+    var sql = "insert into 1001db.Companies(Name, WebSiteURL, LinkedinProfileURL, Logo_path, Industries_ID, CompanyTypes_ID, CompanySizes_ID)\n" +
+    " values ('" + company.getName + "','" + company.getWebSiteURL + "','" + company.getLinkedinProfileURL+ "','"+ companyClass.getLogoPath + "'," + company.getIndustry + "," + company.getCompanyType + "," + company.getCompanySize +")";
 
-    var sql = "UPDATE 1001db.ChallengesUsersStatus SET Status = '" + Status + "' where  UserID = " + UserID + " and ChallengeID = " + ChallengeID;
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      console.log("["+Date(Date.now()).toString()+"] - "+"[PersistenceManager]: ChallengeUserStatus for user " + UserID +" updated");
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: New Company with ID = " + result.insertId + " inserted ");
+      var id = result.insertId;
+      callback(null, id);
     });
+
     connection.end();
   } catch (err) {
     callback(err, null);
   }
-} */
+}
 
 exports.getUser = getUser;
 exports.updateUser = updateUser;
@@ -1201,7 +1167,6 @@ exports.getKey = getKey;
 exports.getLeaderBoard = getLeaderBoard;
 exports.isThereASlot = isThereASlot;
 exports.saveChallenge = saveChallenge;
-/* exports.isPlaying = isPlaying; */
 exports.deleteChallenge = deleteChallenge;
 exports.getRandomQuestions = getRandomQuestions;
 exports.saveTypeInformations = saveTypeInformations;
@@ -1216,11 +1181,10 @@ exports.saveUserActivity = saveUserActivity;
 exports.saveChallengeResult = saveChallengeResult;
 exports.getTopicID = getTopicID;
 exports.updateChallenge = updateChallenge;
-exports.getChallengeResult = getChallengeResult;/* 
-exports.saveChallengeUserStatus = saveChallengeUserStatus;
-exports.deleteChallengeUserStatus = deleteChallengeUserStatus;
-exports.updateChallengeUserStatus = updateChallengeUserStatus; */
+exports.getChallengeResult = getChallengeResult;
 exports.updateChallengeResult = updateChallengeResult;
 exports.getWaitingChallenge = getWaitingChallenge;
 exports.getAllChallengesResults = getAllChallengesResults;
 exports.getQuestionsByChallengeID = getQuestionsByChallengeID;
+exports.saveCompany = saveCompany;
+exports.saveIndustry = saveIndustry;

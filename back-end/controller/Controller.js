@@ -7,7 +7,7 @@ const challengeClass = require('../model/Challenge');
 const EventEmitter = require('events').EventEmitter;
 const extractionQuestionsFactory = require('./RandomQuestionAlgorithmFactory');
 const challengeResultClass = require('../model/ChallengeResult');
-
+const companyClass = require('../model/Company');
 
 
 const users = new Map();
@@ -598,6 +598,21 @@ eventRequest.on('getAllChallengesResults', function (req, res) {
                     res.end(response);
                 }
             }
+        });
+    } catch (err) {
+        errorJSON.error = 'Input error or interaction with the database';
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
+eventRequest.on('saveCompany', function(req,res){
+    try {
+        pm.saveCompany(new companyClass.Company(req.Company.Name, req.Company.WebSiteURL, req.Company.LinkedinProfileURL, req.Company.Industries_ID, req.Company.CompanyTypeID, req.Company.CompanySizeID), function (err, id) {
+            response = JSON.stringify({
+                CompanyID: id
+            });
+            res.end(response);
         });
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';

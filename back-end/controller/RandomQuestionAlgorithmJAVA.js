@@ -1,6 +1,6 @@
 const pm = require('../persistence/PersistenceManager');
 const c = require('./Controller');
-
+const challengeResultClass = require('../model/ChallengeResult');
 
 const TopicID = 2;
 

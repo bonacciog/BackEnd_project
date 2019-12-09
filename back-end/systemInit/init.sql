@@ -8,7 +8,7 @@ insert into 1001db.TypeInformations(Type, TimeInSec)
        ('JAVA');
 insert into 1001db.ExecutionTable values('chiave');
 
-INSERT INTO `1001db`.`companysizes`
+INSERT INTO `1001db`.`CompanySizes`
 (`Quantity`)
 VALUES
 ('0-1 employees'),
@@ -16,7 +16,7 @@ VALUES
 ('11-50 employees'),
 ('51-200 employees');
 
-INSERT INTO `1001db`.`companytypes`
+INSERT INTO `1001db`.`CompanyTypes`
 (`Name`)
 VALUES
 ('Public company'),

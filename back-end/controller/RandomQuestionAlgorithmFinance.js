@@ -1,6 +1,6 @@
 const pm = require('../persistence/PersistenceManager');
-const c = require('./Controller');
 const challengeResultClass = require('../model/ChallengeResult');
+const utils = require('../util/utils');
 
 const TopicID = 1;
 const types = [
@@ -24,17 +24,7 @@ var allRightJSON = {
     response: "It's all right!"
 }
 var response;
-/* 
-async function saveChallengeResultsAndSendSync(req, challenge) {
-    const { promisify } = require('util');
 
-    const saveChallengeResultPromise = promisify(pm.saveChallengeResult);
-    challenge.Questions.forEach( async (question) => {
-        await saveChallengeResultPromise(new challengeResultClass.ChallengeResult(req.UserID, question.getID, req.challengeID, 0, 0, challengeResultClass.ChallengeResultStatus.NotAnswered));
-    });
-    c.sendIfPossibleOrSaveNotification(req.UserID, JSON.stringify(challenge));
-}
- */
 const getSaveAndSendFinanceRandomQuestions = function (req, res) {
     var typesIndex = 0;
     pm.getRandomQuestions(TopicID, types[typesIndex].typeName, types[typesIndex].questionsNumber, function (err, result1) {
@@ -69,22 +59,14 @@ const getSaveAndSendFinanceRandomQuestions = function (req, res) {
                                     }
                                     else {
                                         challenge.Questions = challenge.Questions.concat(result3);
-                                        // This if because the first is for random event, specific user for the second
-                                       /*  if (req.UserID === undefined) { */
-                                            challenge.Questions.forEach((question) => {
-                                                pm.saveChallengeResult(new challengeResultClass.ChallengeResult(req.SenderProposal_ID, question.getID, req.challengeID, 0, 0, challengeResultClass.ChallengeResultStatus.NotAnswered), (err, result) => {
-                                                    if (err) throw err;
-                                                });
-                                                pm.saveChallengeResult(new challengeResultClass.ChallengeResult(req.ReceiverProposal_ID, question.getID, req.challengeID, 0, 0, challengeResultClass.ChallengeResultStatus.NotAnswered), (err, result) => {
-                                                    if (err) throw err;
-                                                });
-                                            })
-                                            c.sendIfPossibleOrSaveNotification(req.SenderProposal_ID, JSON.stringify(challenge));
-                                            c.sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(challenge));
-                                        /* }
-                                        else {
-                                            saveChallengeResultsAndSendSync(req, challenge);
-                                        } */
+                                        challenge.Questions.forEach((question) => {
+                                            pm.saveChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, question.getID, req.challengeID, 0, 0, challengeResultClass.ChallengeResultStatus.NotAnswered), (err, result) => {
+                                                if (err) throw err;
+                                            });
+                                        });
+                                        challenge.Questions = utils.sortQuestions(challenge.Questions);
+                                        utils.sendIfPossibleOrSaveNotification(req.UserID, JSON.stringify(challenge));
+
                                         res.end(JSON.stringify(allRightJSON));
                                     }
                                 }
@@ -113,3 +95,4 @@ const getSaveAndSendFinanceRandomQuestions = function (req, res) {
 };
 
 exports.saveAndSendRandomQuestions = getSaveAndSendFinanceRandomQuestions;
+exports.types = types;

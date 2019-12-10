@@ -43,19 +43,19 @@ var http = require('http');
     request : "challengeAccepted",
     ReceiverProposal_ID : 2,
     SenderProposal_ID : 1,
-    TopicID : 1,
-    challengeID : 1
+    TopicID : 2,
+    challengeID : 3
 }); */
 
 /* var postData = JSON.stringify({ 
     request : "challengeSpecificUser", 
     ReceiverProposal_ID :2,
     SenderProposal_ID : 1,
-    TopicID : 1
+    TopicID : 2
 }); */
 /* var postData = JSON.stringify({ 
     request : "chooseRandomOpponent", 
-    UserID: 1,
+    UserID: 2,
     TopicID : 1
 }); */
 /* var postData = JSON.stringify({
@@ -65,7 +65,7 @@ var http = require('http');
 
 /* var postData = JSON.stringify({ 
     request : "getAllTopics"
-}) */;
+}); */
 
 /* var postData = JSON.stringify({
     request: "getLeaderBoard"

@@ -1041,7 +1041,7 @@ function getWaitingChallenge(UserID, callback) {
       if (err) callback(err, null);
       console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
-    var sql = "select * from 1001db.Challenge where SenderProposal_ID = " + UserID + " and Status = '" + challengeClass.ChallengeStatus.WaitingOtherPlayer +"'";
+    var sql = "select * from 1001db.Challenge where ReceiverProposal_ID = " + UserID + " and Status = '" + challengeClass.ChallengeStatus.WaitingOtherPlayer +"'";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       var challenge = new Array();

@@ -8,11 +8,11 @@ var http = require('http');
 /*  var postData = JSON.stringify({ 
     request : "getAllChallengesResults", 
     UserID: 2
-}); */ 
+}); */
 /*  var postData = JSON.stringify({ 
     request : "getWaitingChallengeByID", 
     UserID: 1
-});  */
+}); */ 
 
 /* var postData = JSON.stringify({ 
     request : "closeConnection", 
@@ -39,19 +39,19 @@ var http = require('http');
     SenderProposal_ID : 1,
     challengeID: 1
 }) */
-/* var postData = JSON.stringify({
+var postData = JSON.stringify({
     request : "challengeAccepted",
     ReceiverProposal_ID : 2,
     SenderProposal_ID : 1,
-    TopicID : 2,
+    TopicID : 1,
     challengeID : 3
-}); */
+});
 
 /* var postData = JSON.stringify({ 
     request : "challengeSpecificUser", 
     ReceiverProposal_ID :2,
     SenderProposal_ID : 1,
-    TopicID : 2
+    TopicID : 1
 }); */
 /* var postData = JSON.stringify({ 
     request : "chooseRandomOpponent", 
@@ -61,7 +61,7 @@ var http = require('http');
 /* var postData = JSON.stringify({
     request: 'getAllRivals',
     UserID: 1
-}); */ 
+}); */
 
 /* var postData = JSON.stringify({ 
     request : "getAllTopics"
@@ -73,7 +73,13 @@ var http = require('http');
 
 /* var postData = JSON.stringify({
     request: "saveUser",
-    User: { Firstname: 'Lautaro', Lastname: "Martinez", University: "UnInter" },
+    User: { Firstname: 'Paolo', Lastname: "Caligiana", University: "Unibo" },
+    key: "chiave"
+}); */
+
+/* var postData = JSON.stringify({
+    request: "saveUser",
+    User: { Firstname: 'Giovanni', Lastname: "Bonaccio", University: "Unibo" },
     key: "chiave"
 }); */
 

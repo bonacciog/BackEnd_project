@@ -549,7 +549,7 @@ function isThereASlot(ID, callback) {
     });
     var sql = "select ID, SenderProposal_ID\n"+
     "from 1001db.Challenge\n"+
-    "where  Status = 'Waiting'\n"+
+    "where  Status = '" + challengeClass.ChallengeStatus.WaitingOtherPlayer +"'\n"
     "and ReceiverProposal_ID is null\n"+
     "and SenderProposal_ID <> " +ID +"\n"+
     "order by ID\n"+
@@ -625,6 +625,29 @@ function updateChallenge(challenge, callback) {
   } catch (err) {
     callback(err, null);
   }
+}
+
+function addDATETIMEtoChallenge(date, challengeID, callback){
+  try {
+    if (challengeID === undefined || date === undefined)
+      callback(new ParamError('Incorrect Parameter!'), null);
+    var connection = mysql.createConnection(dbParam);
+    connection.connect(function (err) {
+      if (err) callback(err, null);
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
+    });
+    var sql = "update 1001db.Challenge" +
+      " Set Datetime = '" + date +"' where ID = " + challengeID;
+
+    connection.query(sql, function (err, result) {
+      if (err) callback(err, null);;
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A Challenge updated.");
+
+    });
+    connection.end();
+  } catch (err) {
+    callback(err, null);
+  } 
 }
 
 function getQuestionsByChallengeID(ID, callback) {
@@ -1018,7 +1041,7 @@ function getWaitingChallenge(UserID, callback) {
       if (err) callback(err, null);
       console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
-    var sql = "select * from 1001db.Challenge where SenderProposal_ID = " + UserID + " and Status = 'Waiting'";
+    var sql = "select * from 1001db.Challenge where SenderProposal_ID = " + UserID + " and Status = '" + challengeClass.ChallengeStatus.WaitingOtherPlayer +"'";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       var challenge = new Array();
@@ -1027,6 +1050,7 @@ function getWaitingChallenge(UserID, callback) {
         var row = result[key];
         challenge[challengeDim] = new challengeClass.Challenge(row.SenderProposal_ID, row.ReceiverProposal_ID, row.Status);
         challenge[challengeDim].setID = row.ID;
+        challenge[challengeDim].setDatetime = row.DateTime;
         challengeDim++;
       });
       callback(null, challenge);
@@ -1188,3 +1212,4 @@ exports.getAllChallengesResults = getAllChallengesResults;
 exports.getQuestionsByChallengeID = getQuestionsByChallengeID;
 exports.saveCompany = saveCompany;
 exports.saveIndustry = saveIndustry;
+exports.addDATETIMEtoChallenge=addDATETIMEtoChallenge;

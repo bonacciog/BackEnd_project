@@ -7,7 +7,7 @@ const TopicID = 2;
 const types = [
     {
         typeName: 'THEORY',
-        questionsNumber: 10
+        questionsNumber: 5
     },
     {
         typeName: 'HANDS ON',

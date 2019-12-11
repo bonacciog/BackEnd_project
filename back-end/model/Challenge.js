@@ -31,6 +31,17 @@ class Challenge{
         return this.Datetime;
     }
 
+    get getTopicID(){
+        return this.TopicID;
+    }
+
+    /**
+     * @param {any} ID
+     */
+    set setTopicID(TopicID){
+        this.TopicID = TopicID;
+    }
+
     /**
      * @param {any} ID
      */

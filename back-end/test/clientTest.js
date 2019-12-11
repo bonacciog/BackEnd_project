@@ -39,25 +39,25 @@ var http = require('http');
     SenderProposal_ID : 1,
     challengeID: 1
 }) */
-var postData = JSON.stringify({
+/* var postData = JSON.stringify({
     request : "challengeAccepted",
     ReceiverProposal_ID : 2,
     SenderProposal_ID : 1,
     TopicID : 1,
     challengeID : 3
-});
+}); */
 
 /* var postData = JSON.stringify({ 
     request : "challengeSpecificUser", 
-    ReceiverProposal_ID :2,
-    SenderProposal_ID : 1,
+    ReceiverProposal_ID :1,
+    SenderProposal_ID : 2,
     TopicID : 1
 }); */
-/* var postData = JSON.stringify({ 
+var postData = JSON.stringify({ 
     request : "chooseRandomOpponent", 
-    UserID: 2,
-    TopicID : 1
-}); */
+    UserID: 1,
+    TopicID : 2
+});
 /* var postData = JSON.stringify({
     request: 'getAllRivals',
     UserID: 1

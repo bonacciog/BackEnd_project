@@ -66,7 +66,7 @@ eventRequest.on('login', function (req, ws) {
                             users.set(parseInt(req.UserID, 10), ws);
                             console.log("[" + Date(Date.now()).toString() + "] - " + "[Controller]: WebSocket for User " + req.UserID + " saved!");
                             //}
-                            pm.saveUserActivity(req.UserID, 'Access', new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), (err, result) => {
+                            pm.saveUserActivity(req.UserID, userClass.UserStatus.Access, new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), (err, result) => {
                                 if (err) throw err;
                             });
                             ws.send(response);
@@ -283,32 +283,35 @@ eventRequest.on('getLeaderBoard', function (req, res) {
     }
 });
 
- eventRequest.on('chooseRandomOpponent', function (req, res) {
+eventRequest.on('chooseRandomOpponent', function (req, res) {
     try {
         pm.isThereASlot(req.UserID, function (err, result) {
             if (err == null) {
-                if(result == null){
-                    pm.saveChallenge(new challengeClass.Challenge(req.UserID, null, challengeClass.ChallengeStatus.WaitingforAcceptance),(err, resultID) => {
-                        if(err) throw err;
-                        else if(resultID !== null && resultID !== undefined){
+                if (result == null) {
+                    pm.saveChallenge(new challengeClass.Challenge(req.UserID, null, challengeClass.ChallengeStatus.WaitingOtherPlayer), (err, resultID) => {
+                        if (err) throw err;
+                        else if (resultID !== null && resultID !== undefined) {
+                            pm.addDATETIMEtoChallenge(new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), resultID, (err, result) => {
+                                if (err) throw err;
+                            });
                             var req_modified = {
-                                UserID : req.UserID,
-                                Topic : req.Topic,
-                                challengeID : resultID
+                                UserID: req.UserID,
+                                Topic: req.Topic,
+                                challengeID: resultID
                             }
                             extractionQuestionsFactory.getRandomQuestionAlgorithm(req.TopicID).saveAndSendRandomQuestions(req_modified, res);
                         }
-                        
+
                     });
 
                 }
-                else{
+                else {
                     var challenge_tmp = new challengeClass.Challenge(result.SenderProposal_ID, req.UserID, challengeClass.ChallengeStatus.Playing);
                     challenge_tmp.setID = result.ID;
                     pm.updateChallenge(challenge_tmp, (err, result) => {
                         if (err) throw err;
                     });
-                    pm.getQuestionsByChallengeID(result.ID,function (err, questions) {
+                    pm.getQuestionsByChallengeID(result.ID, function (err, questions) {
                         if (err == null) {
                             if (questions == null) {
                                 errorJSON.error = "There aren't questions in DB";
@@ -341,12 +344,15 @@ eventRequest.on('getLeaderBoard', function (req, res) {
         response = JSON.stringify(errorJSON);
         res.end(response);
     }
-}); 
+});
 
 
 eventRequest.on('challengeSpecificUser', function (req, res) {
     try {
-        pm.saveChallenge(new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.Playing), function (err, id) {
+        pm.saveChallenge(new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.WaitingOtherPlayer), function (err, id) {
+            pm.addDATETIMEtoChallenge(new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), id, (err, result) => {
+                if (err) throw err;
+            });
             var notification = {
                 notificationType: "challengeProposal",
                 TopicID: req.TopicID,
@@ -355,9 +361,9 @@ eventRequest.on('challengeSpecificUser', function (req, res) {
                 challengeID: id
             };
             var req_modified = {
-                UserID : req.SenderProposal_ID,
-                Topic : req.TopicID,
-                challengeID : id
+                UserID: req.SenderProposal_ID,
+                Topic: req.TopicID,
+                challengeID: id
             }
             extractionQuestionsFactory.getRandomQuestionAlgorithm(req.TopicID).saveAndSendRandomQuestions(req_modified, res);
             utils.sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(notification));
@@ -389,13 +395,15 @@ eventRequest.on('challengeRejected', function (req, res) {
     }
 });
 
-/**
- * This service will have to be changed in the future, 
- * it's necessary a refactoring applying design principles!
- */
+
 eventRequest.on('challengeAccepted', function (req, res) {
     try {
-        pm.getQuestionsByChallengeID(req.challengeID,function (err, questions) {
+        var challenge_tmp = new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.Playing);
+        challenge_tmp.setID = req.challengeID;
+        pm.updateChallenge(challenge_tmp, (err, result) => {
+            if (err) throw err;
+        });
+        pm.getQuestionsByChallengeID(req.challengeID, function (err, questions) {
             if (err == null) {
                 if (questions == null) {
                     errorJSON.error = "There aren't questions in DB";
@@ -458,7 +466,7 @@ eventRequest.on('closeConnection', function (req, res) {
         }
         console.log("[" + Date(Date.now()).toString() + "] - " + "[Controller]: Connessione per utente " + req.UserID + " chiusa");
         res.end(JSON.stringify(allRightJSON));
-        pm.saveUserActivity(req.UserID, 'Exit', new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), (err, result) => {
+        pm.saveUserActivity(req.UserID, userClass.UserStatus.Exit, new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), (err, result) => {
             if (err) throw err;
         });
     } catch (err) {
@@ -555,7 +563,7 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
 
 eventRequest.on('getWaitingChallengeByID', function (req, res) {
     try {
-        pm.getWaitingChallenge(req.UserID, (err, result)=>{
+        pm.getWaitingChallenge(req.UserID, (err, result) => {
             if (err == null) {
                 if (result == null) {
                     errorJSON.error = "There aren't questions in DB";
@@ -577,7 +585,7 @@ eventRequest.on('getWaitingChallengeByID', function (req, res) {
 
 eventRequest.on('getAllChallengesResults', function (req, res) {
     try {
-        pm.getAllChallengesResults(req.UserID, (err, result)=>{
+        pm.getAllChallengesResults(req.UserID, (err, result) => {
             if (err == null) {
                 if (result == null) {
                     errorJSON.error = "There aren't questions in DB";
@@ -597,7 +605,7 @@ eventRequest.on('getAllChallengesResults', function (req, res) {
     }
 });
 
-eventRequest.on('saveCompany', function(req,res){
+eventRequest.on('saveCompany', function (req, res) {
     try {
         pm.saveCompany(new companyClass.Company(req.Company.Name, req.Company.WebSiteURL, req.Company.LinkedinProfileURL, req.Company.Industries_ID, req.Company.CompanyTypeID, req.Company.CompanySizeID), function (err, id) {
             response = JSON.stringify({

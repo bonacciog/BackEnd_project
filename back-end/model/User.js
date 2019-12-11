@@ -3,6 +3,10 @@
  *  @author Giovanni Bonaccio
  */
 
+const UserStatus = {
+    Access: 'Access',
+    Exit: 'Exit'
+};
 
 class User {
     constructor(firstName, lastName, university){
@@ -63,3 +67,4 @@ class User {
 
 
 exports.User=User;
+exports.UserStatus=UserStatus;

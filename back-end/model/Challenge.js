@@ -1,5 +1,5 @@
 const ChallengeStatus = {
-    WaitingforAcceptance: 'Waiting',
+    WaitingOtherPlayer: 'WaitingOtherPlayer',
     Playing: 'Playing',
     Finished: 'Finished'
 };
@@ -27,6 +27,16 @@ class Challenge{
         return this.ID;
     }
 
+    get getDatetime(){
+        return this.Datetime;
+    }
+
+    /**
+     * @param {any} ID
+     */
+    set setDatetime(Datetime){
+        this.Datetime = Datetime;
+    }
     /**
      * @param {any} ID
      */

@@ -547,13 +547,13 @@ function isThereASlot(ID, callback) {
       if (err) callback(err, null);
       console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
-    var sql = "select ID, SenderProposal_ID\n"+
-    "from 1001db.Challenge\n"+
-    "where  Status = '" + challengeClass.ChallengeStatus.WaitingOtherPlayer +"'\n"
-    "and ReceiverProposal_ID is null\n"+
-    "and SenderProposal_ID <> " +ID +"\n"+
-    "order by ID\n"+
-    "limit 1\n";
+    var sql = "select ID, SenderProposal_ID\n" +
+      "from 1001db.Challenge\n" +
+      "where  Status = '" + challengeClass.ChallengeStatus.WaitingOtherPlayer + "'\n"+
+    "and ReceiverProposal_ID is null\n" +
+      "and SenderProposal_ID <> " + ID + "\n" +
+      "order by ID\n" +
+      "limit 1\n";
 
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
@@ -627,7 +627,7 @@ function updateChallenge(challenge, callback) {
   }
 }
 
-function addDATETIMEtoChallenge(date, challengeID, callback){
+function addDATETIMEtoChallenge(date, challengeID, callback) {
   try {
     if (challengeID === undefined || date === undefined)
       callback(new ParamError('Incorrect Parameter!'), null);
@@ -637,7 +637,7 @@ function addDATETIMEtoChallenge(date, challengeID, callback){
       console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
     var sql = "update 1001db.Challenge" +
-      " Set Datetime = '" + date +"' where ID = " + challengeID;
+      " Set Datetime = '" + date + "' where ID = " + challengeID;
 
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);;
@@ -647,7 +647,7 @@ function addDATETIMEtoChallenge(date, challengeID, callback){
     connection.end();
   } catch (err) {
     callback(err, null);
-  } 
+  }
 }
 
 function getQuestionsByChallengeID(ID, callback) {
@@ -661,12 +661,12 @@ function getQuestionsByChallengeID(ID, callback) {
     });
     var sql = "select CQ.*,T.Type, T.TimeInSec\n" +
       "from 1001db.Challenge C, 1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ,1001db.QuestionTypeInformation Q, 1001db.TypeInformations T\n" +
-    "where  C.ID = " + ID + "\n"+
-    "and CQ.ID = Q.ChallengeQuestions_ID\n" +
-    "and T.ID = Q.TypeInformations_ID\n" +
-    "and C.ID = CR.ChallengeID\n"+
-    "and CQ.ID = CR.QuestionID\n"+
-    "order by CR.ID";
+      "where  C.ID = " + ID + "\n" +
+      "and CQ.ID = Q.ChallengeQuestions_ID\n" +
+      "and T.ID = Q.TypeInformations_ID\n" +
+      "and C.ID = CR.ChallengeID\n" +
+      "and CQ.ID = CR.QuestionID\n" +
+      "order by CR.ID";
 
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
@@ -1032,6 +1032,37 @@ function updateChallengeResult(challengeResult, callback) {
   }
 }
 
+function getWaitingChallengeCounter(UserID, callback) {
+  try {
+    if (UserID === undefined)
+      callback(new ParamError('Incorrect Parameter!'), null);
+    var connection = mysql.createConnection(dbParam);
+    connection.connect(function (err) {
+      if (err) callback(err, null);
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
+    });
+    var sql = "select COUNT(*) as Counter\n" +
+      "from 1001db.Challenge C\n" +
+      "where SenderProposal_ID = " + UserID + "\n" +
+      "and C.Status = 'WaitingOtherPlayer'";
+    connection.query(sql, function (err, result) {
+      if (err) callback(err, null);
+      var counter = 0;
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        counter = row.Counter;
+      });
+
+      callback(null, counter);
+    });
+
+    connection.end();
+  } catch (err) {
+    callback(err, null);
+  }
+
+}
+
 function getWaitingChallenge(UserID, callback) {
   try {
     if (UserID === undefined)
@@ -1041,7 +1072,13 @@ function getWaitingChallenge(UserID, callback) {
       if (err) callback(err, null);
       console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
-    var sql = "select * from 1001db.Challenge where ReceiverProposal_ID = " + UserID + " and Status = '" + challengeClass.ChallengeStatus.WaitingOtherPlayer +"'";
+    var sql = "select C.ID, C.SenderProposal_ID, C.ReceiverProposal_ID, C.Status, C.Datetime, CQ.Topics_ID\n" +
+      "from 1001db.Challenge C,1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ\n" +
+      "where C.ID=CR.ChallengeID\n" +
+      "and CR.QuestionID=CQ.ID\n" +
+      "and C.ReceiverProposal_ID = " + UserID + "\n" +
+      "and C.Status = '" + challengeClass.ChallengeStatus.WaitingOtherPlayer + "'\n" +
+      "group by C.ID";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       var challenge = new Array();
@@ -1050,9 +1087,11 @@ function getWaitingChallenge(UserID, callback) {
         var row = result[key];
         challenge[challengeDim] = new challengeClass.Challenge(row.SenderProposal_ID, row.ReceiverProposal_ID, row.Status);
         challenge[challengeDim].setID = row.ID;
-        challenge[challengeDim].setDatetime = row.DateTime;
+        challenge[challengeDim].setDatetime = row.Datetime;
+        challenge[challengeDim].setTopicID = row.Topics_ID;
         challengeDim++;
       });
+
       callback(null, challenge);
     });
 
@@ -1079,12 +1118,12 @@ function getAllChallengesResults(UserID, callback) {
       " group by ReceiverProposal_ID\n" +
       ") as OpponentTable\n" +
       "where C.SenderProposal_ID = " + UserID + "\n" +
-      "and C.SenderProposal_ID = PlayerID\n"+
+      "and C.SenderProposal_ID = PlayerID\n" +
       "and CQ.ID = CR.QuestionID\n" +
       " and T.ID = CQ.Topics_ID\n" +
       " and OpponentTable.ChallengeID = C.ID\n" +
       "and OpponentTable.ReceiverProposal_ID = C.ReceiverProposal_ID\n" +
-      "group by C.ID, PlayerID\n"+
+      "group by C.ID, PlayerID\n" +
       "UNION\n" +
       "select  C.ID, TopicName, C.SenderProposal_ID, sum(CR.XP) as MYXP, IF(sum(CR.XP)>sum(OpponentTable.OpponentXPs),'true','false') as Win\n" +
       "from 1001db.Challenge C, 1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ, 1001db.Topics T, (\n" +
@@ -1094,11 +1133,11 @@ function getAllChallengesResults(UserID, callback) {
       " group by SenderProposal_ID\n" +
       ") as OpponentTable\n" +
       "where C.ReceiverProposal_ID = " + UserID + "\n" +
-      "and C.ReceiverProposal_ID = PlayerID\n"+
+      "and C.ReceiverProposal_ID = PlayerID\n" +
       "and CQ.ID = CR.QuestionID\n" +
       "and T.ID = CQ.Topics_ID\n" +
       "and OpponentTable.ChallengeID = C.ID\n" +
-      "and OpponentTable.SenderProposal_ID = C.SenderProposal_ID\n"+
+      "and OpponentTable.SenderProposal_ID = C.SenderProposal_ID\n" +
       "group by C.ID, PlayerID;"
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
@@ -1120,31 +1159,31 @@ function getAllChallengesResults(UserID, callback) {
   }
 }
 
-function saveIndustry(Name, callback){
+function saveIndustry(Name, callback) {
   try {
     if (Name === undefined)
       callback(new ParamError('Incorrect Parameter!'), null);
-      var connection = mysql.createConnection(dbParam);
-      connection.connect(function (err) {
-        if (err) callback(err, null);
-        console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
-      });
-      var sql = "insert into 1001db.Industries(Name)" +
-        " values('" +Name+ "')";
-      connection.query(sql, function (err, result) {
-        if (err) callback(err, null);
-        console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: New Industry with ID = " + result.insertId + " inserted.");
-        var id = result.insertId;
-        callback(null, id);
-  
-      });
-      connection.end();
+    var connection = mysql.createConnection(dbParam);
+    connection.connect(function (err) {
+      if (err) callback(err, null);
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
+    });
+    var sql = "insert into 1001db.Industries(Name)" +
+      " values('" + Name + "')";
+    connection.query(sql, function (err, result) {
+      if (err) callback(err, null);
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: New Industry with ID = " + result.insertId + " inserted.");
+      var id = result.insertId;
+      callback(null, id);
+
+    });
+    connection.end();
   } catch (err) {
-      callback(err, null);
+    callback(err, null);
   }
 }
 
-function saveCompany(company, callback){
+function saveCompany(company, callback) {
   try {
     if (!company instanceof companyClass.Company) {
       callback(new ParamError("Incorrect parameter!"), null);
@@ -1156,10 +1195,10 @@ function saveCompany(company, callback){
     });
     if (company.getLogoPath === undefined)
       var sql = "insert into 1001db.Companies(Name, WebSiteURL, LinkedinProfileURL, Industries_ID, CompanyTypes_ID, CompanySizes_ID)\n" +
-        " values ('" + company.getName + "','" + company.getWebSiteURL + "','" + company.getLinkedinProfileURL + "'," + company.getIndustry + "," + company.getCompanyType + "," + company.getCompanySize +")";
+        " values ('" + company.getName + "','" + company.getWebSiteURL + "','" + company.getLinkedinProfileURL + "'," + company.getIndustry + "," + company.getCompanyType + "," + company.getCompanySize + ")";
     else
-    var sql = "insert into 1001db.Companies(Name, WebSiteURL, LinkedinProfileURL, Logo_path, Industries_ID, CompanyTypes_ID, CompanySizes_ID)\n" +
-    " values ('" + company.getName + "','" + company.getWebSiteURL + "','" + company.getLinkedinProfileURL+ "','"+ companyClass.getLogoPath + "'," + company.getIndustry + "," + company.getCompanyType + "," + company.getCompanySize +")";
+      var sql = "insert into 1001db.Companies(Name, WebSiteURL, LinkedinProfileURL, Logo_path, Industries_ID, CompanyTypes_ID, CompanySizes_ID)\n" +
+        " values ('" + company.getName + "','" + company.getWebSiteURL + "','" + company.getLinkedinProfileURL + "','" + companyClass.getLogoPath + "'," + company.getIndustry + "," + company.getCompanyType + "," + company.getCompanySize + ")";
 
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
@@ -1212,4 +1251,5 @@ exports.getAllChallengesResults = getAllChallengesResults;
 exports.getQuestionsByChallengeID = getQuestionsByChallengeID;
 exports.saveCompany = saveCompany;
 exports.saveIndustry = saveIndustry;
-exports.addDATETIMEtoChallenge=addDATETIMEtoChallenge;
+exports.addDATETIMEtoChallenge = addDATETIMEtoChallenge;
+exports.getWaitingChallengeCounter = getWaitingChallengeCounter;

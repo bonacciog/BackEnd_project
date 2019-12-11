@@ -12,6 +12,8 @@ const utils = require('../util/utils');
 
 const users = new Map();
 
+const MAX_PENDINGCHALLENGE = 4;
+
 var eventRequest = new EventEmitter();
 var errorJSON = {
     error: ""
@@ -285,60 +287,69 @@ eventRequest.on('getLeaderBoard', function (req, res) {
 
 eventRequest.on('chooseRandomOpponent', function (req, res) {
     try {
-        pm.isThereASlot(req.UserID, function (err, result) {
-            if (err == null) {
-                if (result == null) {
-                    pm.saveChallenge(new challengeClass.Challenge(req.UserID, null, challengeClass.ChallengeStatus.WaitingOtherPlayer), (err, resultID) => {
-                        if (err) throw err;
-                        else if (resultID !== null && resultID !== undefined) {
-                            pm.addDATETIMEtoChallenge(new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), resultID, (err, result) => {
+        pm.getWaitingChallengeCounter(req.UserID, (err, counter) => {
+            if (counter < MAX_PENDINGCHALLENGE) {
+                pm.isThereASlot(req.UserID, function (err, result) {
+                    if (err == null) {
+                        if (result == null) {
+                            pm.saveChallenge(new challengeClass.Challenge(req.UserID, null, challengeClass.ChallengeStatus.WaitingOtherPlayer), (err, resultID) => {
                                 if (err) throw err;
-                            });
-                            var req_modified = {
-                                UserID: req.UserID,
-                                Topic: req.Topic,
-                                challengeID: resultID
-                            }
-                            extractionQuestionsFactory.getRandomQuestionAlgorithm(req.TopicID).saveAndSendRandomQuestions(req_modified, res);
-                        }
-
-                    });
-
-                }
-                else {
-                    var challenge_tmp = new challengeClass.Challenge(result.SenderProposal_ID, req.UserID, challengeClass.ChallengeStatus.Playing);
-                    challenge_tmp.setID = result.ID;
-                    pm.updateChallenge(challenge_tmp, (err, result) => {
-                        if (err) throw err;
-                    });
-                    pm.getQuestionsByChallengeID(result.ID, function (err, questions) {
-                        if (err == null) {
-                            if (questions == null) {
-                                errorJSON.error = "There aren't questions in DB";
-                                response = JSON.stringify(errorJSON);
-                                res.end(response);
-                            }
-                            else {
-                                var challenge = {
-                                    notificationType: 'startChallenge',
-                                    Questions: questions
-                                }
-                                challenge.Questions.forEach((question) => {
-                                    pm.saveChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, question.getID, result.ID, 0, 0, challengeResultClass.ChallengeResultStatus.NotAnswered), (err, result) => {
+                                else if (resultID !== null && resultID !== undefined) {
+                                    pm.addDATETIMEtoChallenge(new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), resultID, (err, result) => {
                                         if (err) throw err;
                                     });
-                                });
-                                challenge.Questions = utils.sortQuestions(challenge.Questions);
-                                utils.sendIfPossibleOrSaveNotification(req.UserID, JSON.stringify(challenge));
-                                res.end(JSON.stringify(allRightJSON));
-                            }
+                                    var req_modified = {
+                                        UserID: req.UserID,
+                                        Topic: req.Topic,
+                                        challengeID: resultID
+                                    }
+                                    extractionQuestionsFactory.getRandomQuestionAlgorithm(req.TopicID).saveAndSendRandomQuestions(req_modified, res);
+                                }
+
+                            });
+
                         }
-                    });
-                }
+                        else {
+                            var challenge_tmp = new challengeClass.Challenge(result.SenderProposal_ID, req.UserID, challengeClass.ChallengeStatus.Playing);
+                            challenge_tmp.setID = result.ID;
+                            pm.updateChallenge(challenge_tmp, (err, result) => {
+                                if (err) throw err;
+                            });
+                            pm.getQuestionsByChallengeID(result.ID, function (err, questions) {
+                                if (err == null) {
+                                    if (questions == null) {
+                                        errorJSON.error = "There aren't questions in DB";
+                                        response = JSON.stringify(errorJSON);
+                                        res.end(response);
+                                    }
+                                    else {
+                                        var challenge = {
+                                            notificationType: 'startChallenge',
+                                            Questions: questions
+                                        }
+                                        challenge.Questions.forEach((question) => {
+                                            pm.saveChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, question.getID, result.ID, 0, 0, challengeResultClass.ChallengeResultStatus.NotAnswered), (err, result) => {
+                                                if (err) throw err;
+                                            });
+                                        });
+                                        challenge.Questions = utils.sortQuestions(challenge.Questions);
+                                        utils.sendIfPossibleOrSaveNotification(req.UserID, JSON.stringify(challenge));
+                                        res.end(JSON.stringify(allRightJSON));
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    else
+                        throw err;
+                });
             }
-            else
-                throw err;
-        });
+            else {
+                errorJSON.error = 'Max number of pending challenges achieved';
+                response = JSON.stringify(errorJSON);
+                res.end(response);
+            }
+        })
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
@@ -349,26 +360,35 @@ eventRequest.on('chooseRandomOpponent', function (req, res) {
 
 eventRequest.on('challengeSpecificUser', function (req, res) {
     try {
-        pm.saveChallenge(new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.WaitingOtherPlayer), function (err, id) {
-            pm.addDATETIMEtoChallenge(new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), id, (err, result) => {
-                if (err) throw err;
-            });
-            var notification = {
-                notificationType: "challengeProposal",
-                TopicID: req.TopicID,
-                SenderProposal_ID: req.SenderProposal_ID,
-                ReceiverProposal_ID: req.ReceiverProposal_ID,
-                challengeID: id
-            };
-            var req_modified = {
-                UserID: req.SenderProposal_ID,
-                Topic: req.TopicID,
-                challengeID: id
+        pm.getWaitingChallengeCounter(req.SenderProposal_ID, (err, counter) => {
+            if (counter < MAX_PENDINGCHALLENGE) {
+                pm.saveChallenge(new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.WaitingOtherPlayer), function (err, id) {
+                    pm.addDATETIMEtoChallenge(new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), id, (err, result) => {
+                        if (err) throw err;
+                    });
+                    var notification = {
+                        notificationType: "challengeProposal",
+                        TopicID: req.TopicID,
+                        SenderProposal_ID: req.SenderProposal_ID,
+                        ReceiverProposal_ID: req.ReceiverProposal_ID,
+                        challengeID: id
+                    };
+                    var req_modified = {
+                        UserID: req.SenderProposal_ID,
+                        Topic: req.TopicID,
+                        challengeID: id
+                    }
+                    extractionQuestionsFactory.getRandomQuestionAlgorithm(req.TopicID).saveAndSendRandomQuestions(req_modified, res);
+                    utils.sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(notification));
+                    res.end(JSON.stringify(notification));
+                });
             }
-            extractionQuestionsFactory.getRandomQuestionAlgorithm(req.TopicID).saveAndSendRandomQuestions(req_modified, res);
-            utils.sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(notification));
-            res.end(JSON.stringify(notification));
-        });
+            else {
+                errorJSON.error = 'Max number of pending challenges achieved';
+                response = JSON.stringify(errorJSON);
+                res.end(response);
+            }
+        })
 
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';

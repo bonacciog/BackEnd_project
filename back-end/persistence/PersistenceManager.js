@@ -1185,6 +1185,99 @@ function saveIndustry(Name, callback) {
   }
 }
 
+function getAllIndustries(callback){
+  try {
+    var connection = mysql.createConnection(dbParam);
+    connection.connect(function (err) {
+      if (err) callback(err, null);
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
+    });
+    var sql = "select * " +
+      "from 1001db.Industries";
+    connection.query(sql, function (err, result) {
+      if (err) callback(err, null);
+      else {
+        var industriesArrayDim = 0;
+        var industries = new Array();
+        Object.keys(result).forEach(function (key) {
+          var row = result[key];
+          industries[industriesArrayDim] = {
+            ID: row.ID,
+            Name: row.Name
+          }
+          industriesArrayDim++;
+        });
+        callback(null, industries);
+      }
+    });
+    connection.end();
+  } catch (err) {
+    callback(err, null);
+  }
+}
+
+function getAllCompanyTypes(callback){
+  try {
+    var connection = mysql.createConnection(dbParam);
+    connection.connect(function (err) {
+      if (err) callback(err, null);
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
+    });
+    var sql = "select * " +
+      "from 1001db.CompanyTypes";
+    connection.query(sql, function (err, result) {
+      if (err) callback(err, null);
+      else {
+        var typesArrayDim = 0;
+        var types = new Array();
+        Object.keys(result).forEach(function (key) {
+          var row = result[key];
+          types[typesArrayDim] = {
+            ID: row.ID,
+            Name: row.Name
+          }
+          typesArrayDim++;
+        });
+        callback(null, types);
+      }
+    });
+    connection.end();
+  } catch (err) {
+    callback(err, null);
+  }
+}
+
+function getAllCompanySizes(callback){
+  try {
+    var connection = mysql.createConnection(dbParam);
+    connection.connect(function (err) {
+      if (err) callback(err, null);
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
+    });
+    var sql = "select * " +
+      "from 1001db.CompanySizes";
+    connection.query(sql, function (err, result) {
+      if (err) callback(err, null);
+      else {
+        var sizesArrayDim = 0;
+        var Sizes = new Array();
+        Object.keys(result).forEach(function (key) {
+          var row = result[key];
+          Sizes[sizesArrayDim] = {
+            ID: row.ID,
+            Quantity: row.Quantity
+          }
+          sizesArrayDim++;
+        });
+        callback(null, Sizes);
+      }
+    });
+    connection.end();
+  } catch (err) {
+    callback(err, null);
+  }
+}
+
 function saveCompany(company, callback) {
   try {
     if (!company instanceof companyClass.Company) {
@@ -1255,3 +1348,6 @@ exports.saveCompany = saveCompany;
 exports.saveIndustry = saveIndustry;
 exports.addDATETIMEtoChallenge = addDATETIMEtoChallenge;
 exports.getWaitingChallengeCounter = getWaitingChallengeCounter;
+exports.getAllCompanySizes = getAllCompanySizes;
+exports.getAllCompanyTypes = getAllCompanyTypes;
+exports.getAllIndustries = getAllIndustries;

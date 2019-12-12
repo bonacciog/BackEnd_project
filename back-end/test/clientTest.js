@@ -1,5 +1,17 @@
 var http = require('http');
 
+/* var postData = JSON.stringify({ 
+    request : "getAllIndustries"
+}); */
+
+/* var postData = JSON.stringify({ 
+    request : "getAllCompanyTypes"
+}); */
+
+/* var postData = JSON.stringify({ 
+    request : "getAllCompanySizes"
+}); */
+
 /* var postData = JSON.stringify({
     request: "saveCompany",
     Company: { Name:'Prova', WebSiteURL:'Prova', LinkedinProfileURL:'Prova', Industries_ID:1, CompanyTypeID:1, CompanySizeID:1 }
@@ -29,10 +41,10 @@ var http = require('http');
     TimeInSec : 3,
     RoundNumber: 1
 }); */
-var postData = JSON.stringify({
+/* var postData = JSON.stringify({
     request: 'getResultByChallengeID',
     challengeID: 1
-})
+}) */
 /* var postData = JSON.stringify({
     request:'endChallenge',
     ReceiverProposal_ID : 2,

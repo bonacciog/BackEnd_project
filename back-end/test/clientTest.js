@@ -29,10 +29,10 @@ var http = require('http');
     TimeInSec : 3,
     RoundNumber: 1
 }); */
-/* var postData = JSON.stringify({
+var postData = JSON.stringify({
     request: 'getResultByChallengeID',
     challengeID: 1
-}) */
+})
 /* var postData = JSON.stringify({
     request:'endChallenge',
     ReceiverProposal_ID : 2,
@@ -53,11 +53,11 @@ var http = require('http');
     SenderProposal_ID : 2,
     TopicID : 1
 }); */
-var postData = JSON.stringify({ 
+/* var postData = JSON.stringify({ 
     request : "chooseRandomOpponent", 
     UserID: 1,
     TopicID : 2
-});
+}); */
 /* var postData = JSON.stringify({
     request: 'getAllRivals',
     UserID: 1

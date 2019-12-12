@@ -966,11 +966,13 @@ function getChallengeResult(ChallengeID, callback) {
     var sql = "select * from 1001db.ChallengeResults where ChallengeID = " + ChallengeID;
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      var challengeresult;
+      var challengeresult = new Array();
+      var dim = 0;
       Object.keys(result).forEach(function (key) {
         var row = result[key];
-        challengeresult = new challengeResultClass.ChallengeResult(row.PlayerID, row.QuestionID, row.ChallengeID, row.XP, row.TimeInSec, row.Status)
-        challengeresult.setID = row.ID;
+        challengeresult[dim] = new challengeResultClass.ChallengeResult(row.PlayerID, row.QuestionID, row.ChallengeID, row.XP, row.TimeInSec, row.Status)
+        challengeresult[dim].setID = row.ID;
+        dim++;
       });
       callback(null, challengeresult);
     });

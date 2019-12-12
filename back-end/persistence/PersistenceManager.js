@@ -963,7 +963,7 @@ function getChallengeResult(ChallengeID, callback) {
       console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
 
-    var sql = "select * from 1001db.ChallengeResults";
+    var sql = "select * from 1001db.ChallengeResults where ChallengeID = " + ChallengeID;
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       var challengeresult;

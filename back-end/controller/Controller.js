@@ -640,5 +640,60 @@ eventRequest.on('saveCompany', function (req, res) {
     }
 });
 
+eventRequest.on('getAllIndustries', function (req, res) {
+    try {
+        pm.getAllIndustries(function (err, industries) {
+            if (industries != "")
+                response = JSON.stringify(industries);
+            else {
+                errorJSON.error = "There aren't industries";
+                response = JSON.stringify(errorJSON);
+            }
+            res.end(response);
+        });
+    } catch (err) {
+        errorJSON.error = 'Input error or interaction with the database';
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
+eventRequest.on('getAllCompanyTypes', function (req, res) {
+    try {
+        pm.getAllCompanyTypes(function (err, types) {
+            if (types != "")
+                response = JSON.stringify(types);
+            else {
+                errorJSON.error = "There aren't types";
+                response = JSON.stringify(errorJSON);
+            }
+            res.end(response);
+        });
+    } catch (err) {
+        errorJSON.error = 'Input error or interaction with the database';
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
+eventRequest.on('getAllCompanySizes', function (req, res) {
+    try {
+        pm.getAllCompanySizes(function (err, sizes) {
+            if (sizes != "")
+                response = JSON.stringify(sizes);
+            else {
+                errorJSON.error = "There aren't sizes";
+                response = JSON.stringify(errorJSON);
+            }
+            res.end(response);
+        });
+    } catch (err) {
+        errorJSON.error = 'Input error or interaction with the database';
+        response = JSON.stringify(errorJSON);
+        res.end(response);
+    }
+});
+
+
 exports.eventRequest = eventRequest;
 exports.users = users;

@@ -1342,7 +1342,7 @@ function saveCompany(company, callback) {
 }
 function getChallengeByID(ID, callback) {
   try {
-    if (UserID === undefined||Opponent==undefined)
+    if (ID === undefined)
       callback(new ParamError('Incorrect Parameter!'), null);
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
@@ -1351,15 +1351,15 @@ function getChallengeByID(ID, callback) {
     });
     var sql = "select *\n" +
       "from 1001db.Challenge\n"+
-      "where ID= " + ID;
+      "where ID = " + ID;
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      var challenge;;
+      var challenge;
       Object.keys(result).forEach(function (key) {
         var row = result[key];
         challenge = new challengeClass.Challenge(row.SenderProposal_ID, row.ReceiverProposal_ID, row.Status);
-        challenge[challengeDim].setID = row.ID;
-        challenge[challengeDim].setDatetime = row.Datetime;
+        challenge.setID = row.ID;
+        challenge.setDatetime = row.Datetime;
       });
 
       callback(null, challenge);

@@ -579,11 +579,14 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
                 pm.updateChallenge(challenge, (err, result) => {
                     if (err) throw err;
                 });
-                finishedInHalfChallengeSet.delete(req.ChallengeID);
+                console.log("A challenge finished with id " + req.ChallengeID); 
+		finishedInHalfChallengeSet.delete(req.ChallengeID);
             }
-            else
-                finishedInHalfChallengeSet.add(req.challengeID); 
-        }
+            else{
+                finishedInHalfChallengeSet.add(req.challengeID);
+		console.log("A finished in half added with id " + req.ChallengeID); 
+       	    }
+	}
         utils.sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
         res.end(JSON.stringify(allRightJSON));
 

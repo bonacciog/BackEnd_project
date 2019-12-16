@@ -11,6 +11,7 @@ const companyClass = require('../model/Company');
 const utils = require('../util/utils');
 
 const users = new Map();
+const finishedInHalfChallengeSet = new Set();
 
 const MAX_PENDINGCHALLENGE = 4;
 
@@ -574,6 +575,19 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
 
         utils.sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
         res.end(JSON.stringify(allRightJSON));
+        if (req.RoundNumber === 10){
+            if (finishedInHalfChallengeSet.has(req.ChallengeID)) {
+                var challenge = new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.Finished);
+                challenge.setID = req.challengeID;
+                pm.updateChallenge(challenge, (err, result) => {
+                    if (err) throw err;
+                });
+                finishedInHalfChallengeSet.delete(req.ChallengeID);
+            }
+            else
+                finishedInHalfChallengeSet.add(req.challengeID); 
+        }
+
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);

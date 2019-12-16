@@ -1116,7 +1116,7 @@ function getAllChallengesResults(UserID, callback) {
       " from 1001db.Challenge C, 1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ, 1001db.Topics T, (\n" +
       "select ReceiverProposal_ID, sum(XP) as OpponentXPs, ChallengeID\n" +
       " from 1001db.Challenge C, 1001db.ChallengeResults CR\n" +
-      " where C.ID = CR.ChallengeID\n" +
+      " where C.ID = CR.ChallengeID and ReceiverProposal_ID = PlayerID \n" +
       " group by ReceiverProposal_ID\n" +
       ") as OpponentTable\n" +
       "where C.SenderProposal_ID = " + UserID + "\n" +
@@ -1131,7 +1131,7 @@ function getAllChallengesResults(UserID, callback) {
       "from 1001db.Challenge C, 1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ, 1001db.Topics T, (\n" +
       "select SenderProposal_ID, sum(XP) as OpponentXPs, ChallengeID\n" +
       "from 1001db.Challenge C, 1001db.ChallengeResults CR\n" +
-      " where C.ID = CR.ChallengeID\n" +
+      " where C.ID = CR.ChallengeID and SenderProposal_ID = PlayerID \n" +
       " group by SenderProposal_ID\n" +
       ") as OpponentTable\n" +
       "where C.ReceiverProposal_ID = " + UserID + "\n" +

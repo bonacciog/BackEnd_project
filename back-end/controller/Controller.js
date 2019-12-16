@@ -572,9 +572,6 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
             TimeInSec: req.TimeInSec,
             RoundNumber: req.RoundNumber
         };
-
-        utils.sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
-        res.end(JSON.stringify(allRightJSON));
         if (req.RoundNumber === 10){
             if (finishedInHalfChallengeSet.has(req.ChallengeID)) {
                 var challenge = new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.Finished);
@@ -587,6 +584,8 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
             else
                 finishedInHalfChallengeSet.add(req.challengeID); 
         }
+        utils.sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
+        res.end(JSON.stringify(allRightJSON));
 
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';

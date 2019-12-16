@@ -572,7 +572,7 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
             TimeInSec: req.TimeInSec,
             RoundNumber: req.RoundNumber
         };
-        if (parse(req.RoundNumber) === 10){
+        if (parseInt(req.RoundNumber) === 10){
             if (finishedInHalfChallengeSet.has(req.ChallengeID)) {
                 var challenge = new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.Finished);
                 challenge.setID = req.challengeID;
@@ -580,7 +580,7 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
                     if (err) throw err;
                 });
                 console.log("A challenge finished with id " + req.ChallengeID); 
-		finishedInHalfChallengeSet.delete(req.ChallengeID);
+		        finishedInHalfChallengeSet.delete(req.ChallengeID);
             }
             else{
                 finishedInHalfChallengeSet.add(req.challengeID);

@@ -575,7 +575,7 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
         if (parseInt(req.RoundNumber) === 10){
             if (finishedInHalfChallengeSet.has(req.ChallengeID)) {
                 var challenge = new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.Finished);
-                challenge.setID = req.challengeID;
+                challenge.setID = req.ChallengeID;
                 pm.updateChallenge(challenge, (err, result) => {
                     if (err) throw err;
                 });

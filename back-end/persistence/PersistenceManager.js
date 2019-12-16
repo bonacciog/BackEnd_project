@@ -1340,7 +1340,36 @@ function saveCompany(company, callback) {
     callback(err, null);
   }
 }
+function getChallengeByID(ID, callback) {
+  try {
+    if (UserID === undefined||Opponent==undefined)
+      callback(new ParamError('Incorrect Parameter!'), null);
+    var connection = mysql.createConnection(dbParam);
+    connection.connect(function (err) {
+      if (err) callback(err, null);
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
+    });
+    var sql = "select *\n" +
+      "from 1001db.Challenge\n"+
+      "where ID= " + ID;
+    connection.query(sql, function (err, result) {
+      if (err) callback(err, null);
+      var challenge;;
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        challenge = new challengeClass.Challenge(row.SenderProposal_ID, row.ReceiverProposal_ID, row.Status);
+        challenge[challengeDim].setID = row.ID;
+        challenge[challengeDim].setDatetime = row.Datetime;
+      });
 
+      callback(null, challenge);
+    });
+
+    connection.end();
+  } catch (err) {
+    callback(err, null);
+  }
+}
 exports.getUser = getUser;
 exports.updateUser = updateUser;
 exports.saveUser = saveUser;
@@ -1385,3 +1414,4 @@ exports.getAllCompanySizes = getAllCompanySizes;
 exports.getAllCompanyTypes = getAllCompanyTypes;
 exports.getAllIndustries = getAllIndustries;
 exports.getPlayingChallenge=getPlayingChallenge;
+exports.getChallengeByID=getChallengeByID;

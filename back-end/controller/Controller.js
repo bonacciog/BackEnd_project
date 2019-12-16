@@ -572,21 +572,32 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
             TimeInSec: req.TimeInSec,
             RoundNumber: req.RoundNumber
         };
-        if (parseInt(req.RoundNumber) === 10){
+        if (parseInt(req.RoundNumber) === 10) {
             if (finishedInHalfChallengeSet.has(req.ChallengeID)) {
-                var challenge = new challengeClass.Challenge(req.SenderProposal_ID, req.ReceiverProposal_ID, challengeClass.ChallengeStatus.Finished);
-                challenge.setID = req.ChallengeID;
-                pm.updateChallenge(challenge, (err, result) => {
+                pm.getChallengeByID(req.ChallengeID, (err, result) => {
                     if (err) throw err;
-                });
-                console.log("A challenge finished with id " + req.ChallengeID); 
-		        finishedInHalfChallengeSet.delete(req.ChallengeID);
+                    else if (result !== undefined && result !== null) {
+                        var challenge = new challengeClass.Challenge(result.getSender, req.getReceiver, challengeClass.ChallengeStatus.Finished);
+                        challenge.setID = req.ChallengeID;
+                        pm.updateChallenge(challenge, (err, result) => {
+                            if (err) throw err;
+                        });
+                        console.log("A challenge finished with id " + req.ChallengeID);
+                        finishedInHalfChallengeSet.delete(req.ChallengeID);
+                    }
+                    else {
+                        errorJSON.error = 'Input error or interaction with the database';
+                        response = JSON.stringify(errorJSON);
+                        res.end(response);
+                    }
+                })
+
             }
-            else{
+            else {
                 finishedInHalfChallengeSet.add(req.ChallengeID);
-		        console.log("A finished in half added with id " + req.ChallengeID); 
-       	    }
-	}
+                console.log("A finished in half added with id " + req.ChallengeID);
+            }
+        }
         utils.sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
         res.end(JSON.stringify(allRightJSON));
 

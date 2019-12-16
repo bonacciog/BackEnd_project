@@ -1,7 +1,7 @@
 insert into 1001db.TypeInformations(Type, TimeInSec)
- values ('THEORY', 20),
- ('HANDS ON', 30),
- ('CASES', 30);
+ values ('THEORY', 30),
+ ('HANDS ON', 40),
+ ('CASES', 50);
  
  insert into 1001db.Topics(TopicName)
  values('Investment banking and finance'),

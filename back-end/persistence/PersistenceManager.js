@@ -1065,6 +1065,39 @@ function getWaitingChallengeCounter(UserID, callback) {
 
 }
 
+function getPlayingChallenge(UserID, callback) {
+  try {
+    if (UserID === undefined)
+      callback(new ParamError('Incorrect Parameter!'), null);
+    var connection = mysql.createConnection(dbParam);
+    connection.connect(function (err) {
+      if (err) callback(err, null);
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
+    });
+    var sql = "select * "+
+    " from 1001db.Challenge"+
+    " where (SenderProposal_ID = " + UserID + " or ReceiverProposal_ID = " + UserID + ")  and Status = 'Playing'";
+    connection.query(sql, function (err, result) {
+      if (err) callback(err, null);
+      var challenge = new Array();
+      var challengeDim = 0;
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        challenge[challengeDim] = new challengeClass.Challenge(row.SenderProposal_ID, row.ReceiverProposal_ID, row.Status);
+        challenge[challengeDim].setID = row.ID;
+        challenge[challengeDim].setDatetime = row.Datetime;
+        challengeDim++;
+      });
+
+      callback(null, challenge);
+    });
+
+    connection.end();
+  } catch (err) {
+    callback(err, null);
+  }
+}
+
 function getWaitingChallenge(UserID, callback) {
   try {
     if (UserID === undefined)
@@ -1116,13 +1149,13 @@ function getAllChallengesResults(UserID, callback) {
       " from 1001db.Challenge C, 1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ, 1001db.Topics T, (\n" +
       "select ReceiverProposal_ID, sum(XP) as OpponentXPs, ChallengeID\n" +
       " from 1001db.Challenge C, 1001db.ChallengeResults CR\n" +
-      " where C.ID = CR.ChallengeID and ReceiverProposal_ID = PlayerID \n" +
+      " where C.ID = CR.ChallengeID and ReceiverProposal_ID = PlayerID and C.Status = 'Finished'\n" +
       " group by ReceiverProposal_ID\n" +
       ") as OpponentTable\n" +
       "where C.SenderProposal_ID = " + UserID + "\n" +
       "and C.SenderProposal_ID = PlayerID\n" +
       "and CQ.ID = CR.QuestionID\n" +
-      " and T.ID = CQ.Topics_ID\n" +
+      " and T.ID = CQ.Topics_ID\nand C.Status = 'Finished'\n" +
       " and OpponentTable.ChallengeID = C.ID\n" +
       "and OpponentTable.ReceiverProposal_ID = C.ReceiverProposal_ID\n" +
       "group by C.ID, PlayerID\n" +
@@ -1131,11 +1164,11 @@ function getAllChallengesResults(UserID, callback) {
       "from 1001db.Challenge C, 1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ, 1001db.Topics T, (\n" +
       "select SenderProposal_ID, sum(XP) as OpponentXPs, ChallengeID\n" +
       "from 1001db.Challenge C, 1001db.ChallengeResults CR\n" +
-      " where C.ID = CR.ChallengeID and SenderProposal_ID = PlayerID \n" +
+      " where C.ID = CR.ChallengeID and SenderProposal_ID = PlayerID and C.Status = 'Finished'\n" +
       " group by SenderProposal_ID\n" +
       ") as OpponentTable\n" +
       "where C.ReceiverProposal_ID = " + UserID + "\n" +
-      "and C.ReceiverProposal_ID = PlayerID\n" +
+      "and C.ReceiverProposal_ID = PlayerID\nand C.Status = 'Finished'\n" +
       "and CQ.ID = CR.QuestionID\n" +
       "and T.ID = CQ.Topics_ID\n" +
       "and OpponentTable.ChallengeID = C.ID\n" +
@@ -1351,3 +1384,4 @@ exports.getWaitingChallengeCounter = getWaitingChallengeCounter;
 exports.getAllCompanySizes = getAllCompanySizes;
 exports.getAllCompanyTypes = getAllCompanyTypes;
 exports.getAllIndustries = getAllIndustries;
+exports.getPlayingChallenge=getPlayingChallenge;

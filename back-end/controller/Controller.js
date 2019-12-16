@@ -577,12 +577,12 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
                 pm.getChallengeByID(req.ChallengeID, (err, result) => {
                     if (err) throw err;
                     else if (result !== undefined && result !== null) {
-                        var challenge = new challengeClass.Challenge(result.getSender, req.getReceiver, challengeClass.ChallengeStatus.Finished);
+                        var challenge = new challengeClass.Challenge(result.getSender, result.getReceiver, challengeClass.ChallengeStatus.Finished);
                         challenge.setID = req.ChallengeID;
                         pm.updateChallenge(challenge, (err, result) => {
                             if (err) throw err;
                         });
-                        console.log("A challenge finished with id " + req.ChallengeID);
+                        console.log("[" + Date(Date.now()).toString() + "] - " + "[Controller]: A challenge finished with id " + req.ChallengeID);
                         finishedInHalfChallengeSet.delete(req.ChallengeID);
                     }
                     else {
@@ -595,7 +595,7 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
             }
             else {
                 finishedInHalfChallengeSet.add(req.ChallengeID);
-                console.log("A finished in half added with id " + req.ChallengeID);
+                console.log("[" + Date(Date.now()).toString() + "] - " + "[Controller]: A finished in half added with id " + req.ChallengeID);
             }
         }
         utils.sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));

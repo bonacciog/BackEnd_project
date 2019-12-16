@@ -1,9 +1,9 @@
 var http = require('http');
 
-var postData = JSON.stringify({ 
+/* var postData = JSON.stringify({ 
     request : "getPlayingChallengeByID",
     UserID:1
-});
+}); */
 /* var postData = JSON.stringify({ 
     request : "getAllIndustries"
 }); */
@@ -21,10 +21,10 @@ var postData = JSON.stringify({
     Company: { Name:'Prova', WebSiteURL:'Prova', LinkedinProfileURL:'Prova', Industries_ID:1, CompanyTypeID:1, CompanySizeID:1 }
 }); */
 
-/*  var postData = JSON.stringify({ 
+ var postData = JSON.stringify({ 
     request : "getAllChallengesResults", 
-    UserID: 4
-}); */
+    UserID: 2
+});
 /*  var postData = JSON.stringify({ 
     request : "getWaitingChallengeByID", 
     UserID: 1
@@ -36,14 +36,14 @@ var postData = JSON.stringify({
 }); */
 /* var postData = JSON.stringify({
     request: 'answerToChallengeQuestion',
-    UserID : 4,
-    QuestionID :16,
-    ChallengeID : 11,
-    OpponentID : 3,
-    XP : 0,
+    UserID : 2,
+    QuestionID :60,
+    ChallengeID : 1,
+    OpponentID : 1,
+    XP : 15,
     TopicID : 2,
     TimeInSec : 3,
-    RoundNumber: 1
+    RoundNumber: 10
 }); */
 /* var postData = JSON.stringify({
     request: 'getResultByChallengeID',
@@ -57,16 +57,16 @@ var postData = JSON.stringify({
 }) */
 /* var postData = JSON.stringify({
     request : "challengeAccepted",
-    ReceiverProposal_ID : 4,
-    SenderProposal_ID : 3,
-    TopicID : 1,
-    challengeID : 11
+    ReceiverProposal_ID : 2,
+    SenderProposal_ID : 1,
+    TopicID : 2,
+    challengeID : 1
 }); */
 
 /* var postData = JSON.stringify({ 
     request : "challengeSpecificUser", 
-    ReceiverProposal_ID :4,
-    SenderProposal_ID :3,
+    ReceiverProposal_ID :2,
+    SenderProposal_ID :1,
     TopicID : 2
 }); */
 /* var postData = JSON.stringify({ 

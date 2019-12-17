@@ -1098,6 +1098,8 @@ function getPlayingChallenge(UserID, callback) {
   }
 }
 
+
+
 function getWaitingChallenge(UserID, callback) {
   try {
     if (UserID === undefined)
@@ -1111,7 +1113,7 @@ function getWaitingChallenge(UserID, callback) {
       "from 1001db.Challenge C,1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ\n" +
       "where C.ID=CR.ChallengeID\n" +
       "and CR.QuestionID=CQ.ID\n" +
-      "and C.ReceiverProposal_ID = " + UserID + "\n" +
+      "and (C.ReceiverProposal_ID = " + UserID  +" or C.SenderProposal_ID = " + UserID +")\n" +
       "and C.Status = '" + challengeClass.ChallengeStatus.WaitingOtherPlayer + "'\n" +
       "group by C.ID";
     connection.query(sql, function (err, result) {
@@ -1351,15 +1353,15 @@ function getChallengeByID(ID, callback) {
     });
     var sql = "select *\n" +
       "from 1001db.Challenge\n"+
-      "where ID= " + ID;
+      "where ID = " + ID;
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
-      var challenge;;
+      var challenge;
       Object.keys(result).forEach(function (key) {
         var row = result[key];
         challenge = new challengeClass.Challenge(row.SenderProposal_ID, row.ReceiverProposal_ID, row.Status);
-        challenge[challengeDim].setID = row.ID;
-        challenge[challengeDim].setDatetime = row.Datetime;
+        challenge.setID = row.ID;
+        challenge.setDatetime = row.Datetime;
       });
 
       callback(null, challenge);

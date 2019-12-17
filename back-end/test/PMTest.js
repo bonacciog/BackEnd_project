@@ -52,6 +52,6 @@ for (i = 0; i < 30; i++) {
  
 
 
-pm.isThereASlot(1, function (err, result) {
+pm.getChallengeByID(13, function (err, result) {
     console.log(err + " " + result)
 });

@@ -1098,6 +1098,8 @@ function getPlayingChallenge(UserID, callback) {
   }
 }
 
+
+
 function getWaitingChallenge(UserID, callback) {
   try {
     if (UserID === undefined)
@@ -1111,7 +1113,7 @@ function getWaitingChallenge(UserID, callback) {
       "from 1001db.Challenge C,1001db.ChallengeResults CR, 1001db.ChallengeQuestions CQ\n" +
       "where C.ID=CR.ChallengeID\n" +
       "and CR.QuestionID=CQ.ID\n" +
-      "and C.ReceiverProposal_ID = " + UserID + "\n" +
+      "and (C.ReceiverProposal_ID = " + UserID  +" or C.SenderProposal_ID = " + UserID +")\n" +
       "and C.Status = '" + challengeClass.ChallengeStatus.WaitingOtherPlayer + "'\n" +
       "group by C.ID";
     connection.query(sql, function (err, result) {

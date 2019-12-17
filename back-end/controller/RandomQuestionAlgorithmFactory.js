@@ -1,6 +1,10 @@
 const financeAlgorithm = require('./RandomQuestionAlgorithmFinance');
-const programmingToolsAlgorithm = require('./RandomQuestionAlgorithmJAVA');
-const questionsExtractionAlgorithm=[ financeAlgorithm, programmingToolsAlgorithm ];
+const AccountingAlgorithmJava = require('./RandomQuestionAlgorithmAccounting');
+const JavaAlgorithmJava = require('./RandomQuestionAlgorithmJAVA');
+const SQLAlgorithmJava = require('./RandomQuestionAlgorithmSQL');
+const VBAAlgorithmJava = require('./RandomQuestionAlgorithmVBA');
+
+const questionsExtractionAlgorithm=[ financeAlgorithm,AccountingAlgorithmJava, JavaAlgorithmJava,SQLAlgorithmJava, VBAAlgorithmJava];
 
 function getRandomQuestionAlgorithm(topicID) {
     return questionsExtractionAlgorithm[topicID-1];

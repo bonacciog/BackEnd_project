@@ -5,7 +5,10 @@ insert into 1001db.TypeInformations(Type, TimeInSec)
  
  insert into 1001db.Topics(TopicName)
  values('Investment banking and finance'),
-       ('JAVA');
+		('Accounting'),
+       ('JAVA'),
+       ('SQL'),
+       ('VBA');
 insert into 1001db.ExecutionTable values('chiave');
 
 INSERT INTO `1001db`.`CompanySizes`

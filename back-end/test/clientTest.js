@@ -21,10 +21,10 @@ var http = require('http');
     Company: { Name:'Prova', WebSiteURL:'Prova', LinkedinProfileURL:'Prova', Industries_ID:1, CompanyTypeID:1, CompanySizeID:1 }
 }); */
 
- var postData = JSON.stringify({ 
+/*  var postData = JSON.stringify({ 
     request : "getAllChallengesResults", 
-    UserID: 13
-});
+    UserID: 1
+}); */
 /*  var postData = JSON.stringify({ 
     request : "getWaitingChallengeByID", 
     UserID: 1
@@ -36,14 +36,14 @@ var http = require('http');
 }); */
 /* var postData = JSON.stringify({
     request: 'answerToChallengeQuestion',
-    UserID : 13,
-    QuestionID :4,
-    ChallengeID : 47,
-    OpponentID : 12,
-    XP : 15,
+    UserID :11,
+    QuestionID :85,
+    ChallengeID : 54,
+    OpponentID : 15,
+    XP : 0,
     TopicID : 1,
     TimeInSec : 3,
-    RoundNumber: 10
+    RoundNumber:1
 }); */
 /* var postData = JSON.stringify({
     request: 'getResultByChallengeID',
@@ -60,15 +60,15 @@ var http = require('http');
     ReceiverProposal_ID : 2,
     SenderProposal_ID : 1,
     TopicID : 2,
-    challengeID : 1
+    challengeID : 2
 }); */
 
-/* var postData = JSON.stringify({ 
+var postData = JSON.stringify({ 
     request : "challengeSpecificUser", 
     ReceiverProposal_ID :2,
     SenderProposal_ID :1,
-    TopicID : 2
-}); */
+    TopicID : 4
+});
 /* var postData = JSON.stringify({ 
     request : "chooseRandomOpponent", 
     UserID: 1,
@@ -107,7 +107,7 @@ var http = require('http');
 }) */
 
 var options = {
-    hostname: '80.211.33.82',
+    hostname: 'localhost',
     port: 3000,
     method: 'POST',
     headers: {

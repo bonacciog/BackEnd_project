@@ -2,7 +2,7 @@ const pm = require('../persistence/PersistenceManager');
 const utils = require('../util/utils');
 const challengeResultClass = require('../model/ChallengeResult');
 
-const TopicID = 3;
+const TopicID = 5;
 
 const types = [
     {

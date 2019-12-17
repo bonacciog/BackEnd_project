@@ -1043,10 +1043,18 @@ function getWaitingChallengeCounter(UserID, callback) {
       if (err) callback(err, null);
       console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
-    var sql = "select COUNT(*) as Counter\n" +
-      "from 1001db.Challenge C\n" +
+    var sql =  "select COUNT(*) as Counter\n"+
+      "from 1001db.Challenge, (\n"+
+		"select ChallengeID, Count(*) as ansCount\n"+
+	"from 1001db.ChallengeResults\n"+
+       "where PlayerID = 15\n"+
+        "and Status = 'Answered'\n"+
+        "group by ChallengeID\n"+
+      ") as AnsweredTable\n"+
       "where SenderProposal_ID = " + UserID + "\n" +
-      "and C.Status = 'WaitingOtherPlayer'";
+      "and AnsweredTable.ChallengeID = ID\n"+
+      "and AnsweredTable.ansCount = 10\n"+
+      "and Status = '" + challengeClass.ChallengeStatus.WaitingOtherPlayer +"'";
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       var counter = 0;
@@ -1116,6 +1124,7 @@ function getWaitingChallenge(UserID, callback) {
       "and (C.ReceiverProposal_ID = " + UserID  +" or C.SenderProposal_ID = " + UserID +")\n" +
       "and C.Status = '" + challengeClass.ChallengeStatus.WaitingOtherPlayer + "'\n" +
       "group by C.ID";
+      
     connection.query(sql, function (err, result) {
       if (err) callback(err, null);
       var challenge = new Array();

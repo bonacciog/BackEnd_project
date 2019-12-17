@@ -1342,7 +1342,7 @@ function saveCompany(company, callback) {
 }
 function getChallengeByID(ID, callback) {
   try {
-    if (UserID === undefined||Opponent==undefined)
+    if (ID === undefined)
       callback(new ParamError('Incorrect Parameter!'), null);
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
@@ -1370,6 +1370,38 @@ function getChallengeByID(ID, callback) {
     callback(err, null);
   }
 }
+
+function IsChallengeOnFinished(ID, callback) {
+  try {
+    if (ID === undefined)
+      callback(new ParamError('Incorrect Parameter!'), null);
+    var connection = mysql.createConnection(dbParam);
+    connection.connect(function (err) {
+      if (err) callback(err, null);
+      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
+    });
+    var sql = "select C.ID, COUNT(*) as Finished\n"+
+    "from 1001db.Challenge C JOIN 1001db.ChallengeResults CR ON (CR.ChallengeID = C.ID)\n"+
+    "where (C.SenderProposal_ID = PlayerID or C.ReceiverProposal_ID = PlayerID)\n"+
+    "and C.ID = " + ID + "\n"+
+    "and CR.Status = 'Answered'";
+    connection.query(sql, function (err, result) {
+      if (err) callback(err, null);
+      var result;
+      Object.keys(result).forEach(function (key) {
+        var row = result[key];
+        result = row.Finished;
+      });
+
+      callback(null, result);
+    });
+
+    connection.end();
+  } catch (err) {
+    callback(err, null);
+  }
+}
+
 exports.getUser = getUser;
 exports.updateUser = updateUser;
 exports.saveUser = saveUser;
@@ -1415,3 +1447,4 @@ exports.getAllCompanyTypes = getAllCompanyTypes;
 exports.getAllIndustries = getAllIndustries;
 exports.getPlayingChallenge=getPlayingChallenge;
 exports.getChallengeByID=getChallengeByID;
+exports.IsChallengeOnFinished = IsChallengeOnFinished;

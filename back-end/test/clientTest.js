@@ -21,10 +21,10 @@ var http = require('http');
     Company: { Name:'Prova', WebSiteURL:'Prova', LinkedinProfileURL:'Prova', Industries_ID:1, CompanyTypeID:1, CompanySizeID:1 }
 }); */
 
- var postData = JSON.stringify({ 
+/*  var postData = JSON.stringify({ 
     request : "getAllChallengesResults", 
     UserID: 2
-});
+}); */
 /*  var postData = JSON.stringify({ 
     request : "getWaitingChallengeByID", 
     UserID: 1
@@ -107,7 +107,7 @@ var http = require('http');
 }) */
 
 var options = {
-    hostname: 'localhost',
+    hostname: '80.211.33.82',
     port: 3000,
     method: 'POST',
     headers: {

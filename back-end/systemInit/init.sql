@@ -5,7 +5,7 @@ insert into 1001db.TypeInformations(Type, TimeInSec)
  
  insert into 1001db.Topics(TopicName)
  values('Investment banking and finance'),
-		('Accounting'),
+		('Financial Accounting'),
        ('JAVA'),
        ('SQL'),
        ('VBA');

@@ -21,10 +21,10 @@ var http = require('http');
     Company: { Name:'Prova', WebSiteURL:'Prova', LinkedinProfileURL:'Prova', Industries_ID:1, CompanyTypeID:1, CompanySizeID:1 }
 }); */
 
-/*  var postData = JSON.stringify({ 
+ var postData = JSON.stringify({ 
     request : "getAllChallengesResults", 
-    UserID: 2
-}); */
+    UserID: 13
+});
 /*  var postData = JSON.stringify({ 
     request : "getWaitingChallengeByID", 
     UserID: 1
@@ -36,12 +36,12 @@ var http = require('http');
 }); */
 /* var postData = JSON.stringify({
     request: 'answerToChallengeQuestion',
-    UserID : 2,
-    QuestionID :60,
-    ChallengeID : 1,
-    OpponentID : 1,
+    UserID : 13,
+    QuestionID :4,
+    ChallengeID : 47,
+    OpponentID : 12,
     XP : 15,
-    TopicID : 2,
+    TopicID : 1,
     TimeInSec : 3,
     RoundNumber: 10
 }); */

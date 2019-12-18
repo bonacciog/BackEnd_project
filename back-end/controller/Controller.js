@@ -557,11 +557,11 @@ eventRequest.on('getResultByChallengeID', function (req, res) {
 });
 
 eventRequest.on('answerToChallengeQuestion', async function (req, res) {
-    try {
         const { promisify } = require('util');
         const updateChallengeResultPromise = promisify(pm.updateChallengeResult);
-        await updateChallengeResultPromise(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered));
-        var notification = {
+        await updateChallengeResultPromise(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered)).then((err,nothing)=>{
+            if (err) throw err;
+            var notification = {
             notificationType: "questionResponse",
             OpponentID: req.UserID,
             QuestionID: req.QuestionID,
@@ -571,16 +571,16 @@ eventRequest.on('answerToChallengeQuestion', async function (req, res) {
             TimeInSec: req.TimeInSec,
             RoundNumber: req.RoundNumber
         };      
-        pm.IsChallengeOnFinished(req.ChallengeID,(err, answeredNumber) => {
-            if (err) throw err;
+        pm.IsChallengeOnFinished(req.ChallengeID,(err1, answeredNumber) => {
+            if (err1) throw err1;
             if (parseInt(answeredNumber) === 20) {
-                pm.getChallengeByID(req.ChallengeID, (err, result) => {
-                    if (err) throw err;
+                pm.getChallengeByID(req.ChallengeID, (err2, result) => {
+                    if (err2) throw err2;
                     else if (result !== undefined && result !== null) {
                         var challenge = new challengeClass.Challenge(result.getSender, result.getReceiver, challengeClass.ChallengeStatus.Finished);
                         challenge.setID = req.ChallengeID;
-                        pm.updateChallenge(challenge, (err, result) => {
-                            if (err) throw err;
+                        pm.updateChallenge(challenge, (err3, result) => {
+                            if (err3) throw err3;
                         });
                         console.log("A challenge finished with id " + req.ChallengeID);
                     }
@@ -595,12 +595,11 @@ eventRequest.on('answerToChallengeQuestion', async function (req, res) {
         
         utils.sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
         res.end(JSON.stringify(allRightJSON));
-
-    } catch (err) {
+    }).catch((err)=>{
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
-    }
+    });
 });
 
 eventRequest.on('getWaitingChallengeByID', function (req, res) {

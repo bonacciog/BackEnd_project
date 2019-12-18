@@ -589,7 +589,7 @@ eventRequest.on('answerToChallengeQuestion', async function (req, res) {
         });
     });
 
-    await updateResults.then(() => {
+    await updateResults.then(async () => {
         await verifyFinished.then(() => {
             utils.sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
             res.end(JSON.stringify(allRightJSON));

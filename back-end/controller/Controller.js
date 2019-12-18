@@ -560,6 +560,7 @@ eventRequest.on('answerToChallengeQuestion', async function (req, res) {
         const { promisify } = require('util');
         const updateChallengeResultPromise = promisify(pm.updateChallengeResult);
         await updateChallengeResultPromise(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered)).then((err,nothing)=>{
+            console.log(err);
             if (err) throw err;
             var notification = {
             notificationType: "questionResponse",
@@ -570,8 +571,10 @@ eventRequest.on('answerToChallengeQuestion', async function (req, res) {
             TopicID: req.TopicID,
             TimeInSec: req.TimeInSec,
             RoundNumber: req.RoundNumber
-        };      
+        };   
+        console.log("Eccomi")   
         pm.IsChallengeOnFinished(req.ChallengeID,(err1, answeredNumber) => {
+            console.log(answeredNumber)   
             if (err1) throw err1;
             if (parseInt(answeredNumber) === 20) {
                 pm.getChallengeByID(req.ChallengeID, (err2, result) => {
@@ -592,9 +595,10 @@ eventRequest.on('answerToChallengeQuestion', async function (req, res) {
                 });
             }
         });
-        
+        console.log("Eccomi")
         utils.sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
         res.end(JSON.stringify(allRightJSON));
+        console.log("Eccomi")
     }).catch((err)=>{
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);

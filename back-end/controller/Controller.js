@@ -574,7 +574,7 @@ eventRequest.on('answerToChallengeQuestion', async function (req, res) {
 
         const { promisify } = require('util');
         const IsChallengeOnFinishedPromise = promisify(pm.IsChallengeOnFinished);
-        await IsChallengeOnFinishedPromise(req.ChallengeID).then((err, answeredNumber) => {
+        await IsChallengeOnFinishedPromise(req.ChallengeID).then((answeredNumber) => {
             console.log(answeredNumber)
             if (err) throw err;
             if (parseInt(answeredNumber) === 20) {

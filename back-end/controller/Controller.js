@@ -557,51 +557,6 @@ eventRequest.on('getResultByChallengeID', function (req, res) {
 });
 
 eventRequest.on('answerToChallengeQuestion', function (req, res) {
-    /*     const verifyFinished = function () {
-            pm.IsChallengeOnFinished(req.ChallengeID, (err, answeredNumber) => {
-                if (err) throw err;
-                if (parseInt(answeredNumber) === 20) {
-                    pm.getChallengeByID(req.ChallengeID, (err, result) => {
-                        if (err) throw err;
-                        else if (result !== undefined && result !== null) {
-                            var challenge = new challengeClass.Challenge(result.getSender, result.getReceiver, challengeClass.ChallengeStatus.Finished);
-                            challenge.setID = req.ChallengeID;
-                            pm.updateChallenge(challenge, (err, result) => {
-                                if (err) throw err;
-                            });
-                            console.log("A challenge finished with id " + req.ChallengeID);
-                        }
-                        else
-                            throw err;
-                    });
-                }
-            });
-        };
-        const updateResults = await new Promise((resolve, reject) => {
-            pm.updateChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered), (err, result) => {
-                if (err) reject(err);
-                else resolve(verifyFinished);
-            });
-        });
-    
-        updateResults.then(() => {
-            var notification = {
-                notificationType: "questionResponse",
-                OpponentID: req.UserID,
-                QuestionID: req.QuestionID,
-                ChallengeID: req.ChallengeID,
-                XP: req.XP,
-                TopicID: req.TopicID,
-                TimeInSec: req.TimeInSec,
-                RoundNumber: req.RoundNumber
-            };
-            utils.sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
-            res.end(JSON.stringify(allRightJSON));
-        }).catch(() => {
-            errorJSON.error = 'Input error or interaction with the database';
-            response = JSON.stringify(errorJSON);
-            res.end(response);
-        }) */
     try {
         pm.updateChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered), (err, result) => {
             if (err) throw err;

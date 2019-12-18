@@ -556,7 +556,7 @@ eventRequest.on('getResultByChallengeID', function (req, res) {
     }
 });
 
-eventRequest.on('answerToChallengeQuestion', function (req, res) {
+eventRequest.on('answerToChallengeQuestion', async function (req, res) {
     try {
         pm.updateChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered), (err, result) => {
             if (err) throw err;
@@ -572,7 +572,9 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
             RoundNumber: req.RoundNumber
         };
 
-        pm.IsChallengeOnFinished(req.ChallengeID, (err, answeredNumber) => {
+        const { promisify } = require('util');
+        const IsChallengeOnFinishedPromise = promisify(pm.IsChallengeOnFinished);
+        await IsChallengeOnFinishedPromise(req.ChallengeID).then((err, answeredNumber) => {
             console.log(answeredNumber)
             if (err) throw err;
             if (parseInt(answeredNumber) === 20) {

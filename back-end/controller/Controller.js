@@ -557,52 +557,51 @@ eventRequest.on('getResultByChallengeID', function (req, res) {
 });
 
 eventRequest.on('answerToChallengeQuestion', async function (req, res) {
-    const updateResults = new Promise((resolve, reject) => {
-        pm.updateChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered), (err, result) => {
-            if (err) reject(err);
-            else resolve();
-        });
-    });
-    const verifyFinished = new Promise((resolve, reject) => {
+    const verifyFinished = function () {
         pm.IsChallengeOnFinished(req.ChallengeID, (err, answeredNumber) => {
-            if (err) reject(err);
+            if (err) throw err;
             if (parseInt(answeredNumber) === 20) {
                 pm.getChallengeByID(req.ChallengeID, (err, result) => {
-                    if (err) reject(err);
+                    if (err) throw err;
                     else if (result !== undefined && result !== null) {
                         var challenge = new challengeClass.Challenge(result.getSender, result.getReceiver, challengeClass.ChallengeStatus.Finished);
                         challenge.setID = req.ChallengeID;
                         pm.updateChallenge(challenge, (err, result) => {
-                            if (err) reject(err);
+                            if (err) throw err;
                         });
                         console.log("A challenge finished with id " + req.ChallengeID);
-                        resolve();
                     }
-                    else {
-                        reject(err);
-                    }
+                    else
+                        throw err;
                 });
             }
-            else {
-                resolve();
-            }
+        });
+    };
+    const updateResults = await new Promise((resolve, reject) => {
+        pm.updateChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered), (err, result) => {
+            if (err) reject(err);
+            else resolve(verifyFinished);
         });
     });
 
-    await updateResults.then(async () => {
-        await verifyFinished.then(() => {
-            utils.sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
-            res.end(JSON.stringify(allRightJSON));
-        }).catch(() => {
-            errorJSON.error = 'Input error or interaction with the database';
-            response = JSON.stringify(errorJSON);
-            res.end(response);
-        });
+    updateResults.then(() => {
+        var notification = {
+            notificationType: "questionResponse",
+            OpponentID: req.UserID,
+            QuestionID: req.QuestionID,
+            ChallengeID: req.ChallengeID,
+            XP: req.XP,
+            TopicID: req.TopicID,
+            TimeInSec: req.TimeInSec,
+            RoundNumber: req.RoundNumber
+        };
+        utils.sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
+        res.end(JSON.stringify(allRightJSON));
     }).catch(() => {
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);
         res.end(response);
-    });
+    })
     /*pm.updateChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered), (err, result) => {
         if (err) throw err;
     });

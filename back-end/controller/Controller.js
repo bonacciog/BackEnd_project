@@ -562,6 +562,7 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
             if (err) throw err;
             else {
                 pm.IsChallengeOnFinished(req.ChallengeID, (err, answeredNumber) => {
+                    console.log(answeredNumber)
                     if (err) throw err;
                     if (parseInt(answeredNumber) === 20) {
                         pm.getChallengeByID(req.ChallengeID, (err, result) => {

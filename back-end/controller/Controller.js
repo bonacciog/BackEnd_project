@@ -559,7 +559,7 @@ eventRequest.on('getResultByChallengeID', function (req, res) {
 eventRequest.on('answerToChallengeQuestion', function (req, res) {
     try {
         pm.updateChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered), (err, result) => {
-            if (err) throw err;
+            console.log("Entrato")
             pm.IsChallengeOnFinished(req.ChallengeID, (err, answeredNumber) => {
                 console.log(answeredNumber)
                 if (err) throw err;

@@ -1027,7 +1027,7 @@ function updateChallengeResult(challengeResult, callback) {
       if (err) callback(err, null);
       console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A result for User " + challengeResult.getPlayerID + " updated");
     });
-
+    callback(null, null);
     connection.end();
   } catch (err) {
     callback(err, null);

@@ -559,7 +559,7 @@ eventRequest.on('getResultByChallengeID', function (req, res) {
 eventRequest.on('answerToChallengeQuestion', async function (req, res) {
         const { promisify } = require('util');
         const updateChallengeResultPromise = promisify(pm.updateChallengeResult);
-        await updateChallengeResultPromise(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered)).then((err,nothing)=>{
+        await updateChallengeResultPromise(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered)).then(()=>{
             console.log(err);
             if (err) throw err;
             var notification = {

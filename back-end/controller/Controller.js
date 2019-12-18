@@ -560,30 +560,28 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
     try {
         pm.updateChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered), (err, result) => {
             if (err) throw err;
-            else {
-                pm.IsChallengeOnFinished(req.ChallengeID, (err, answeredNumber) => {
-                    console.log(answeredNumber)
-                    if (err) throw err;
-                    if (parseInt(answeredNumber) === 20) {
-                        pm.getChallengeByID(req.ChallengeID, (err, result) => {
-                            if (err) throw err;
-                            else if (result !== undefined && result !== null) {
-                                var challenge = new challengeClass.Challenge(result.getSender, result.getReceiver, challengeClass.ChallengeStatus.Finished);
-                                challenge.setID = req.ChallengeID;
-                                pm.updateChallenge(challenge, (err, result) => {
-                                    if (err) throw err;
-                                });
-                                console.log("A challenge finished with id " + req.ChallengeID);
-                            }
-                            else {
-                                errorJSON.error = 'Input error or interaction with the database';
-                                response = JSON.stringify(errorJSON);
-                                res.end(response);
-                            }
-                        });
-                    }
-                });
-            }
+            pm.IsChallengeOnFinished(req.ChallengeID, (err, answeredNumber) => {
+                console.log(answeredNumber)
+                if (err) throw err;
+                if (parseInt(answeredNumber) === 20) {
+                    pm.getChallengeByID(req.ChallengeID, (err, result) => {
+                        if (err) throw err;
+                        else if (result !== undefined && result !== null) {
+                            var challenge = new challengeClass.Challenge(result.getSender, result.getReceiver, challengeClass.ChallengeStatus.Finished);
+                            challenge.setID = req.ChallengeID;
+                            pm.updateChallenge(challenge, (err, result) => {
+                                if (err) throw err;
+                            });
+                            console.log("A challenge finished with id " + req.ChallengeID);
+                        }
+                        else {
+                            errorJSON.error = 'Input error or interaction with the database';
+                            response = JSON.stringify(errorJSON);
+                            res.end(response);
+                        }
+                    });
+                }
+            });
         });
 
         var notification = {

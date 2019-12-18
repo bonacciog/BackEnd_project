@@ -380,7 +380,12 @@ eventRequest.on('challengeSpecificUser', function (req, res) {
                     }
                     extractionQuestionsFactory.getRandomQuestionAlgorithm(req.TopicID).saveAndSendRandomQuestions(req_modified, res);
                     utils.sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(notification));
-                    res.end(JSON.stringify(notification));
+                    res.end(JSON.stringify({
+                        TopicID: req.TopicID,
+                        SenderProposal_ID: req.SenderProposal_ID,
+                        ReceiverProposal_ID: req.ReceiverProposal_ID,
+                        challengeID: id
+                    }));
                 });
             }
             else {
@@ -433,6 +438,7 @@ eventRequest.on('challengeAccepted', function (req, res) {
                 else {
                     var challenge = {
                         notificationType: 'startChallenge',
+                        ChallengeID: req.challengeID,
                         Questions: questions
                     }
                     challenge.Questions.forEach((question) => {
@@ -442,7 +448,12 @@ eventRequest.on('challengeAccepted', function (req, res) {
                     });
                     challenge.Questions = utils.sortQuestions(challenge.Questions);
                     utils.sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(challenge));
-                    res.end(JSON.stringify(allRightJSON));
+                    res.end(JSON.stringify({
+                        ReceiverProposal_ID : req.ReceiverProposal_ID,
+                        SenderProposal_ID : req.SenderProposal_ID,
+                        TopicID : req.TopicID,
+                        challengeID : req.challengeID
+                    }));
                 }
             }
         });

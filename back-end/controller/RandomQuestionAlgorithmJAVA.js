@@ -34,6 +34,7 @@ const getSaveAndSendProgrammingToolsRandomQuestions = function (req, res) {
             else {
                 var challenge = {
                     notificationType: 'startChallenge',
+                    ChallengeID: req.challengeID,
                     Questions: result1
                 }
                 pm.getRandomQuestions(TopicID, types[typesIndex].typeName, types[typesIndex].questionsNumber, function (err, result2) {

@@ -1404,7 +1404,7 @@ function IsChallengeOnFinished(ID, callback) {
         result = row.Finished;
       });
 
-      callback(null, result);
+      callback(result);
     });
 
     connection.end();

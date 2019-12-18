@@ -11,7 +11,6 @@ const companyClass = require('../model/Company');
 const utils = require('../util/utils');
 
 const users = new Map();
-// const finishedInHalfChallengeSet = new Set();
 
 const MAX_PENDINGCHALLENGE = 4;
 
@@ -574,6 +573,7 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
         };
 
         pm.IsChallengeOnFinished(req.ChallengeID, (err, answeredNumber) => {
+            console.log(answeredNumber)
             if (err) throw err;
             if (parseInt(answeredNumber) === 20) {
                 pm.getChallengeByID(req.ChallengeID, (err, result) => {
@@ -594,32 +594,7 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
                 });
             }
         });
-        /* if (parseInt(req.RoundNumber) === 10) {
-            if (finishedInHalfChallengeSet.has(req.ChallengeID)) {
-                pm.getChallengeByID(req.ChallengeID, (err, result) => {
-                    if (err) throw err;
-                    else if (result !== undefined && result !== null) {
-                        var challenge = new challengeClass.Challenge(result.getSender, result.getReceiver, challengeClass.ChallengeStatus.Finished);
-                        challenge.setID = req.ChallengeID;
-                        pm.updateChallenge(challenge, (err, result) => {
-                            if (err) throw err;
-                        });
-                        console.log("[" + Date(Date.now()).toString() + "] - " + "[Controller]: A challenge finished with id " + req.ChallengeID);
-                        finishedInHalfChallengeSet.delete(req.ChallengeID);
-                    }
-                    else {
-                        errorJSON.error = 'Input error or interaction with the database';
-                        response = JSON.stringify(errorJSON);
-                        res.end(response);
-                    }
-                })
-
-            }
-            else {
-                finishedInHalfChallengeSet.add(req.ChallengeID);
-                console.log("[" + Date(Date.now()).toString() + "] - " + "[Controller]: A finished in half added with id " + req.ChallengeID);
-            }
-        } */
+        
         utils.sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
         res.end(JSON.stringify(allRightJSON));
 

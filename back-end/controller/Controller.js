@@ -558,9 +558,9 @@ eventRequest.on('getResultByChallengeID', function (req, res) {
 
 eventRequest.on('answerToChallengeQuestion', async function (req, res) {
     try {
-        pm.updateChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered), (err, result) => {
-            if (err) throw err;
-        });
+        const { promisify } = require('util');
+        const updateChallengeResultPromise = promisify(pm.updateChallengeResult);
+        await updateChallengeResultPromise(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered);
         var notification = {
             notificationType: "questionResponse",
             OpponentID: req.UserID,
@@ -570,12 +570,8 @@ eventRequest.on('answerToChallengeQuestion', async function (req, res) {
             TopicID: req.TopicID,
             TimeInSec: req.TimeInSec,
             RoundNumber: req.RoundNumber
-        };
-
-        const { promisify } = require('util');
-        const IsChallengeOnFinishedPromise = promisify(pm.IsChallengeOnFinished);
-        await IsChallengeOnFinishedPromise(req.ChallengeID,(err, answeredNumber) => {
-            console.log(answeredNumber)
+        };      
+        pm.IsChallengeOnFinished(req.ChallengeID,(err, answeredNumber) => {
             if (err) throw err;
             if (parseInt(answeredNumber) === 20) {
                 pm.getChallengeByID(req.ChallengeID, (err, result) => {

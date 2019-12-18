@@ -560,7 +560,7 @@ eventRequest.on('answerToChallengeQuestion', async function (req, res) {
     try {
         const { promisify } = require('util');
         const updateChallengeResultPromise = promisify(pm.updateChallengeResult);
-        await updateChallengeResultPromise(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered);
+        await updateChallengeResultPromise(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered));
         var notification = {
             notificationType: "questionResponse",
             OpponentID: req.UserID,

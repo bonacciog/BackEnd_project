@@ -571,7 +571,6 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
     try {
         pm.updateChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered), (err, result) => {
             pm.IsChallengeOnFinished(req.ChallengeID, (err, answeredNumber) => {
-                console.log(answeredNumber)
                 if (err) throw err;
                 if (parseInt(answeredNumber) === 20) {
                     console.log("Entrato nell'if con " + answeredNumber)

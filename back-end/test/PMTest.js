@@ -52,6 +52,7 @@ for (i = 0; i < 30; i++) {
  
 
 
-pm.getChallengeByID(13, function (err, result) {
+const challengeResultClass = require('../model/ChallengeResult');
+pm.updateChallengeResult(new challengeResultClass.ChallengeResult(2, 80, 1, 0, 3, challengeResultClass.ChallengeResultStatus.Answered), function (err, result) {
     console.log(err + " " + result)
 });

@@ -1025,8 +1025,8 @@ async function updateChallengeResult(challengeResult, callback) {
       "and ChallengeID = " + challengeResult.getChallengeID;
     const { promisify } = require('util');
 
-    const queryPromise = promisify(connection.query);
-    await queryPromise(sql).then(function (err, result) {
+    //const queryPromise = promisify(connection.query);
+    connection.query(sql,function (err, result) {
       if (err) callback(err, null);
       console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A result for User " + challengeResult.getPlayerID + " updated");
     });

@@ -449,10 +449,10 @@ eventRequest.on('challengeAccepted', function (req, res) {
                     challenge.Questions = utils.sortQuestions(challenge.Questions);
                     utils.sendIfPossibleOrSaveNotification(req.ReceiverProposal_ID, JSON.stringify(challenge));
                     res.end(JSON.stringify({
-                        ReceiverProposal_ID : req.ReceiverProposal_ID,
-                        SenderProposal_ID : req.SenderProposal_ID,
-                        TopicID : req.TopicID,
-                        challengeID : req.challengeID
+                        ReceiverProposal_ID: req.ReceiverProposal_ID,
+                        SenderProposal_ID: req.SenderProposal_ID,
+                        TopicID: req.TopicID,
+                        challengeID: req.challengeID
                     }));
                 }
             }
@@ -571,29 +571,29 @@ eventRequest.on('answerToChallengeQuestion', async function (req, res) {
     try {
         const { promisify } = require('util');
 
-    const updateChallengeResultPromise = promisify(pm.updateChallengeResult);
-    await updateChallengeResultPromise(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered)).then(()=>{
-            pm.IsChallengeOnFinished(req.ChallengeID, (err, answeredNumber) => {
-                if (err) throw err;
-                if (parseInt(answeredNumber) === 20) {
-                    pm.getChallengeByID(req.ChallengeID, (err, result) => {
-                        if (err) throw err;
-                        if (result !== undefined && result !== null) {
-                            var challenge = new challengeClass.Challenge(result.getSender, result.getReceiver, challengeClass.ChallengeStatus.Finished);
-                            challenge.setID = req.ChallengeID;
-                            pm.updateChallenge(challenge, (err, result) => {
-                                if (err) throw err;
-                            });
-                            console.log("A challenge finished with id " + req.ChallengeID);
-                        }
-                        else {
-                            errorJSON.error = 'Input error or interaction with the database';
-                            response = JSON.stringify(errorJSON);
-                            res.end(response);
-                        }
-                    });
-                }
-            });
+        const updateChallengeResultPromise = promisify(pm.updateChallengeResult);
+        const IsChallengeOnFinishedPromise = promisify(pm.IsChallengeOnFinished);
+        await updateChallengeResultPromise(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered));
+        await IsChallengeOnFinishedPromise(req.ChallengeID).then((err, answeredNumber) => {
+            if (err) throw err;
+            if (parseInt(answeredNumber) === 20) {
+                pm.getChallengeByID(req.ChallengeID, (err, result) => {
+                    if (err) throw err;
+                    if (result !== undefined && result !== null) {
+                        var challenge = new challengeClass.Challenge(result.getSender, result.getReceiver, challengeClass.ChallengeStatus.Finished);
+                        challenge.setID = req.ChallengeID;
+                        pm.updateChallenge(challenge, (err, result) => {
+                            if (err) throw err;
+                        });
+                        console.log("A challenge finished with id " + req.ChallengeID);
+                    }
+                    else {
+                        errorJSON.error = 'Input error or interaction with the database';
+                        response = JSON.stringify(errorJSON);
+                        res.end(response);
+                    }
+                });
+            }
         });
 
         var notification = {

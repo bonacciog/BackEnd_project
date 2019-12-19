@@ -572,9 +572,10 @@ eventRequest.on('answerToChallengeQuestion', async function (req, res) {
         const { promisify } = require('util');
 
         const updateChallengeResultPromise = promisify(pm.updateChallengeResult);
-        const IsChallengeOnFinishedPromise = promisify(pm.IsChallengeOnFinished);
-        await updateChallengeResultPromise(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered)).then(()=>{console.log("terrone")});
-        await IsChallengeOnFinishedPromise(req.ChallengeID, (err, answeredNumber) => {
+        await updateChallengeResultPromise(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered)).then(()=>{
+        console.log("esegue il then");
+        pm.IsChallengeOnFinished(req.ChallengeID, (err, answeredNumber) => {
+            console.log("esegue il isCha");
             if (err) throw err;
             if (parseInt(answeredNumber) === 20) {
                 pm.getChallengeByID(req.ChallengeID, (err, result) => {
@@ -610,7 +611,7 @@ eventRequest.on('answerToChallengeQuestion', async function (req, res) {
 
         utils.sendIfPossibleOrSaveNotification(req.OpponentID, JSON.stringify(notification));
         res.end(JSON.stringify(allRightJSON));
-
+    });
     } catch (err) {
         errorJSON.error = 'Input error or interaction with the database';
         response = JSON.stringify(errorJSON);

@@ -567,13 +567,15 @@ eventRequest.on('getResultByChallengeID', function (req, res) {
     }
 });
 
-eventRequest.on('answerToChallengeQuestion', function (req, res) {
+eventRequest.on('answerToChallengeQuestion', async function (req, res) {
     try {
-        pm.updateChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered), (err, result) => {
+        const { promisify } = require('util');
+
+    const updateChallengeResultPromise = promisify(pm.updateChallengeResult);
+    await updateChallengeResultPromise(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered)).then(()=>{
             pm.IsChallengeOnFinished(req.ChallengeID, (err, answeredNumber) => {
                 if (err) throw err;
                 if (parseInt(answeredNumber) === 20) {
-                    console.log("Entrato nell'if con " + answeredNumber)
                     pm.getChallengeByID(req.ChallengeID, (err, result) => {
                         if (err) throw err;
                         if (result !== undefined && result !== null) {

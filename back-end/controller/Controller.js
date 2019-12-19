@@ -574,7 +574,6 @@ eventRequest.on('answerToChallengeQuestion', async function (req, res) {
         const updateChallengeResultPromise = promisify(pm.updateChallengeResult);
         await updateChallengeResultPromise(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered)).then(()=>{
         pm.IsChallengeOnFinished(req.ChallengeID, (err, answeredNumber) => {
-            //console.log(answeredNumber);
             if (err) throw err;
             if (parseInt(answeredNumber) === 20) {
                 pm.getChallengeByID(req.ChallengeID, (err, result) => {

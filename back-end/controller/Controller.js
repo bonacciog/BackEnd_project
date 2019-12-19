@@ -571,11 +571,13 @@ eventRequest.on('answerToChallengeQuestion', function (req, res) {
     try {
         pm.updateChallengeResult(new challengeResultClass.ChallengeResult(req.UserID, req.QuestionID, req.ChallengeID, req.XP, req.TimeInSec, challengeResultClass.ChallengeResultStatus.Answered), (err, result) => {
             pm.IsChallengeOnFinished(req.ChallengeID, (err, answeredNumber) => {
+                console.log(answeredNumber)
                 if (err) throw err;
                 if (parseInt(answeredNumber) === 20) {
+                    console.log("Entrato nell'if con " + answeredNumber)
                     pm.getChallengeByID(req.ChallengeID, (err, result) => {
                         if (err) throw err;
-                        else if (result !== undefined && result !== null) {
+                        if (result !== undefined && result !== null) {
                             var challenge = new challengeClass.Challenge(result.getSender, result.getReceiver, challengeClass.ChallengeStatus.Finished);
                             challenge.setID = req.ChallengeID;
                             pm.updateChallenge(challenge, (err, result) => {

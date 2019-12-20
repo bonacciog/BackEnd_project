@@ -1006,13 +1006,13 @@ function saveChallengeResult(challengeResult, callback) {
   }
 }
 
-async function updateChallengeResult(challengeResult, callback) {
+function updateChallengeResult(challengeResult, callback) {
   try {
     if (!(challengeResult instanceof challengeResultClass.ChallengeResult))
       callback(new ParamError('Incorrect Parameter!'), null);
     var connection = mysql.createConnection(dbParam);
     connection.connect(function (err) {
-      if (err) callback(err, null);
+      if (err) throw err;
       console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: Connected to DB!");
     });
 
@@ -1023,18 +1023,21 @@ async function updateChallengeResult(challengeResult, callback) {
       "where PlayerID = " + challengeResult.getPlayerID + "\n" +
       "and QuestionID = " + challengeResult.getQuestionID + "\n" +
       "and ChallengeID = " + challengeResult.getChallengeID;
-    const { promisify } = require('util');
+    //const { promisify } = require('util');
 
     //const queryPromise = promisify(connection.query);
     connection.query(sql,function (err, result) {
-      if (err) callback(err, null);
-      console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A result for User " + challengeResult.getPlayerID + " updated");
+      if (err) throw err;
+      else{
+        console.log("[" + Date(Date.now()).toString() + "] - " + "[PersistenceManager]: A result for User " + challengeResult.getPlayerID + " updated");
+        callback();
+      }
     });
    
     connection.end();
-    callback(null, null);
+    
   } catch (err) {
-    callback(err, null);
+    if (err) throw err;
   }
 }
 

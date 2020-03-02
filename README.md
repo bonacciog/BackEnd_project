@@ -4,17 +4,11 @@ This project has been developed for a personal training. The objective was to le
 
 
 **Abstract:**
-
   Develop the back-end part for a mobile app with these features:
-  
-  - Users can register in the system.
-  
+  - Users can register in the system.  
   - Users can challenge other users on a specific topic.
-  
-  - Users can compile a personal profile.
-  
+  - Users can compile a personal profile.  
   - The home shows the leaderboard for every topic.
-  
   - A challenge consists in 10 multiple choice questions with a maximum time for the answer.
   
   

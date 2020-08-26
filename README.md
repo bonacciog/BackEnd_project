@@ -14,7 +14,7 @@ This project has been developed for a personal training. The objective was to le
   
 **Short explanation of the solution**:
 It has been developed in javascript with Node.js using the MVC pattern (view is the mobile app).
-An **HTTP** server (**Server.js**) listen on a specific ip/port address. It emits an event for every request.
+An **HTTP** server (**Server.js**) listens on a specific ip/port address. It emits an event for every request.
 The controller (**Controller.js**) manages every event calling the persistence part (**PersistenceManager.js**),
 The role of the persistence is to comunicate with DB (**MySQL**). Notifications are sent throught **WebSocket**.
 
